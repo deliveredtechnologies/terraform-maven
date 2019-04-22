@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.deliveredtechnologies.maven</groupId>
   <artifactId>tfn-maven-plugin</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>${version}</version>
   <packaging>maven-plugin</packaging>
   <name>tfn-maven-plugin</name>
   <url>http://maven.apache.org</url>
