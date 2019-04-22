@@ -1,2 +1,2 @@
-# terraform-maven
-Terraform Maven Plugin
+# terraform-maven : The Terraform Maven Plugin
+
