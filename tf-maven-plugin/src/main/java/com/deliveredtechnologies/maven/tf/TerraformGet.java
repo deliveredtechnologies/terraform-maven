@@ -37,7 +37,7 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
    * @param tfModules the common modules directory; if null, it's defaulted to src/main/.tfmodules
    */
   public TerraformGet(Log log, String tfModules) throws IOException {
-    this(log, StringUtils.isEmpty(tfModules) ? Paths.get("src", "main", ".tfmodules"): Paths.get(tfModules));
+    this(log, StringUtils.isEmpty(tfModules) ? Paths.get("src", "main", ".tfmodules") : Paths.get(tfModules));
   }
 
   protected TerraformGet(Log log, Path tfModules) throws IOException {
@@ -102,12 +102,12 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
     try {
       List<Path> result = new ArrayList<>();
       List<Path> zipFiles = Files.walk(directory, 1)
-        .filter(path -> path.getFileName().toString().endsWith(".zip"))
-        .collect(Collectors.toList());
+          .filter(path -> path.getFileName().toString().endsWith(".zip"))
+          .collect(Collectors.toList());
 
-      for(Path zipFile : zipFiles) {
+      for (Path zipFile : zipFiles) {
         result.add((new ZippedArtifact(zipFile, log)).expand()
-          .orElseThrow(() -> new TerraformException("unable to extract " + zipFile.getFileName())));
+            .orElseThrow(() -> new TerraformException("unable to extract " + zipFile.getFileName())));
       }
       return result;
     } catch (IOException e) {

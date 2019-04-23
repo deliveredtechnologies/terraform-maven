@@ -10,15 +10,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Mojo terraform "get" goal.
+ */
 @Mojo(name = "get")
-public class Get
-    extends TerraformMojo<List<Path>>
-{
+public class Get extends TerraformMojo<List<Path>> {
   @Parameter(property = "tf_modules_dir")
   private String tfModulesDir;
 
-  public void execute() throws MojoExecutionException
-  {
+  @Override
+  public void execute() throws MojoExecutionException {
     try {
       execute(new TerraformGet(getLog(), tfModulesDir), System.getProperties());
     } catch (IOException e) {
