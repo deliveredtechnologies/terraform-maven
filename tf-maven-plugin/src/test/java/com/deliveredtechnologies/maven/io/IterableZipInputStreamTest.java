@@ -25,7 +25,7 @@ public class IterableZipInputStreamTest {
   }
 
   @Test
-  public void IterableZipInputStreamIteratesOverElementsInZupUsingForEachSyntax() throws IOException {
+  public void iterableZipInputStreamIteratesOverElementsInZupUsingForEachSyntax() throws IOException {
     try (InputStream inputStream = new FileInputStream(zipFile)) {
       IterableZipInputStream zipInputStream = new IterableZipInputStream(inputStream);
       int count = 0;
@@ -38,7 +38,7 @@ public class IterableZipInputStreamTest {
   }
 
   @Test
-  public void IterableZipInputStreamIteratesOverElementsInZupUsingLambdaSyntax() throws IOException {
+  public void iterableZipInputStreamIteratesOverElementsInZupUsingLambdaSyntax() throws IOException {
     try (InputStream inputStream = new FileInputStream(zipFile)) {
       IterableZipInputStream zipInputStream = new IterableZipInputStream(inputStream);
       zipInputStream.forEach(entry -> {

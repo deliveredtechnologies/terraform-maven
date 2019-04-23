@@ -58,12 +58,12 @@ public class ZippedArtifactTest {
     Assert.assertTrue(expandedDir.toFile().isDirectory());
 
     Assert.assertEquals(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .count(), 2);
+        .filter(path -> !path.equals(expandedDir))
+        .count(), 2);
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .filter(path -> !path.equals(expandedDir))
+        .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
 
     Assert.assertFalse(zipFile.toFile().exists());
   }
@@ -79,12 +79,12 @@ public class ZippedArtifactTest {
     Assert.assertTrue(expandedDir.toFile().isDirectory());
 
     Assert.assertEquals(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .count(), 2);
+        .filter(path -> !path.equals(expandedDir))
+        .count(), 2);
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .filter(path -> !path.equals(expandedDir))
+        .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
 
     Assert.assertFalse(zipFile.toFile().exists());
 
@@ -101,12 +101,12 @@ public class ZippedArtifactTest {
     Assert.assertTrue(expandedDir.toFile().isDirectory());
 
     Assert.assertEquals(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .count(), 2);
+        .filter(path -> !path.equals(expandedDir))
+        .count(), 2);
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .filter(path -> !path.equals(expandedDir))
+        .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
 
     Assert.assertFalse(zipFile.toFile().exists());
   }

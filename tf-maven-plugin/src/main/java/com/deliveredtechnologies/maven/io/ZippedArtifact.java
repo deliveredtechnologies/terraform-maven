@@ -6,7 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -46,19 +50,19 @@ public class ZippedArtifact implements Expandable {
       //get just the name of the unprefixed Maven artifact (e.g. s3-bucket or lambda or module1, etc.)
       //a supported convention for TerraformCmdLineDecorator Maven artifact prefixes is tf-module-{artifact}-{version}-{qualifier}
       String artifactName = Arrays.stream(zipFilenameSplitByHyphen)
-        .filter(s -> !s.startsWith("SNAPSHOT"))
-        .filter(s -> !s.equals("rc"))
-        .filter(s -> !s.equals("tf"))
-        .filter(s -> !s.equals("module"))
-        .filter(s -> {
-          if (s.contains(".")) {
-            String[] splitByDot = s.split("\\.");
-            return !StringUtils.isNumeric(splitByDot[0])
-              && !splitByDot[splitByDot.length -1].equals("zip");
-          }
-          return true;
-        })
-        .reduce("", (s1, s2) -> s1 + (s1.length() > 0 ? "-" : "") + s2);
+          .filter(s -> !s.startsWith("SNAPSHOT"))
+          .filter(s -> !s.equals("rc"))
+          .filter(s -> !s.equals("tf"))
+          .filter(s -> !s.equals("module"))
+          .filter(s -> {
+            if (s.contains(".")) {
+              String[] splitByDot = s.split("\\.");
+              return !StringUtils.isNumeric(splitByDot[0])
+                && !splitByDot[splitByDot.length - 1].equals("zip");
+            }
+            return true;
+          })
+          .reduce("", (s1, s2) -> s1 + (s1.length() > 0 ? "-" : "") + s2);
 
       Path modulesDir = zipFile.getParent();
 
