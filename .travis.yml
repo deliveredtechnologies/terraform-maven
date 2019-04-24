@@ -1,0 +1,9 @@
+language: java
+sudo: false
+branches:
+  only:
+    -develop
+script:
+  - |
+  cd tf-maven-plugin
+  ./mvnw clean install -Dcurrent.version

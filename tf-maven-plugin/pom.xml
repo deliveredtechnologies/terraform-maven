@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.deliveredtechnologies.maven</groupId>
   <artifactId>tf-maven-plugin</artifactId>
-  <version>${version}</version>
+  <version>0.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>tf-maven-plugin</name>
   <url>https://github.com/deliveredtechnologies/terraform-maven</url>
