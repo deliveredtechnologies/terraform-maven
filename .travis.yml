@@ -1,0 +1,12 @@
+
+language: java
+sudo: false
+branches:
+  only:
+  - develop
+jdk:
+  - oraclejdk8
+script:
+  - |
+    cd tf-maven-plugin
+    ./mvnw clean install

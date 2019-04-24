@@ -2,6 +2,8 @@
 
 ---
 
+[![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
+
 # Terraform Maven Plugin
 
 ### Goals
