@@ -7,17 +7,26 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class TerraformCmdLineDecorator implements Executable {
+/**
+ * Decorates Executable (for use with CommandLine) to put in the context of Terraform commands.
+ */
+public class TerraformCommandLineDecorator implements Executable {
 
-  private CommandLine commandLine;
+  private Executable commandLine;
   private TerraformCommand cmd;
 
-  public TerraformCmdLineDecorator(TerraformCommand cmd, CommandLine commandLine) {
+  public TerraformCommandLineDecorator(TerraformCommand cmd, Executable commandLine) {
     this.commandLine = commandLine;
     this.cmd = cmd;
   }
 
-  public TerraformCmdLineDecorator(TerraformCommand cmd) throws IOException {
+  /**
+   * Instantiates TerraformCommandLineDecorator using TerraformCommand.<br/>
+   * The directory where commands are executed is src/main/tf/{root module dir}.
+   * @param cmd the Terraform command to be executed
+   * @throws IOException
+   */
+  public TerraformCommandLineDecorator(TerraformCommand cmd) throws IOException {
     this.commandLine = new CommandLine(
       Files.walk(
         Paths.get("src", "main", "tf"), 1)

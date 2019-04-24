@@ -39,13 +39,13 @@ public class CommandLine implements Executable {
       };
       ProcessBuilder processBuilder = new ProcessBuilder(cmd);
       processBuilder.directory(directory.toFile());
-      process = processBuilder.inheritIO().start();
+      process = processBuilder.start();
     }
 
     String output = IOUtils.toString(new InputStreamReader(process.getInputStream()));
     String error = IOUtils.toString(new InputStreamReader(process.getErrorStream()));
-
     process.waitFor(timeout, TimeUnit.MILLISECONDS);
+
     if (process.exitValue() > 0) {
       throw new IOException("Exit value was greater than zero!\n" + error);
     }
