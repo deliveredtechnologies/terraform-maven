@@ -48,7 +48,7 @@ public class ZippedArtifact implements Expandable {
       String[] zipFilenameSplitByHyphen = zipFilenamePathSplit[zipFilenamePathSplit.length - 1].split("-");
 
       //get just the name of the unprefixed Maven artifact (e.g. s3-bucket or lambda or module1, etc.)
-      //a supported convention for TerraformCmdLineDecorator Maven artifact prefixes is tf-module-{artifact}-{version}-{qualifier}
+      //a supported convention for TerraformCommandLineDecorator Maven artifact prefixes is tf-module-{artifact}-{version}-{qualifier}
       String artifactName = Arrays.stream(zipFilenameSplitByHyphen)
           .filter(s -> !s.startsWith("SNAPSHOT"))
           .filter(s -> !s.equals("rc"))

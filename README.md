@@ -18,7 +18,19 @@ of the modules folder is `src/main/.tfModules`.
 
 Optional Parameters:
 
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| tfModules | String | The directory location where Terraform modules should be expanded |
+| Name      | Type   | Description                                                     |
+| --------- | ------ | --------------------------------------------------------------- |
+| tfModules | String | The directory location where Terraform modules will be expanded |
+
+**tf:init**
+
+Description:
+
+Executes the `terraform init` command. See [https://www.terraform.io/docs/commands/init.html](https://www.terraform.io/docs/commands/init.html).
+
+Optional Parameters:
+
+| Name      | Type   | Description                                                            |
+| --------- | ------ | ---------------------------------------------------------------------- |
+| tfRootDir | String | The root module directory location where terraform will be initialized |
 
