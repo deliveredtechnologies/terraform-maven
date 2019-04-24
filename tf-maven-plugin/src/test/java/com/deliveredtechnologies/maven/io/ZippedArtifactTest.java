@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -106,7 +107,14 @@ public class ZippedArtifactTest {
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
         .filter(path -> !path.equals(expandedDir))
-        .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .anyMatch(path -> path.getFileName().toString().equals("test.file1.txt")));
+
+    List<Path> filesInSubDir = Files.walk(expandedDir.resolve("test_dir"), 1)
+        .filter(path -> !path.equals(expandedDir.resolve("test_dir")))
+        .collect(Collectors.toList());
+
+    Assert.assertEquals(1, filesInSubDir.size());
+    Assert.assertEquals("test.file2.txt", filesInSubDir.get(0).getFileName().toString());
 
     Assert.assertFalse(zipFile.toFile().exists());
   }
