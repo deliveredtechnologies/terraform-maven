@@ -18,20 +18,20 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZippedArtifact implements Expandable {
+public class ExpandableZippedArtifact implements Expandable {
 
   private static int BUFFER_SIZE = 4096;
 
   private Path zipFile;
   private Log log;
 
-  public ZippedArtifact(Path zipFile, Log log) {
+  public ExpandableZippedArtifact(Path zipFile, Log log) {
     this.zipFile = zipFile;
     this.log = log;
   }
 
-  public ZippedArtifact(Path zipFile) {
-    this(zipFile, new Slf4jMavenAdapter(LoggerFactory.getLogger(ZippedArtifact.class)));
+  public ExpandableZippedArtifact(Path zipFile) {
+    this(zipFile, new Slf4jMavenAdapter(LoggerFactory.getLogger(ExpandableZippedArtifact.class)));
   }
 
 

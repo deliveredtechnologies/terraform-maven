@@ -28,10 +28,7 @@ public class TerraformCommandLineDecorator implements Executable {
    */
   public TerraformCommandLineDecorator(TerraformCommand cmd) throws IOException {
     this.commandLine = new CommandLine(
-      Files.walk(
-        Paths.get("src", "main", "tf"), 1)
-             .filter(path -> path.getFileName().toString() != "tf")
-             .findFirst().orElseThrow(() -> new IOException("Terraform root module not found")));
+      TerraformUtils.getTerraformRootModuleDir());
   }
 
   @Override

@@ -1,6 +1,6 @@
 package com.deliveredtechnologies.maven.tf;
 
-import com.deliveredtechnologies.maven.io.ZippedArtifact;
+import com.deliveredtechnologies.maven.io.ExpandableZippedArtifact;
 
 import com.deliveredtechnologies.maven.logs.Slf4jMavenAdapter;
 import org.apache.commons.lang.StringUtils;
@@ -106,7 +106,7 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
           .collect(Collectors.toList());
 
       for (Path zipFile : zipFiles) {
-        result.add((new ZippedArtifact(zipFile, log)).expand()
+        result.add((new ExpandableZippedArtifact(zipFile, log)).expand()
             .orElseThrow(() -> new TerraformException("unable to extract " + zipFile.getFileName())));
       }
       return result;

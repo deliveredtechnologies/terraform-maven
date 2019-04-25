@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Tests for ZippedArtifact.
+ * Tests for ExpandableZippedArtifact.
  */
-public class ZippedArtifactTest {
+public class ExpandableZippedArtifactTest {
 
   private Path zipFileDir;
 
@@ -52,7 +52,7 @@ public class ZippedArtifactTest {
   @Test
   public void zippedArtifactExtractsArtifactsWithaDotInTheName() throws URISyntaxException, IOException {
     Path zipFile = zipFileDir.resolve("tf-module-my.module2-0.1.zip");
-    Expandable expandableArtifact = new ZippedArtifact(zipFile);
+    Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile);
     expandableArtifact.expand();
 
     Path expandedDir = zipFileDir.resolve("my.module2");
@@ -73,7 +73,7 @@ public class ZippedArtifactTest {
   public void zippedArtifactExtractsArtifactsWithaReleaseQualifierInTheName() throws URISyntaxException, IOException {
     Log log = Mockito.mock(Log.class);
     Path zipFile = zipFileDir.resolve("tf-module-my-module1-0.12-rc.zip");
-    Expandable expandableArtifact = new ZippedArtifact(zipFile, log);
+    Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile, log);
     expandableArtifact.expand();
 
     Path expandedDir = zipFileDir.resolve("my-module1");
@@ -95,7 +95,7 @@ public class ZippedArtifactTest {
   @Test
   public void zippedArtifactExtractsSnapshotArtifacts() throws URISyntaxException, IOException {
     Path zipFile = zipFileDir.resolve("tf-module-my-module3-1.2.3-SNAPSHOT.zip");
-    Expandable expandableArtifact = new ZippedArtifact(zipFile);
+    Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile);
     expandableArtifact.expand();
 
     Path expandedDir = zipFileDir.resolve("my-module3");
