@@ -11,7 +11,7 @@ The Terraform Maven Plugin brings Terraform into Maven and greatly enhances the 
 lifecycle and management experience. Maven in some form has been the standard for Java project management for over a decade.
 Now, all of that Maven goodness can be used with Terraform.
 
-##### Contents
+### Contents
 
 * [Benefits of the Terraform Maven Plugin](#what-does-the-terraform-maven-plugin-bring-to-terraform)
 * [Maven Goals](#maven-goals)
@@ -20,7 +20,7 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:package](#tfpackage)
 
 
-##### What does the Terraform Maven Plugin bring to Terraform?
+#### What does the Terraform Maven Plugin bring to Terraform?
 * Dependency Management
   * Terraform really has no dependency management to speak of. Even when you use Terraform Enterprise or some other private
     Terraform module registry, a version update to a module means editing the Terraform code in each and every place
@@ -36,7 +36,7 @@ Now, all of that Maven goodness can be used with Terraform.
   
 ### Maven Goals
 
-##### tf:get
+#### tf:get
 
 Description:
 
@@ -50,7 +50,9 @@ Optional Parameters:
 | ------------ | ------ | --------------------------------------------------------------- |
 | tfModulesDir | String | The directory location where Terraform modules will be expanded |
 
-##### tf:init
+---
+
+#### tf:init
 
 Description:
 
@@ -62,7 +64,9 @@ Optional Parameters:
 | --------- | ------ | ---------------------------------------------------------------------- |
 | tfRootDir | String | The root module directory location where terraform will be initialized |
 
-##### tf:package
+---
+
+#### tf:package
 
 Description:
 
