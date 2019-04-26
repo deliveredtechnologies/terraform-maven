@@ -34,7 +34,7 @@ Now, all of that Maven goodness can be used with Terraform.
     or Terraform Enterprise. It's all part of a single Maven goal/command.
 * Simple Integration with CI Tools
   * Get rid of hundreds of lines of untested code in your CI tool and replace it with tested build lifecycle management
-    using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraformbuild logic 
+    using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraform build logic 
     in your CI tool means more reliable builds and less CI code to maintain. 
     
 ### Maven Goals
