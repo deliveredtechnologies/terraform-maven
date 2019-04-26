@@ -11,32 +11,35 @@ The Terraform Maven Plugin brings Terraform into Maven and greatly enhances the 
 lifecycle and management experience. Maven in some form has been the standard for Java project management for over a decade.
 Now, all of that Maven goodness can be used with Terraform.
 
-##### Contents
+### Contents
 
-* [Benefits of the Terraform Maven Plugin](#what-does-the-terraform-maven-plugin-bring-to-terraform)
+* [Benefits of the Terraform Maven Plugin](#benefits-of-the-terraform-maven-plugin)
 * [Maven Goals](#maven-goals)
   * [tf:get](#tfget)
   * [tf:init](#tfinit)
   * [tf:package](#tfpackage)
 
-
-##### What does the Terraform Maven Plugin bring to Terraform?
+### Benefits of the Terraform Maven Plugin
 * Dependency Management
   * Terraform really has no dependency management to speak of. Even when you use Terraform Enterprise or some other private
     Terraform module registry, a version update to a module means editing the Terraform code in each and every place
     that module is sourced. The Terraform Maven Plugin allows you to specify your dependencies for Terraform the same way
-    you specify your dependencies with Java in Maven: in an external [POM file](https://maven.apache.org/pom.html). And
-    because it's Maven, Terraform modules sourced from Maven repos can also take advantage of release ranges and 
+    you specify your dependencies with Java: in an external [Maven POM file](https://maven.apache.org/pom.html). And
+    because it's Maven, Terraform modules sourced from Maven repos can also take advantage of version ranges and 
     Maven's SNAPSHOT functionality. No more modifying code for version updates! No more sourcing obscure URLs!
     Hooray, Maven! 
 * Packaging as Part of the Build Lifecycle
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
     or it can package that same Terraform root module with its dependencies for deployment into an isolated environemnt
     or Terraform Enterprise. It's all part of a single Maven goal/command.
-  
+* Simple Integration with CI Tools
+  * Get rid of hundreds of lines of untested code in your CI tool and replace it with tested build lifecycle management
+    using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraform build logic 
+    in your CI tool means more reliable builds and less CI code to maintain. 
+    
 ### Maven Goals
 
-##### tf:get
+#### tf:get
 
 Description:
 
@@ -50,7 +53,9 @@ Optional Parameters:
 | ------------ | ------ | --------------------------------------------------------------- |
 | tfModulesDir | String | The directory location where Terraform modules will be expanded |
 
-##### tf:init
+---
+
+#### tf:init
 
 Description:
 
@@ -62,7 +67,9 @@ Optional Parameters:
 | --------- | ------ | ---------------------------------------------------------------------- |
 | tfRootDir | String | The root module directory location where terraform will be initialized |
 
-##### tf:package
+---
+
+#### tf:package
 
 Description:
 
@@ -77,7 +84,3 @@ extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
 | fatZip       | Boolean | Set to true if a fat zip should be created, otherwise false; defaults to false                |
-
-
-
-

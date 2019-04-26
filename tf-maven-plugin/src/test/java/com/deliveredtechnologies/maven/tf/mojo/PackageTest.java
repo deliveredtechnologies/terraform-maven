@@ -52,6 +52,7 @@ public class PackageTest {
         .filter(path -> path.getFileName().toString().equals("main.tf")
           || path.getFileName().toString().equals("variables.tf"))
         .count());
+    //TODO: Check that module source dependencies were updated.
   }
 
   @Test
