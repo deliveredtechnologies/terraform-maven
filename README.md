@@ -69,6 +69,27 @@ Optional Parameters:
 
 ---
 
+#### tf:apply
+
+Description:
+
+Executes the `terraform apply` command`. See [https://www.terraform.io/docs/commands/apply.html](https://www.terraform.io/docs/commands/apply.html).
+
+Optional Parameters:
+
+| Name        | Type   | Description                                                                                 |
+| ----------- | ------ | ------------------------------------------------------------------------------------------- |
+| varFiles    | String | A comma delimited string of tfvars files                                                    |
+| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                 |
+| lockTimeout | Number | Duration to retry a state lock                                                              |
+| target      | Number | A Resource Address to target                                                                |
+| target      | String | A Resource Address to target                                                                |
+| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                      |
+| noColor     | Any    | If this property exists, the -no-color flag is set                                          |
+| timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; default is 10min |
+
+---
+
 #### tf:package
 
 Description:

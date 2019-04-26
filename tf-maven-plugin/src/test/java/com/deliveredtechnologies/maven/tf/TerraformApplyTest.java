@@ -14,13 +14,14 @@ public class TerraformApplyTest {
     Executable commandLine = Mockito.mock(Executable.class);
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, commandLine);
     Mockito.when(commandLine.execute(
-      "terraform apply -var-file=test1.txt -var-file=test2.txt -lock-timeout=1000 -target=module1.module2 -auto-approve -no-color ",
+      "terraform apply -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -auto-approve -no-color ",
       1111))
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
     Properties properties = new Properties();
     properties.put("varFiles", "test1.txt, test2.txt");
+    properties.put("tfVars", "key1=value1, key2=value2");
     properties.put("lockTimeout", "1000");
     properties.put("target", "module1.module2");
     properties.put("autoApprove", "true");

@@ -5,12 +5,17 @@ import com.deliveredtechnologies.maven.io.Executable;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
+/**
+ * API for terraform apply.
+ */
 public class TerraformApply implements TerraformOperation<String> {
   private Executable terraform;
 
   private enum TerraformApplyParam {
-    varFiles("tf_var_files"),
+    tfVars("var"),
+    varFiles("var_file"),
     lockTimeout("lock-timeout"),
     target("target"),
     autoApprove("auto-approve"),
@@ -39,6 +44,22 @@ public class TerraformApply implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.APPLY));
   }
 
+  /**
+   * Executes terraform apply. <br/>
+   * <p>
+   *   Valid Properties: <br/>
+   *   tfVars - a comma delimited list of terraform variables<br/>
+   *   varFiles - a comma delimited list of terraform vars files<br/>
+   *   lockTimeout - state file lock timeout<br/>
+   *   target - resource target<br/>
+   *   autoApprove - approve without prompt<br/>
+   *   noColor - remove color encoding from output<br/>
+   *   timeout - how long in milliseconds the terraform apply command can run<br/>   *
+   * </p>
+   * @param properties  paramter options and properties for terraform apply
+   * @return            the output of terraform apply
+   * @throws TerraformException
+   */
   @Override
   public String execute(Properties properties) throws TerraformException {
     String workingDir = properties.getProperty("tfRootDir", "");
@@ -48,7 +69,13 @@ public class TerraformApply implements TerraformOperation<String> {
       if (properties.containsKey(param.property)) {
         if (param == TerraformApplyParam.varFiles) {
           for (String file : ((String)properties.get(param.property)).split(",")) {
-            options.append(String.format("-var-file=%1$s ", file.trim()));
+            options.append(String.format("-%1$s=%2$s ", param, file.trim()));
+          }
+          continue;
+        }
+        if (param == TerraformApplyParam.tfVars) {
+          for (String var : ((String)properties.get(param.property)).split(",")) {
+            options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
           }
           continue;
         }
@@ -62,6 +89,14 @@ public class TerraformApply implements TerraformOperation<String> {
           default:
             options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
         }
+      }
+    }
+    for (String key :
+        properties.keySet().stream()
+        .filter(key -> ((String)key).startsWith("tfVar."))
+        .map(key -> (String)key).collect(Collectors.toList())) {
+      {
+        options.append(String.format("-var '%1$s=%2$s' ", key.substring(6), properties.getProperty(key)));
       }
     }
     try {
