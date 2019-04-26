@@ -91,14 +91,7 @@ public class TerraformApply implements TerraformOperation<String> {
         }
       }
     }
-    for (String key :
-        properties.keySet().stream()
-        .filter(key -> ((String)key).startsWith("tfVar."))
-        .map(key -> (String)key).collect(Collectors.toList())) {
-      {
-        options.append(String.format("-var '%1$s=%2$s' ", key.substring(6), properties.getProperty(key)));
-      }
-    }
+    
     try {
       if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt((String) properties.get("timeout")));
