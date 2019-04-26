@@ -1,5 +1,7 @@
 
 language: java
+env:
+  - COVERALLS_TOKEN=OG8RAhndMR8qNlH8e1YUuN85ikl18mYU3
 sudo: false
 branches:
   only:
@@ -9,4 +11,4 @@ jdk:
 script:
   - |
     cd tf-maven-plugin
-    ./mvnw clean install coveralls:report
+    ./mvnw clean test jacoco:report coveralls:report
