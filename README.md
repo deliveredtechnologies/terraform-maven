@@ -80,7 +80,7 @@ Optional Parameters:
 
 | Name        | Type   | Description                                                                                 |
 | ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| varFiles    | String | A comma delimited string of tfvars files                                                    |
+| varFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                                                   |
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                 |
 | lockTimeout | Number | Duration to retry a state lock                                                              |
 | target      | Number | A Resource Address to target                                                                |
