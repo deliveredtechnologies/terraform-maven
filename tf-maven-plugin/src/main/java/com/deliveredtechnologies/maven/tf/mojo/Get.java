@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Mojo(name = "get")
 public class Get extends TerraformMojo<List<Path>> {
-  @Parameter(property = "tf_modules_dir")
+  @Parameter(property = "tfModulesDir")
   private String tfModulesDir;
 
   @Override
