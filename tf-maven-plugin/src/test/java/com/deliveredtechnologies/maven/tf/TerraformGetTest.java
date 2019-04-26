@@ -29,14 +29,14 @@ public class TerraformGetTest {
   private Path tfModules;
 
   /**
-   * Creates a tfModules directory and copies the mock artifact zips in.
+   * Creates a tfmodules directory and copies the mock artifact zips in.
    * @throws URISyntaxException
    * @throws IOException
    */
   @Before
   public void setup() throws URISyntaxException, IOException {
     Path zipsDir = Paths.get(this.getClass().getResource("/zips").toURI());
-    tfModules  = zipsDir.resolveSibling(".tfModules");
+    tfModules  = zipsDir.resolveSibling(".tfmodules");
     FileUtils.forceMkdir(tfModules.toFile());
     List<Path> zipFiles = Files.walk(zipsDir, 1)
         .filter(path -> !path.equals(zipsDir))
@@ -47,7 +47,7 @@ public class TerraformGetTest {
   }
 
   /**
-   * Cleans up the tfModules directory that was created.
+   * Cleans up the tfmodules directory that was created.
    * @throws IOException
    */
   @After
