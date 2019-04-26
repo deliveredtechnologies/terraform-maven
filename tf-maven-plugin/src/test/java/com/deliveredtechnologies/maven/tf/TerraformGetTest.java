@@ -102,4 +102,27 @@ public class TerraformGetTest {
     Assert.assertTrue(directories.stream().anyMatch(path -> path.getFileName().toString().equals("my-module1")));
     Assert.assertTrue(directories.stream().anyMatch(path -> path.getFileName().toString().equals("my-module3")));
   }
+
+  @Test
+  public void terraformGetConstructorWithLogAndTfModulesStringCreatesInstanceWithoutError() throws IOException {
+    Log log = Mockito.mock(Log.class);
+    TerraformGet terraformGet = new TerraformGet(log, tfModules.toString());
+
+    Assert.assertNotNull(terraformGet);
+  }
+
+  @Test
+  public void terraformGetConstructorWithLogCreatesInstanceWithoutError() throws IOException {
+    Log log = Mockito.mock(Log.class);
+    TerraformGet terraformGet = new TerraformGet(log);
+
+    Assert.assertNotNull(terraformGet);
+  }
+
+  @Test
+  public void terraformGetConstructorWithNoArgsCreatesInstanceWithoutError() throws IOException {
+    TerraformGet terraformGet = new TerraformGet();
+
+    Assert.assertNotNull(terraformGet);
+  }
 }
