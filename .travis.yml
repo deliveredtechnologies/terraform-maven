@@ -9,4 +9,4 @@ jdk:
 script:
   - |
     cd tf-maven-plugin
-    ./mvnw clean install
+    ./mvnw clean test jacoco:report coveralls:report
