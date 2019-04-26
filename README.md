@@ -12,11 +12,11 @@ Now, all of that Maven goodness can be used with Terraform.
 
 ##### Contents
 
-* [Benefits of the Terraform Maven Plugin](#tf-maven-plugin-benefits)
+* [Benefits of the Terraform Maven Plugin](#what-does-the-terraform-maven-plugin-bring-to-terraform)
 * [Maven Goals](#maven-goals)
-  * [tf:get](#tf-get)
-  * [tf:init](#tf-init)
-  * [tf:package](#tf-deploy)
+  * [tf:get](#tfget)
+  * [tf:init](#tfinit)
+  * [tf:package](#tfpackage)
 
 
 ##### What does the Terraform Maven Plugin bring to Terraform?
@@ -29,7 +29,7 @@ Now, all of that Maven goodness can be used with Terraform.
     Maven's SNAPSHOT functionality. No more modifying code for version updates! No more sourcing obscure URLs!
     Hooray, Maven! 
 * Packaging as Part of the Build Lifecycle
-  * The [package goal](#tf-package) can package a Terraform root module for deployment into a Maven repo
+  * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
     or it can package that same Terraform root module with its dependencies for deployment into an isolated environemnt
     or Terraform Enterprise. It's all part of a single Maven goal/command.
   
@@ -66,7 +66,7 @@ Optional Parameters:
 Description:
 
 Recursively packages the Terraform files from the root module directory as target/{artifact-id}-{version}.zip.
-Optionally, a fat zip can be created instead, which also includes the Terraform module dependencies; see the [tf:get goal](#tf-get) above.
+Optionally, a fat zip can be created instead, which also includes the Terraform module dependencies; see the [tf:get goal](#tfget) above.
 
 _Note: Within the fat zip, module source paths are updated accordingly so that the zip is a wholly contained working module that can be consumed as a module,
 extracted, initialized and applied as-is or submitted to Terraform Enterprise._
