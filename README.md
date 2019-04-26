@@ -20,7 +20,7 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:package](#tfpackage)
 
 
-#### What does the Terraform Maven Plugin bring to Terraform?
+### What does the Terraform Maven Plugin bring to Terraform?
 * Dependency Management
   * Terraform really has no dependency management to speak of. Even when you use Terraform Enterprise or some other private
     Terraform module registry, a version update to a module means editing the Terraform code in each and every place
