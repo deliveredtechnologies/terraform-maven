@@ -61,7 +61,7 @@ Optional Parameters:
 | --------- | ------ | ---------------------------------------------------------------------- |
 | tfRootDir | String | The root module directory location where terraform will be initialized |
 
-##### tf:deploy
+##### tf:package
 
 Description:
 
