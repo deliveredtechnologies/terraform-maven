@@ -19,7 +19,6 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:init](#tfinit)
   * [tf:package](#tfpackage)
 
-
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
   * Terraform really has no dependency management to speak of. Even when you use Terraform Enterprise or some other private
@@ -33,7 +32,11 @@ Now, all of that Maven goodness can be used with Terraform.
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
     or it can package that same Terraform root module with its dependencies for deployment into an isolated environemnt
     or Terraform Enterprise. It's all part of a single Maven goal/command.
-  
+* Simple Integration with CI Tools
+  * Get rid of hundreds of lines of untested code in your CI tool and replace it with tested build lifecycle management
+    using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraformbuild logic 
+    in your CI tool means more reliable builds and less CI code to maintain. 
+    
 ### Maven Goals
 
 #### tf:get
@@ -81,7 +84,3 @@ extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
 | fatZip       | Boolean | Set to true if a fat zip should be created, otherwise false; defaults to false                |
-
-
-
-
