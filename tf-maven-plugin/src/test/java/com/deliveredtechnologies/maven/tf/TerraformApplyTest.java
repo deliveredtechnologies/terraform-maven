@@ -43,4 +43,12 @@ public class TerraformApplyTest {
     Assert.assertEquals("Success!", terraformApply.execute(new Properties()));
     Mockito.verify(commandLine, Mockito.times(1)).execute(Mockito.anyString());
   }
+
+  @Test(expected = TerraformException.class)
+  public void terraformApplyThrowsTerraformExceptionOnError() throws IOException, InterruptedException, TerraformException {
+    Executable executable = Mockito.mock(Executable.class);
+    Mockito.when(executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
+    TerraformApply terraformApply = new TerraformApply(executable);
+    terraformApply.execute(new Properties());
+  }
 }
