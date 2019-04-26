@@ -45,18 +45,27 @@ public class TerraformApply implements TerraformOperation<String> {
     StringBuilder options = new StringBuilder();
 
     for (TerraformApplyParam param : TerraformApplyParam.values()) {
-      if (properties.contains(param.property)) {
+      if (properties.containsKey(param.property)) {
         if (param == TerraformApplyParam.varFiles) {
           for (String file : ((String)properties.get(param.property)).split(",")) {
-            options.append(String.format("%1$s=%2$s ", param, file.trim()));
+            options.append(String.format("-var-file=%1$s ", file.trim()));
           }
           continue;
         }
-        options.append(String.format("%1$s=%2$s ", param, properties.get(param.property)));
+        switch (param) {
+          case autoApprove:
+          case noColor:
+            options.append(String.format("-%1$s ", param));
+            break;
+          case timeout:
+            break;
+          default:
+            options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
+        }
       }
     }
     try {
-      if (properties.contains("timeout")) {
+      if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt((String) properties.get("timeout")));
       } else {
         return terraform.execute(options.toString());
