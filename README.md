@@ -17,6 +17,7 @@ Now, all of that Maven goodness can be used with Terraform.
 * [Maven Goals](#maven-goals)
   * [tf:get](#tfget)
   * [tf:init](#tfinit)
+  * [tf:apply](#tfapply)
   * [tf:package](#tfpackage)
 
 ### Benefits of the Terraform Maven Plugin
@@ -73,7 +74,7 @@ Optional Parameters:
 
 Description:
 
-Executes the `terraform apply` command`. See [https://www.terraform.io/docs/commands/apply.html](https://www.terraform.io/docs/commands/apply.html).
+Executes the `terraform apply` command. See [https://www.terraform.io/docs/commands/apply.html](https://www.terraform.io/docs/commands/apply.html).
 
 Optional Parameters:
 
