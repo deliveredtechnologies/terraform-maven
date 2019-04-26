@@ -55,8 +55,8 @@ public class Package extends AbstractMojo {
 
       targetTfRootDir.toFile().mkdir();
       List<Path> tfRootDirFiles = Files.walk(tfRootPath, 1)
-        .filter(path -> !path.equals(tfRootPath))
-        .collect(Collectors.toList());
+          .filter(path -> !path.equals(tfRootPath))
+          .collect(Collectors.toList());
 
       for (Path file : tfRootDirFiles) {
         if (file.toFile().isDirectory()) {
@@ -82,8 +82,8 @@ public class Package extends AbstractMojo {
     //replace all ../../.tfmodules with .tfmodules
     String tfRootToModulesRelativePath = tfRootPath.relativize(tfModulesPath).toString();
     List<Path> filesInTargetTfRoot = Files.walk(targetTfRootDir)
-      .filter(path -> !path.toFile().isDirectory())
-      .collect(Collectors.toList());
+        .filter(path -> !path.toFile().isDirectory())
+        .collect(Collectors.toList());
 
     for (Path file : filesInTargetTfRoot) {
       try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile())))) {
@@ -101,7 +101,7 @@ public class Package extends AbstractMojo {
 
   private void createZip(Path targetDir, Path targetTfRootDir) throws IOException {
     Compressable compressor = new CompressableZipFile(targetDir.resolve(
-      String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion())).toString());
+        String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion())).toString());
     Files.walk(targetTfRootDir, 1)
       .filter(path -> !path.equals(targetTfRootDir))
       .forEach(compressor::addToCompressedFile);

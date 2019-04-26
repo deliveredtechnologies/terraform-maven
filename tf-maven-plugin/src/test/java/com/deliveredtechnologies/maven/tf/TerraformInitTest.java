@@ -29,7 +29,7 @@ public class TerraformInitTest {
     //and now with a tfRootDir specified
     String tfRootDir = "some path";
     Properties properties = new Properties();
-    properties.put("tf/tfRootDir", tfRootDir);
+    properties.put("tfRootDir", tfRootDir);
     response = terraformInit.execute(properties);
 
     Assert.assertEquals(successMessage, response);

@@ -20,11 +20,16 @@ public class PackageTest {
 
   private Path targetTfRootModule;
   private Package mojoPackage;
+  private Path tfModules;
 
+  /**
+   * Sets up dependencies for Mojo Package goal.
+   * @throws URISyntaxException
+   */
   @Before
   public void setup() throws URISyntaxException {
-    Path tfModules = Paths.get(this.getClass().getResource("/.tfmodules").toURI());
     Path tfRoot = Paths.get(this.getClass().getResource("/tf/root").toURI());
+    this.tfModules = Paths.get(this.getClass().getResource("/tfmodules").toURI());
     this.targetTfRootModule = Paths.get("target/tf-root-module");
     this.mojoPackage = new Package();
     this.mojoPackage.tfRootDir = tfRoot.toAbsolutePath().toString();
@@ -39,14 +44,14 @@ public class PackageTest {
 
     Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
     Assert.assertEquals("main.tf",
-      Files.walk(this.targetTfRootModule, 1)
-        .filter(path -> !path.toFile().isDirectory())
-        .findAny()
-        .get().getFileName().toString());
-    Assert.assertEquals(2, Files.walk(this.targetTfRootModule.resolve(".tfmodules/test-module"), 1)
-      .filter(path -> path.getFileName().toString().equals("main.tf")
+        Files.walk(this.targetTfRootModule, 1)
+          .filter(path -> !path.toFile().isDirectory())
+          .findAny()
+          .get().getFileName().toString());
+    Assert.assertEquals(2, Files.walk(this.targetTfRootModule.resolve(tfModules.getFileName().toString()).resolve("test-module"), 1)
+        .filter(path -> path.getFileName().toString().equals("main.tf")
           || path.getFileName().toString().equals("variables.tf"))
-      .count());
+        .count());
   }
 
   @Test
@@ -56,9 +61,9 @@ public class PackageTest {
 
     Assert.assertEquals(1, this.targetTfRootModule.toFile().listFiles().length);
     Assert.assertEquals("main.tf",
-      Files.walk(this.targetTfRootModule, 1)
-        .filter(path -> !path.toFile().isDirectory())
-        .findAny()
-        .get().getFileName().toString());
+        Files.walk(this.targetTfRootModule, 1)
+          .filter(path -> !path.toFile().isDirectory())
+          .findAny()
+          .get().getFileName().toString());
   }
 }
