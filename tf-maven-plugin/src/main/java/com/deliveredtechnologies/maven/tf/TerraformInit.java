@@ -16,7 +16,7 @@ public class TerraformInit implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.INIT));
   }
 
-  protected TerraformInit(Executable terraform) {
+  TerraformInit(Executable terraform) {
     this.terraform = terraform;
   }
 
