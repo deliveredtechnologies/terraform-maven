@@ -49,9 +49,9 @@ public class TerraformDestroyTest {
   public void terraformDestroyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
     Mockito.when(this.executable.execute("terraform destroy ")).thenReturn("Success!");
-    TerraformApply terraformApply = new TerraformApply(terraformDecorator);
+    TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
 
-    Assert.assertEquals("Success!", terraformApply.execute(new Properties()));
+    Assert.assertEquals("Success!", terraformDestroy.execute(new Properties()));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
   }
 
