@@ -69,6 +69,4 @@ public class TerraformApplyTest {
     TerraformApply terraformApply = new TerraformApply(this.executable);
     terraformApply.execute(properties);
   }
-
-
 }

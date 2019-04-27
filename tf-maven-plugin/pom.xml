@@ -90,6 +90,7 @@
             <exclude>**/tf/mojo/Get*</exclude>
             <exclude>**/tf/mojo/Init*</exclude>
             <exclude>**/tf/mojo/Apply*</exclude>
+            <exclude>**/tf/mojo/Destroy*</exclude>
           </excludes>
         </configuration>
         <executions>
