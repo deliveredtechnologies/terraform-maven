@@ -2,6 +2,7 @@
 
 ---
 
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)][Apache 2.0 License]
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop&maxAge=600&service=github)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
 
@@ -18,6 +19,7 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:get](#tfget)
   * [tf:init](#tfinit)
   * [tf:apply](#tfapply)
+  * [tf:destroy](#tfdestroy)
   * [tf:package](#tfpackage)
 
 ### Benefits of the Terraform Maven Plugin
@@ -85,12 +87,31 @@ Optional Parameters:
 | varFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                               |
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                 |
 | lockTimeout | Number | Duration to retry a state lock                                                              |
-| target      | Number | A Resource Address to target                                                                |
+| target      | Number | A resource address to target                                                                |
 | autoApprove | Any    | If this property exists, the -auto-approve flag is set                                      |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                          |
 | plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used      |
 | tfRootDir   | String | A terraform config directory to apply; defaults to current directory                        |
 | timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; default is 10min |
+
+---
+
+#### tf:destroy
+
+Description:
+
+Executes the `terraform destroy` command. See [https://www.terraform.io/docs/commands/destroy.html](https://www.terraform.io/docs/commands/destroy.html).
+
+Optional Parameters:
+
+| Name        | Type   | Description                                                                                 |
+| ----------- | ------ | ------------------------------------------------------------------------------------------- |
+| lockTimeout | Number | Duration to retry a state lock                                                              |
+| target      | Number | A resource address to target                                                                |
+| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                      |
+| noColor     | Any    | If this property exists, the -no-color flag is set                                          |
+| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                        |
+| timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; default is 10min |
 
 ---
 
