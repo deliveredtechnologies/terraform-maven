@@ -46,7 +46,7 @@ Description:
 
 Downloads Maven artifacts into a common modules directory and extracts each artifacts
 contents into a folder named for the artifact (version agnostic). The default location
-of the modules folder is `src/main/.tfModules`.
+of the modules folder is `src/main/.tfmodules`.
 
 Optional Parameters:
 
@@ -61,6 +61,8 @@ Optional Parameters:
 Description:
 
 Executes the `terraform init` command. See [https://www.terraform.io/docs/commands/init.html](https://www.terraform.io/docs/commands/init.html).
+
+_Note: tf:init depends on tf:get; so tf:get is always executed when tf:init is specified._
 
 Optional Parameters:
 
@@ -80,13 +82,14 @@ Optional Parameters:
 
 | Name        | Type   | Description                                                                                 |
 | ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| varFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                                                   |
+| varFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                               |
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                 |
 | lockTimeout | Number | Duration to retry a state lock                                                              |
 | target      | Number | A Resource Address to target                                                                |
-| target      | String | A Resource Address to target                                                                |
 | autoApprove | Any    | If this property exists, the -auto-approve flag is set                                      |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                          |
+| plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used      |
+| tfRootDir   | String | A terraform config directory to apply; defaults to current directory                        |
 | timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; default is 10min |
 
 ---
