@@ -25,8 +25,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//TODO: Refactor this logic out to ...maven.tf.TerraformPackage and have this class extend TerraformMojo.
+
 /**
  * Mojo tfn:package goal.
+ * <br/>
+ * Packages terraform artifacts in a zip for deployment.
  */
 @Mojo(name = "package")
 public class Package extends AbstractMojo {

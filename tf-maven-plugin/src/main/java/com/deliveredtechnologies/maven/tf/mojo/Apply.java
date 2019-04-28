@@ -7,6 +7,8 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Mojo terraform apply goal.
+ * <br/>
+ * Runs 'terraform apply'
  */
 public class Apply extends TerraformMojo<String> {
   @Override
