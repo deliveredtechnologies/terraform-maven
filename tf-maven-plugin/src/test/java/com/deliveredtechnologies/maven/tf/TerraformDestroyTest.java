@@ -40,6 +40,13 @@ public class TerraformDestroyTest {
     this.properties.put("noColor", "true");
     this.properties.put("timeout", "1111");
     this.properties.put("tfRootDir", "/somedir");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.lockTimeout.property, "1000");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.target.property, "module1.module2");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.autoApprove.property, "true");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.noColor.property, "true");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.tfRootDir.property, "/somedir");
+
 
     Assert.assertEquals("Success!", terraformDestroy.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());

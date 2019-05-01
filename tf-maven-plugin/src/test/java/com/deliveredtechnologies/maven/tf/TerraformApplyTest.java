@@ -1,6 +1,8 @@
 package com.deliveredtechnologies.maven.tf;
 
 import com.deliveredtechnologies.maven.io.Executable;
+import com.deliveredtechnologies.maven.tf.TerraformApply.TerraformApplyParam;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,14 +30,14 @@ public class TerraformApplyTest {
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
-    this.properties.put("varFiles", "test1.txt, test2.txt");
-    this.properties.put("tfVars", "key1=value1, key2=value2");
-    this.properties.put("lockTimeout", "1000");
-    this.properties.put("target", "module1.module2");
-    this.properties.put("autoApprove", "true");
-    this.properties.put("noColor", "true");
-    this.properties.put("timeout", "1111");
-    this.properties.put("plan", "someplan.tfplan");
+    this.properties.put(TerraformApplyParam.varFiles.property, "test1.txt, test2.txt");
+    this.properties.put(TerraformApplyParam.tfVars.property, "key1=value1, key2=value2");
+    this.properties.put(TerraformApplyParam.lockTimeout.property, "1000");
+    this.properties.put(TerraformApplyParam.target.property, "module1.module2");
+    this.properties.put(TerraformApplyParam.autoApprove.property, "true");
+    this.properties.put(TerraformApplyParam.noColor.property, "true");
+    this.properties.put(TerraformApplyParam.timeout.property, "1111");
+    this.properties.put(TerraformApplyParam.plan.property, "someplan.tfplan");
 
     Assert.assertEquals("Success!", terraformApply.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
@@ -56,8 +58,8 @@ public class TerraformApplyTest {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
     Mockito.when(this.executable.execute("terraform apply someplan.tfplan")).thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
-    this.properties.put("plan", "someplan.tfplan");
-    this.properties.put("tfRootDir", "/somedir");
+    this.properties.put(TerraformApplyParam.plan.property, "someplan.tfplan");
+    this.properties.put(TerraformApplyParam.tfRootDir.property, "/somedir");
 
     Assert.assertEquals("Success!", terraformApply.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());

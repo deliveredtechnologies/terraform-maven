@@ -13,7 +13,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
 
   private Executable terraform;
 
-  private enum TerraformDestroyParam {
+  enum TerraformDestroyParam {
     lockTimeout("lock-timeout"),
     target("target"),
     tfRootDir("dir"),

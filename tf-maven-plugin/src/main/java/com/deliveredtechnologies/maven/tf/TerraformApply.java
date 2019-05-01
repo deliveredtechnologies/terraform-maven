@@ -5,7 +5,6 @@ import com.deliveredtechnologies.maven.io.Executable;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * API for terraform apply.
@@ -13,13 +12,13 @@ import java.util.stream.Collectors;
 public class TerraformApply implements TerraformOperation<String> {
   private Executable terraform;
 
-  private enum TerraformApplyParam {
+  enum TerraformApplyParam {
     tfVars("var"),
     varFiles("var_file"),
     lockTimeout("lock-timeout"),
     target("target"),
     plan("plan"),
-    tfRoorDir("dir"),
+    tfRootDir("dir"),
     autoApprove("auto-approve"),
     noColor("no-color"),
     timeout("timeout");
@@ -90,7 +89,7 @@ public class TerraformApply implements TerraformOperation<String> {
             break;
           case timeout:
           case plan:
-          case tfRoorDir:
+          case tfRootDir:
             break;
           default:
             options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
@@ -100,8 +99,8 @@ public class TerraformApply implements TerraformOperation<String> {
 
     if (properties.containsKey(TerraformApplyParam.plan.property)) {
       options.append(properties.getProperty(TerraformApplyParam.plan.property));
-    } else if (properties.containsKey(TerraformApplyParam.tfRoorDir.property)) {
-      options.append(properties.get(TerraformApplyParam.tfRoorDir.property));
+    } else if (properties.containsKey(TerraformApplyParam.tfRootDir.property)) {
+      options.append(properties.get(TerraformApplyParam.tfRootDir.property));
     }
 
     try {
