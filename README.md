@@ -130,3 +130,16 @@ extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
 | fatZip       | Boolean | Set to true if a fat zip should be created, otherwise false; defaults to false                |
+
+#### tf:deploy
+
+Description:
+
+Deploys a packaged Terraform zip artifact ([see tf:package](tfpackage)) with a POM to the specified Maven repo.
+
+| Name    | Type   | Description                                                                                           |
+| ------- | ------ | ----------------------------------------------------------------------------------------------------- |
+| file    | String | The name of the Terraform zip file to deploy; default is target/{artifactId}-{version}.zip            |
+| url     | String | The url of the Maven repo to which the zip file artifact will be deployed                             |
+| pomFile | String | The path to the pom.xml file to attach to the artifact; default is pom.xml in the root of the project |
+

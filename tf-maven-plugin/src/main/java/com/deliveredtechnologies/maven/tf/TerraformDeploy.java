@@ -50,12 +50,12 @@ public class TerraformDeploy implements TerraformOperation<String> {
    * @throws TerraformException
    */
   final void deployFileToMavenRepo(Invoker invoker, InvocationRequest request, Properties properties) throws TerraformException {
+    if (!properties.containsKey(TerraformDeployParam.url.toString())) {
+      throw new TerraformException("missing required parameter: url");
+    }
     if (!properties.containsKey(TerraformDeployParam.file.toString())) {
       Path targetPath = Paths.get("target").resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
       properties.setProperty(TerraformDeployParam.file.toString(), String.format("file://%1$s", targetPath.toAbsolutePath().toString()));
-    }
-    if (!properties.containsKey(TerraformDeployParam.url.toString())) {
-      throw new TerraformException("missing required parameter: url");
     }
     log.info(String.format("Deploying %1$s to %2$s", properties.getProperty(TerraformDeployParam.file.toString()), properties.getProperty(TerraformDeployParam.url.toString())));
 
