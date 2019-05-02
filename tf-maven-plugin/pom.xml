@@ -87,10 +87,7 @@
           <excludes>
             <exclude>**/*Test*</exclude>
             <exclude>**/*Exception*</exclude>
-            <exclude>**/tf/mojo/Get*</exclude>
-            <exclude>**/tf/mojo/Init*</exclude>
-            <exclude>**/tf/mojo/Apply*</exclude>
-            <exclude>**/tf/mojo/Destroy*</exclude>
+            <exclude>**/tf/mojo/*</exclude>
           </excludes>
         </configuration>
         <executions>
