@@ -4,8 +4,6 @@ import com.deliveredtechnologies.maven.io.CommandLine;
 import com.deliveredtechnologies.maven.io.Executable;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * Decorates Executable (for use with CommandLine) to put in the context of Terraform commands.

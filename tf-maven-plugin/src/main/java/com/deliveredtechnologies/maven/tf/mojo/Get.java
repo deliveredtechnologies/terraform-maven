@@ -3,7 +3,6 @@ package com.deliveredtechnologies.maven.tf.mojo;
 import com.deliveredtechnologies.maven.tf.TerraformGet;
 import com.deliveredtechnologies.maven.tf.TerraformMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -13,6 +12,8 @@ import java.util.List;
 
 /**
  * Mojo terraform "get" goal.
+ * <br/>
+ * Gets Terraform Maven dependencies and extracts into a tfModules dir.
  */
 @Mojo(name = "get")
 public class Get extends TerraformMojo<List<Path>> {

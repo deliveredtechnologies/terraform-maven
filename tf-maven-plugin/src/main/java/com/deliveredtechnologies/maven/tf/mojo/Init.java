@@ -1,18 +1,18 @@
 package com.deliveredtechnologies.maven.tf.mojo;
 
-import com.deliveredtechnologies.maven.tf.TerraformException;
 import com.deliveredtechnologies.maven.tf.TerraformInit;
 import com.deliveredtechnologies.maven.tf.TerraformMojo;
-import com.deliveredtechnologies.maven.tf.TerraformOperation;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.Mojo;
-
-import java.io.IOException;
 
 /**
  * Mojo terraform init goal.
+ * <br/>
+ * Runs 'terraform init'
  */
+@Execute(goal = "get")
 @Mojo(name = "init")
 public class Init extends TerraformMojo<String> {
   @Override

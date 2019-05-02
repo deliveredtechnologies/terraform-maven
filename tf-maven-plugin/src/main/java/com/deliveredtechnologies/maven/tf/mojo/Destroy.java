@@ -5,15 +5,19 @@ import com.deliveredtechnologies.maven.tf.TerraformMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import java.io.IOException;
+
 /**
  * Mojo terraform destroy goal.
+ * <br/>
+ * Runs 'terraform destroy'
  */
 public class Destroy extends TerraformMojo<String> {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
       execute(new TerraformDestroy(), System.getProperties());
-    } catch (Exception e) {
+    } catch (IOException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
   }
