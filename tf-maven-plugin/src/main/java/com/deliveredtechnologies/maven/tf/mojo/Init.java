@@ -7,8 +7,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.Mojo;
 
-import java.io.IOException;
-
 /**
  * Mojo terraform init goal.
  * <br/>

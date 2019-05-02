@@ -46,7 +46,7 @@ public class TerraformApply implements TerraformOperation<String> {
   }
 
   /**
-   * Executes terraform apply. <br/>
+   * Executes terraform apply.
    * <p>
    *   Valid Properties: <br/>
    *   tfVars - a comma delimited list of terraform variables<br/>
@@ -59,7 +59,7 @@ public class TerraformApply implements TerraformOperation<String> {
    *   noColor - remove color encoding from output<br/>
    *   timeout - how long in milliseconds the terraform apply command can run<br/>
    * </p>
-   * @param properties  paramter options and properties for terraform apply
+   * @param properties  parameter options and properties for terraform apply
    * @return            the output of terraform apply
    * @throws TerraformException
    */
