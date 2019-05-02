@@ -21,6 +21,7 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:apply](#tfapply)
   * [tf:destroy](#tfdestroy)
   * [tf:package](#tfpackage)
+  * [tf:deploy](#tfdeploy)
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -135,7 +136,7 @@ extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 
 Description:
 
-Deploys a packaged Terraform zip artifact ([see tf:package](tfpackage)) with a POM to the specified Maven repo.
+Deploys a packaged Terraform zip artifact ([see tf:package](#tfpackage)) with a POM to the specified Maven repo.
 
 | Name    | Type   | Description                                                                                           |
 | ------- | ------ | ----------------------------------------------------------------------------------------------------- |
