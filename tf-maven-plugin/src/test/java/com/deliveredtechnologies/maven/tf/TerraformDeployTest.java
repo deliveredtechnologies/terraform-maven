@@ -84,7 +84,11 @@ public class TerraformDeployTest {
 
   @Test(expected = TerraformException.class)
   public void deployFileToMavenRepoErrorResultsInTerraformException() throws TerraformException, MavenInvocationException {
+    String url = "http://someurl.com";
+    properties.put(TerraformDeployParam.url.toString(), url);
+
     Mockito.when(invoker.execute(request)).thenThrow(new MavenInvocationException("boom!"));
+
     terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
   }
 }
