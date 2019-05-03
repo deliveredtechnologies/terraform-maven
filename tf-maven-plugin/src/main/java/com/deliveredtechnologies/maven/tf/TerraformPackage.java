@@ -30,6 +30,7 @@ public class TerraformPackage implements TerraformOperation<String> {
 
   private MavenProject project;
 
+  //TODO: Consider using intsance variables instead.
   enum TerraformPackageParams {
     tfModulesDir,
     tfRootDir,

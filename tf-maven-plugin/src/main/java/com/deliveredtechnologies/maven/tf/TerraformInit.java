@@ -33,6 +33,7 @@ public class TerraformInit implements TerraformOperation<String> {
   @Override
   public String execute(Properties properties) throws TerraformException {
     try {
+      //TODO: Make tfRootDir an enum instead of a magic string property.
       String workingDir = properties.getProperty("tfRootDir", "");
       String params = String.format("-no-color %1$s", workingDir);
       return terraform.execute(params);
