@@ -19,6 +19,12 @@ public class TerraformClean implements TerraformOperation<String> {
   private Path tfRootModulePath;
   private Path tfModulesPath;
 
+  /**
+   * Constructor instantiates TerraformClean.
+   * @param tfModules     the tfModules directory; defaults to src/main/.tfmodules if empty
+   * @param tfRootModule  the Terraform root module directory; defaults to src/main/tf/{first dir} if empty
+   * @throws IOException
+   */
   public TerraformClean(String tfModules, String tfRootModule) throws IOException {
     this.tfModulesPath = StringUtils.isEmpty(tfModules)
       ? TerraformUtils.getDefaultTfModulesDir()
@@ -34,8 +40,8 @@ public class TerraformClean implements TerraformOperation<String> {
       StringBuilder response = new StringBuilder("Deleting...\n");
       FileUtils.forceDelete(this.tfModulesPath.toFile());
       List<Path> terraformFiles = Files.walk(this.tfRootModulePath.getParent())
-        .filter(path -> path.getFileName().toString().contains("terraform"))
-        .collect(Collectors.toList());
+          .filter(path -> path.getFileName().toString().contains("terraform"))
+          .collect(Collectors.toList());
       for (Path file : terraformFiles) {
         response.append(file.toString()).append('\n');
         FileUtils.forceDelete(file.toFile());
