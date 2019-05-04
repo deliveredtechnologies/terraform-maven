@@ -85,8 +85,10 @@ public class TerraformPackage implements TerraformOperation<String> {
 
       if (isFatZip) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
-        //copy tfmodules directory into tfRoot directory; i.e. {targetTfRootDir}/{tfModulesDir}
-        FileUtils.copyDirectory(tfModulesPath.toFile(), targetTfRootPath.resolve(tfModulesPath.getFileName().toString()).toFile());
+        //copy tfmodules directory into tfRoot directory; i.e. {targetTfRootDir}/{tfModulesDir} if it exists
+        if (tfModulesPath.toFile().exists() && tfModulesPath.toFile().isDirectory()) {
+          FileUtils.copyDirectory(tfModulesPath.toFile(), targetTfRootPath.resolve(tfModulesPath.getFileName().toString()).toFile());
+        }
       }
       return String.format("Created zip '%1$s'", createZip(targetPath, targetTfRootPath));
     } catch (IOException e) {

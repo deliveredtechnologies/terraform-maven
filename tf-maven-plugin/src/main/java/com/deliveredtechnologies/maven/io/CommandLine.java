@@ -56,4 +56,8 @@ public class CommandLine implements Executable {
   public String execute(String command) throws IOException, InterruptedException {
     return this.execute(command, DEFAULT_TIMEOUT);
   }
+
+  public Path getDirectory() {
+    return this.directory;
+  }
 }

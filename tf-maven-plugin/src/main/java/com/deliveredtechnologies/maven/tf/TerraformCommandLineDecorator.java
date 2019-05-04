@@ -39,6 +39,10 @@ public class TerraformCommandLineDecorator implements Executable {
     return commandLine.execute(getTerraformCommand(command));
   }
 
+  public Executable getCommandLine() {
+    return this.commandLine;
+  }
+
   private String getTerraformCommand(String command) {
     return String.format("terraform %1$s %2$s", cmd.toString(), command);
   }

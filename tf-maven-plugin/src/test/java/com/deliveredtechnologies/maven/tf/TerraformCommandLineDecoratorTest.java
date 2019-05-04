@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.maven.tf;
 
+import com.deliveredtechnologies.maven.io.CommandLine;
 import com.deliveredtechnologies.maven.io.Executable;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -39,9 +40,10 @@ public class TerraformCommandLineDecoratorTest {
     Mockito.verify(executable, Mockito.times(1)).execute(terraformCommand, timeout);
   }
 
-  @Test(expected = IOException.class)
-  public void terraformCommandLineDecoratorErrorsOnCreationWhenTfSourceDirIsNotFound() throws IOException {
+  @Test
+  public void terraformCommandLineDecoratorUsesDefaultRootModuleDirWhenTfSourceDirIsNotFound() throws IOException {
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY);
+    Assert.assertEquals(Paths.get("."), ((CommandLine)terraformCommandLineDecorator.getCommandLine()).getDirectory());
   }
 
   @Test

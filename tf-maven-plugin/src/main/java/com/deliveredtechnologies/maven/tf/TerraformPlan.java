@@ -7,26 +7,30 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- * API for terraform apply.
+ * API for terraform plan.
  */
-public class TerraformApply implements TerraformOperation<String> {
+public class TerraformPlan implements TerraformOperation<String> {
+
   private Executable terraform;
 
-  enum TerraformApplyParam {
+  enum TerraformPlanParam {
     tfVars("var"),
     varFiles("var_file"),
     lockTimeout("lock-timeout"),
     target("target"),
-    plan("plan"),
+    planOutputFile("out"),
     tfRootDir("dir"),
-    autoApprove("auto-approve"),
+    planInput("input"),
+    refreshState("refresh"),
+    tfState("state"),
     noColor("no-color"),
+    destroyPlan("destroy"),
     timeout("timeout");
 
     Optional<String> name = Optional.empty();
     String property;
 
-    TerraformApplyParam(String name) {
+    TerraformPlanParam(String name) {
       this.property = this.toString();
       this.name = Optional.of(name);
     }
@@ -37,27 +41,29 @@ public class TerraformApply implements TerraformOperation<String> {
     }
   }
 
-  TerraformApply(Executable terraform) {
+  TerraformPlan(Executable terraform) {
     this.terraform = terraform;
   }
 
-  public TerraformApply() throws IOException {
+  public TerraformPlan() throws IOException {
     this(new TerraformCommandLineDecorator(TerraformCommand.APPLY));
   }
 
   /**
-   * Executes terraform apply.
+   * Executes terraform plan.
    * <p>
    *   Valid Properties: <br/>
    *   tfVars - a comma delimited list of terraform variables<br/>
    *   varFiles - a comma delimited list of terraform vars files<br/>
    *   lockTimeout - state file lock timeout<br/>
    *   target - resource target<br/>
-   *   autoApprove - approve without prompt<br/>
+   *   planInput - ask for input for variables not directly set<br/>
    *   tfRootDir - the directory in which to run the apply command
-   *   plan - the plan file to run the apply against<br/>
+   *   planOutputFile - path to save the generated execution plan<br/>
+   *   refreshState - if true then refresh the state prior to running plan<br/>
+   *   tfState - path to the state file; defaults to "terraform.tfstate"<br/>
    *   noColor - remove color encoding from output<br/>
-   *   timeout - how long in milliseconds the terraform apply command can run<br/>
+   *   destroyPlan - if set then output a destroy plan<br/>
    * </p>
    * @param properties  parameter options and properties for terraform apply
    * @return            the output of terraform apply
@@ -67,28 +73,27 @@ public class TerraformApply implements TerraformOperation<String> {
   public String execute(Properties properties) throws TerraformException {
     StringBuilder options = new StringBuilder();
 
-    for (TerraformApplyParam param : TerraformApplyParam.values()) {
+    for (TerraformPlanParam param : TerraformPlanParam.values()) {
       if (properties.containsKey(param.property)) {
-        if (param == TerraformApplyParam.varFiles) {
+        if (param == TerraformPlanParam.varFiles) {
           for (String file : (properties.getProperty(param.property)).split(",")) {
             options.append(String.format("-%1$s=%2$s ", param, file.trim()));
           }
           continue;
         }
-        if (param == TerraformApplyParam.tfVars) {
-          for (String var : ((String)properties.get(param.property)).split(",")) {
+        if (param == TerraformPlanParam.tfVars) {
+          for (String var : ((String) properties.get(param.property)).split(",")) {
             options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
           }
           continue;
         }
         switch (param) {
-          case autoApprove:
+          case destroyPlan:
           case noColor:
             options.append(String.format("-%1$s ", param));
             break;
-          case timeout:
-          case plan:
           case tfRootDir:
+          case timeout:
             break;
           default:
             options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
@@ -96,15 +101,16 @@ public class TerraformApply implements TerraformOperation<String> {
       }
     }
 
+    if (!properties.containsKey(TerraformPlanParam.planInput.property)) {
+      options.append((String.format("-%1$s=false ", TerraformPlanParam.planInput.toString())));
+    }
+
     try {
-      if (properties.containsKey(TerraformApplyParam.plan.property)) {
-        options.append(properties.getProperty(TerraformApplyParam.plan.property));
-      } else if (properties.containsKey(TerraformApplyParam.tfRootDir.property)) {
-        options.append(properties.getProperty(TerraformApplyParam.tfRootDir.property));
+      if (properties.containsKey(TerraformPlanParam.tfRootDir.property)) {
+        options.append(properties.getProperty(TerraformPlanParam.tfRootDir.property));
       } else {
         options.append(TerraformUtils.getTerraformRootModuleDir().toString());
       }
-
       if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty("timeout")));
       } else {
@@ -115,4 +121,3 @@ public class TerraformApply implements TerraformOperation<String> {
     }
   }
 }
-

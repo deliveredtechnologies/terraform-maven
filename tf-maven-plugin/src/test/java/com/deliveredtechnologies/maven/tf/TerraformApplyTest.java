@@ -46,7 +46,7 @@ public class TerraformApplyTest {
   @Test
   public void terraformApplyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
-    Mockito.when(this.executable.execute("terraform apply ")).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform apply %1$s", TerraformUtils.getTerraformRootModuleDir()))).thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformApply.execute(new Properties()));
