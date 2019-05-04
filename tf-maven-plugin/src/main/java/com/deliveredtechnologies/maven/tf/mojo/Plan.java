@@ -1,7 +1,7 @@
 package com.deliveredtechnologies.maven.tf.mojo;
 
-import com.deliveredtechnologies.maven.tf.TerraformApply;
 import com.deliveredtechnologies.maven.tf.TerraformMojo;
+import com.deliveredtechnologies.maven.tf.TerraformPlan;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -9,16 +9,16 @@ import org.apache.maven.plugins.annotations.Mojo;
 import java.io.IOException;
 
 /**
- * Mojo terraform apply goal.
+ * Mojo terraform plan goal.
  * <br/>
- * Runs 'terraform apply'
+ * Runs 'terraform plan'
  */
-@Mojo(name = "apply")
-public class Apply extends TerraformMojo<String> {
+@Mojo(name = "plan")
+public class Plan extends TerraformMojo<String> {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
-      execute(new TerraformApply(), System.getProperties());
+      execute(new TerraformPlan(), System.getProperties());
     } catch (IOException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
