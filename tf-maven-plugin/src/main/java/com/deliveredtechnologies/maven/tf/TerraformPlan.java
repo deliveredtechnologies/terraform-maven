@@ -74,29 +74,35 @@ public class TerraformPlan implements TerraformOperation<String> {
     StringBuilder options = new StringBuilder();
 
     for (TerraformPlanParam param : TerraformPlanParam.values()) {
-      if (param == TerraformPlanParam.varFiles) {
-        for (String file : (properties.getProperty(param.property)).split(",")) {
-          options.append(String.format("-%1$s=%2$s ", param, file.trim()));
+      if (properties.containsKey(param.property)) {
+        if (param == TerraformPlanParam.varFiles) {
+          for (String file : (properties.getProperty(param.property)).split(",")) {
+            options.append(String.format("-%1$s=%2$s ", param, file.trim()));
+          }
+          continue;
         }
-        continue;
-      }
-      if (param == TerraformPlanParam.tfVars) {
-        for (String var : ((String)properties.get(param.property)).split(",")) {
-          options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+        if (param == TerraformPlanParam.tfVars) {
+          for (String var : ((String) properties.get(param.property)).split(",")) {
+            options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+          }
+          continue;
         }
-        continue;
+        switch (param) {
+          case destroyPlan:
+          case noColor:
+            options.append(String.format("-%1$s ", param));
+            break;
+          case tfRootDir:
+          case timeout:
+            break;
+          default:
+            options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
+        }
       }
-      switch (param) {
-        case destroyPlan:
-        case noColor:
-          options.append(String.format("-%1$s ", param));
-          break;
-        case tfRootDir:
-        case timeout:
-          break;
-        default:
-          options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
-      }
+    }
+
+    if (!properties.containsKey(TerraformPlanParam.planInput.property)) {
+      options.append((String.format("-%1$s=false ", TerraformPlanParam.planInput.toString())));
     }
 
     try {
