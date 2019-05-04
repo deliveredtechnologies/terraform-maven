@@ -38,10 +38,21 @@ Now, all of that Maven goodness can be used with Terraform.
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
     or it can package that same Terraform root module with its dependencies for deployment into an isolated environemnt
     or Terraform Enterprise. It's all part of a single Maven goal/command.
+* Deploying Terraform Artifacts to a Maven Repo with an Attached POM is a Snap
+  * By default the [deploy goal](#tfdeploy) deploys a zip artifact packaged by the [package goal](#tfpackage) to a Maven repo
+    along with the POM of the current Maven Terraform project. But if you want to point to a differnt POM or a different
+    artifact for deployment, it can do that too. Easy peasy.
 * Simple Integration with CI Tools
   * Get rid of hundreds of lines of untested code in your CI tool and replace it with tested build lifecycle management
     using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraform build logic 
     in your CI tool means more reliable builds and less CI code to maintain. 
+* Build Terraform Maven Projects or Standalone Terraform Configurations and Anything In Between
+  * You can use the Terraform Maven plugin for building any Terraform, not just Terraform Maven projects!
+    The default configuration is opinionated around the Maven project structure. But that's available to override.
+    Do you have a different folder containing Terraform modules that you want packaged into a Fat Zip? No problem.
+    What about just running a Terraform configuration in some directory that you specify? That works too. You don't lose
+    anything with the Terraform Maven plugin. You just gain a whole lot of packaged functionality and the build lifecycle
+    power of Maven with Terraform!
     
 ### Maven Goals
 
