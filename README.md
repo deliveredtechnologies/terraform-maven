@@ -22,6 +22,7 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:destroy](#tfdestroy)
   * [tf:package](#tfpackage)
   * [tf:deploy](#tfdeploy)
+  * [tf:clean](#tfclean)
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -146,3 +147,15 @@ Deploys a packaged Terraform zip artifact ([see tf:package](#tfpackage)) with a 
 | url     | String | The url of the Maven repo to which the zip file artifact will be deployed                              |
 | pomFile | String | The path to the pom.xml file to attach to the artifact; defaults to pom.xml in the root of the project |
 
+---
+
+#### tf:clean
+
+Description:
+
+Deletes all 'terraform' files from terraform configurations along with the Terraform modules directory.
+
+| Name         | Type   | Description                                                                                    |
+| ------------ | ------ | ---------------------------------------------------------------------------------------------- |
+| tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
+| tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |

@@ -37,6 +37,7 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
    * @param tfModules the common modules directory; if null, it's defaulted to src/main/.tfmodules
    */
   public TerraformGet(Log log, String tfModules) throws IOException {
+    //TODO: Use TerraformUtils to determine the tfModules directory instead of reimplementing it here.
     this(log, StringUtils.isEmpty(tfModules) ? Paths.get("src", "main", ".tfmodules") : Paths.get(tfModules));
   }
 
