@@ -18,6 +18,7 @@ Now, all of that Maven goodness can be used with Terraform.
 * [Maven Goals](#maven-goals)
   * [tf:get](#tfget)
   * [tf:init](#tfinit)
+  * [tf:plan](#tfplan)
   * [tf:apply](#tfapply)
   * [tf:destroy](#tfdestroy)
   * [tf:package](#tfpackage)
@@ -49,14 +50,13 @@ Now, all of that Maven goodness can be used with Terraform.
 Description:
 
 Downloads Maven artifacts into a common modules directory and extracts each artifacts
-contents into a folder named for the artifact (version agnostic). The default location
-of the modules folder is `src/main/.tfmodules`.
+contents into a folder named for the artifact (version agnostic). 
 
 Optional Parameters:
 
-| Name         | Type   | Description                                                     |
-| ------------ | ------ | --------------------------------------------------------------- |
-| tfModulesDir | String | The directory location where Terraform modules will be expanded |
+| Name         | Type   | Description                                                                                        |
+| ------------ | ------ | -------------------------------------------------------------------------------------------------- |
+| tfModulesDir | String | The directory location where Terraform modules will be expanded; defaults to `src/main/.tfmodules` |
 
 ---
 
@@ -70,10 +70,35 @@ _Note: tf:init depends on tf:get; so tf:get is always executed when tf:init is s
 
 Optional Parameters:
 
-| Name      | Type   | Description                                                            |
-| --------- | ------ | ---------------------------------------------------------------------- |
-| tfRootDir | String | The root module directory location where terraform will be initialized |
+| Name      | Type   | Description                                                                                                         |
+| --------- | ------ | ------------------------------------------------------------------------------------------------------------------- |
+| tfRootDir | String | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}` |
 
+---
+ 
+#### tf:plan
+
+Description:
+
+Executes the `terraform plan` command. See [https://www.terraform.io/docs/commands/plan.html](https://www.terraform.io/docs/commands/plan.html).
+
+Optional Parameters:
+
+| Name           | Type    | Description                                                                                                |
+| -------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| varFiles       | String  | A comma delimited string of tfvars files (e.g. -var-file=foo)                                              |
+| tfVars         | String  | A comma delimited string of tfvars (e.g. -var 'name=value')                                                |
+| lockTimeout    | Number  | Duration to retry a state lock                                                                             |
+| target         | Number  | A resource address to target                                                                               |
+| planInput      | Boolean | If set to "true", input variables not directly set will be requested; otherwise, the plan will fail        |
+| noColor        | Any     | If this property exists, the -no-color flag is set                                                         |
+| destroyPlan    | Any     | If this property exists, a destroy plan is outputted                                                       | 
+| planOutputFile | String  | The path to save the generated execution plan                                                              |
+| tfRootDir      | String  | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory |
+| timeout        | Number  | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min               |
+| refreshState   | Boolean | If set to "true" then Terraform will refresh the state before generating the plan                          |
+| tfState        | String  | The path to the state file; defaults to `terraform.tfstate`                                                |
+ 
 ---
 
 #### tf:apply
@@ -84,17 +109,17 @@ Executes the `terraform apply` command. See [https://www.terraform.io/docs/comma
 
 Optional Parameters:
 
-| Name        | Type   | Description                                                                                 |
-| ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| varFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                               |
-| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                 |
-| lockTimeout | Number | Duration to retry a state lock                                                              |
-| target      | Number | A resource address to target                                                                |
-| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                      |
-| noColor     | Any    | If this property exists, the -no-color flag is set                                          |
-| plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used      |
-| tfRootDir   | String | A terraform config directory to apply; defaults to current directory                        |
-| timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; default is 10min |
+| Name        | Type   | Description                                                                                                |
+| ----------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| varFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                                              |
+| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                                |
+| lockTimeout | Number | Duration to retry a state lock                                                                             |
+| target      | Number | A resource address to target                                                                               |
+| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                                     |
+| noColor     | Any    | If this property exists, the -no-color flag is set                                                         |
+| plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used                     |
+| tfRootDir   | String | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory |
+| timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min               |
 
 ---
 
@@ -106,14 +131,14 @@ Executes the `terraform destroy` command. See [https://www.terraform.io/docs/com
 
 Optional Parameters:
 
-| Name        | Type   | Description                                                                                 |
-| ----------- | ------ | ------------------------------------------------------------------------------------------- |
-| lockTimeout | Number | Duration to retry a state lock                                                              |
-| target      | Number | A resource address to target                                                                |
-| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                      |
-| noColor     | Any    | If this property exists, the -no-color flag is set                                          |
-| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                        |
-| timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; default is 10min |
+| Name        | Type   | Description                                                                                    |
+| ----------- | ------ | ---------------------------------------------------------------------------------------------- |
+| lockTimeout | Number | Duration to retry a state lock                                                                 |
+| target      | Number | A resource address to target                                                                   |
+| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                         |
+| noColor     | Any    | If this property exists, the -no-color flag is set                                             |
+| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
+| timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; defaults to 10min |
 
 ---
 
@@ -122,7 +147,7 @@ Optional Parameters:
 Description:
 
 Recursively packages the Terraform files from the root module directory as target/{artifact-id}-{version}.zip.
-Optionally, a fat zip can be created instead, which also includes the Terraform module dependencies; see the [tf:get goal](#tfget) above.
+Optionally, a fat zip can be created instead, which also includes the Terraform module dependencies if available; see the [tf:get goal](#tfget) above.
 
 _Note: Within the fat zip, module source paths are updated accordingly so that the zip is a wholly contained working module that can be consumed as a module,
 extracted, initialized and applied as-is or submitted to Terraform Enterprise._
