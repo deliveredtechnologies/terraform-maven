@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Mojo terraform "get" goal.
- * <br/>
+ * <br>
  * Gets Terraform Maven dependencies and extracts into a tfModules dir.
  */
 @Mojo(name = "get")

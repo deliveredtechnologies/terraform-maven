@@ -48,16 +48,16 @@ public class TerraformApply implements TerraformOperation<String> {
   /**
    * Executes terraform apply.
    * <p>
-   *   Valid Properties: <br/>
-   *   tfVars - a comma delimited list of terraform variables<br/>
-   *   varFiles - a comma delimited list of terraform vars files<br/>
-   *   lockTimeout - state file lock timeout<br/>
-   *   target - resource target<br/>
-   *   autoApprove - approve without prompt<br/>
+   *   Valid Properties: <br>
+   *   tfVars - a comma delimited list of terraform variables<br>
+   *   varFiles - a comma delimited list of terraform vars files<br>
+   *   lockTimeout - state file lock timeout<br>
+   *   target - resource target<br>
+   *   autoApprove - approve without prompt<br>
    *   tfRootDir - the directory in which to run the apply command
-   *   plan - the plan file to run the apply against<br/>
-   *   noColor - remove color encoding from output<br/>
-   *   timeout - how long in milliseconds the terraform apply command can run<br/>
+   *   plan - the plan file to run the apply against<br>
+   *   noColor - remove color encoding from output<br>
+   *   timeout - how long in milliseconds the terraform apply command can run<br>
    * </p>
    * @param properties  parameter options and properties for terraform apply
    * @return            the output of terraform apply

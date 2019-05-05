@@ -39,10 +39,10 @@ public class TerraformDeploy implements TerraformOperation<String> {
   /**
    * Deploys a file w/POM to the Maven repo at the specified URL.
    * <p>
-   *   Properties accepted:<br/>
-   *   file - the file to be deployed to the Maven repo<br/>
-   *   url - the url of the Maven repo<br/>
-   *   pomFile - the POM file to be associated with the file<br/>
+   *   Properties accepted:<br>
+   *   file - the file to be deployed to the Maven repo<br>
+   *   url - the url of the Maven repo<br>
+   *   pomFile - the POM file to be associated with the file<br>
    * </p>
    * @param invoker             Maven Invoker
    * @param request             Maven InvocationRequest

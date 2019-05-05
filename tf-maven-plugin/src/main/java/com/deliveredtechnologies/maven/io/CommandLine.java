@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Command line abstraction; executes any command via the command line (cmd.exe or bash based on OS).
+ */
 public class CommandLine implements Executable {
 
   private static int DEFAULT_TIMEOUT = 600000;
@@ -17,6 +20,14 @@ public class CommandLine implements Executable {
     this.directory = directory;
   }
 
+  /**
+   * Runs the command specified on the command line (cmd.exe or bash based on OS).
+   * @param command the command to be run on the command line
+   * @param timeout the max amount of time in milliseconds the command is allowed to run before interruption
+   * @return        the output from the command line
+   * @throws IOException
+   * @throws InterruptedException
+   */
   @Override
   public String execute(String command, int timeout) throws IOException, InterruptedException {
     boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");

@@ -21,9 +21,9 @@ public class TerraformInit implements TerraformOperation<String> {
   }
 
   /**
-   * Executes terraform init. <br/>
+   * Executes terraform init. <br>
    * <p>
-   *   Valid Properties: <br/>
+   *   Valid Properties: <br>
    *   tfRootDir - the directory where terraform init is called
    * </p>
    * @param properties  paramter options and properties for terraform init

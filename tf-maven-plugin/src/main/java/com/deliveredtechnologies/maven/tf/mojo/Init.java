@@ -9,7 +9,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Mojo terraform init goal.
- * <br/>
+ * <br>
  * Runs 'terraform init'
  */
 @Execute(goal = "get")
