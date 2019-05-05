@@ -1,27 +1,22 @@
 language: java
 env:
   global:
-    #OSSRH_USERNAME
-    - secure: "QtZ0h7bfVQ7Juw3SdaXk77AT5bQUlI3YhBZnOAOhjK6IVlPcYGMUY0J+CK2ogSoCkjoGFK+2PcBYvBalscQ0U3atY/MGvbmLA/uj8OjiFHoW2pdTWPIaiLOucOr6t2QVZoC4eSghpyTUVtdbVLt4h+rN3YRyVqxBC/wdN17lq+xgf2vRMk/4+DQxQrEu8UyvwJB1fPNJcU2goZRPwvxFp+PXQsTGfMWdNpl121lZrUnSk0ua+ZR4mFzWaNNFaQz7rSPhH/kpjhjRfTnH+vf9wYUA6iFxqx6YL0+pL64PFB+nYZnxL2gYYMU2uqnpKaWJ+6Hv0Q1OXOJ88LA6AtE6rlPZhBoglbk744Q8XK84ewwBt3NCTsZ3sM0sez9iWR8lkwmkiPlYxAosFRfVxQ8YYa0uoT1/GDwOBfsd4x3tsxQRFMV6quKAnaxM02tJOC4OxCw9ul/Gd8SJBumxPKLJCNA9Dbc1d1TVhgltyMMEzpz2lBgJwyV1i2xM/JAgoZd/dLP2JjLB397HnpIZYqO8prXKmX0Y+ba73uan6qpkobIJaV7tuDJznTjcrzrGo2akFmCeEcCSe+rKYSx7Y8buYQzDR4AeL4Te/FbP6CII2QK6MdmYvcTyMKnYL9viU+SkkM76EX1mzQrmviMm9Ze/Z6xWGdzFG39Ns0zMMbw1SyY="
-    #OSSRH_PASSWORD
-    - secure: "UZ5SRC7sZlkP/rBDzThtcYICpGCeaOzVAC0LzazYd1LgyF29EOiSTLhHjhXOr+E03konKAdKm3nVFld4rl5KJNk/egBlelmDQ6MoLLhGiAujukXPVi1rZ1f/ondpFbzysZub2JM6VkNqJRLKOWQbgZRLcmU2XFJVTQhR0G4O7E917RWF83JAXcTW4US5Dwiv3e90ne83wbA0d3CADrCU9FVi3Qqxv8Pu86x3rZFkcS9tvkhKUb0fJfEUwZaf5zs8o7FURrT7KUJ/cCItECEyBhLlX1C2Dm5s8hyhMsvN11LLPZu5uvqSKLCqY5AAsBxK1C0n5qEbT/ZkAPFQEMGQmqDsxayKqrvQAPJSdDx3tcTyd6zlrDmHuUGQNIDb/oQ0bIYR5qWf+ymRyCHGGhaCvoexJvKqQ9wzJIhlzQwAmWn+rwrwNCytP4C9krFlqpIpPqzXLk9pCIpbMMh302567UAmsfhO5/QQWQhaHnKdZKa6qmmG0QeIEhcAbxPZUOOHWHGjJMaU1O29GFioNgMTRLXAusvpx5bRowyHqtyicDapXACcyeqjr3vSXYq87DTe3rJTRcM6FnIa1eFg8KjyOxZVsdDg/RwXauEKBB1EH5SMmB5shwgegvvP6Khr2r5BLCE1i7CGqEUCOvQ6/Az/fRetkVsz+qNqTpffxL4zWpA="
+  - secure: STW9FkS69BRtMGlF+BGJEefaHi1UzguzkyQOZZxKZp93bJTzWafGLonwDW/Aky3BhlRwCfKrl9e0BuF+j1ACBv5gxowvO8RuwFzBNbpKOeTAtVEmqXrqfLtfN+w3tKj41Db08NxP9NNlxQst9FSlhJP0EM1EdetcMTYwMWvL2Q71UP2RD3vziorPON6W+hiXA1pstRHkYc3G5x7dmVvP6nMcUo/vPvbPi6QOn4SS2Pm/f9t5vAA1UYsXgfQDXG178wI9WMpiUo75hCHL2yzYnLszigWEzG2UDkAM35vJnLwI/fGhl4jysf8r85+bDusfkJ7TYQizRChLpfdOO67UwDTGAN28/KEvhSXT8TG6lMLu35xk3kRvN6mjcnYtxWYhaJjuXQ23vrdXfZvsoXbaW7DwPafqsG8nvhjMUXnXHmNUV+K4RIEqrnYmapxPTVAEmWluzyfCCEptpwpb0Xl2fc/KVy02o63a8rKaa2CaepZt6b7juFVTXeWYmaJ66NoHovXYtbGpiC2v1iDa8bmrdRkb1GzQ/PEcUTToGOeTOEkOZbvCMt2xS2B/cvgo3w2Z4C8moovY2dDjOP5F94fwBwbwodK/b5f8QBPwECqZIoQpqhvtMo99HOQJgpPhKLddUqhzw1rjPt07S2QDiHkwd4EePeZ6ZIcY61iGtMcwpes=
+  - secure: mesHrCi3fqaM538dEQJftOarOTEAMgo61uFx0RmOvg3nBVJphaLHoJWaYXfA5qtNhXTSYFwAeqIxAywRljEspRVwvhXvykRuGUzgk1w5MIL8OLflK34SU7m/eBPGVw6Ka4Uft8vnnZYzfl1qEY05EP9M20gciAujmfSnzSjfyIM9hZieDlsz4YkPexnuV9t7cFWEipg4icac6n0NFcZxzznnQ7Tyg+GyJA3HCVgB4jpfIPByJumpGBla1hFkfcWsgyL2uzQozcWUqLzW772PiPc6H75AAGSIDC63dwA3rmzCfBdj1POwn1mezRoJrxt0c3vr1uoSztZe5wquGEoUw1QRxOyEiYWy0z+TFWfb5G5D/H+7ICllL4+PXqI3Mf5uyujI3JNxeTbOa+lkydx79kL+ulOy2AyrY6IMmzRsyGmRxhpdoreQwHFKIsydqxEtBXHZ3oCcjR83hxLF9atbefWq8CNfvdLYsUUxwsUSmF+IBo5se/kJ7zwdb9yFWX2NzlJhchDmU97dXIzdn8PI4mFC0p/gmllJvr/cdjSBxLxgPVcH8fQ0kH6oMgNEXKvl1od/Qls95w0nP4W33zYxEk+DCKwdCXIQ8arEj4lamSEGyzii0zdn1gM/LExyu/SQ8ZOeWTEOLHuWYMNj7zuEVmaf1b1wwZf8a5E8hH4W6RA=
 sudo: false
-#branches:
-#  only:
-#  - develop
 jdk:
-  - oraclejdk8
+- oraclejdk8
 script:
-  - |
-    cd tf-maven-plugin
-    echo "*** Downloading the help plugin and getting the project version ***"
-    ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
-    VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+- |
+  cd tf-maven-plugin
+  echo "*** Downloading the help plugin and getting the project version ***"
+  ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
+  VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
-    if [ $TRAVIS_PULL_REQUEST = "false" ] && echo $VERSION | grep -q SNAPSHOT; then
-      echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
-      cp ../.travis.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test jacoco:report coveralls:report deploy -P snapshot
-    else
-      echo "*** Validating the build ***"
-      ./mvnw clean test jacoco:report coveralls:report
-    fi
+  if [ $TRAVIS_PULL_REQUEST = "false" ] && echo $VERSION | grep -q SNAPSHOT; then
+    echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
+    cp ../.travis.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test jacoco:report coveralls:report deploy
+  else
+    echo "*** Validating the build ***"
+    ./mvnw clean test jacoco:report coveralls:report
+  fi
