@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * Class abstraction for expanding a ZIP file.
+ */
 public class ExpandableZippedArtifact implements Expandable {
 
   private static int BUFFER_SIZE = 4096;

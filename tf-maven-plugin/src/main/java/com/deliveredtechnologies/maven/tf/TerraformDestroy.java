@@ -44,15 +44,15 @@ public class TerraformDestroy implements TerraformOperation<String> {
   }
 
   /**
-   * Executes terraform destroy. <br/>
+   * Executes terraform destroy. <br>
    * <p>
-   *   Valid Properties: <br/>
-   *   lockTimeout - state file lock timeout<br/>
-   *   target - resource target<br/>
-   *   autoApprove - approve without prompt<br/>
+   *   Valid Properties: <br>
+   *   lockTimeout - state file lock timeout<br>
+   *   target - resource target<br>
+   *   autoApprove - approve without prompt<br>
    *   tfRootDir - the directory in which to run the apply command
-   *   noColor - remove color encoding from output<br/>
-   *   timeout - how long in milliseconds the terraform apply command can run<br/>
+   *   noColor - remove color encoding from output<br>
+   *   timeout - how long in milliseconds the terraform apply command can run<br>
    * </p>
    * @param properties  paramter options and properties for terraform apply
    * @return            the output of terraform apply

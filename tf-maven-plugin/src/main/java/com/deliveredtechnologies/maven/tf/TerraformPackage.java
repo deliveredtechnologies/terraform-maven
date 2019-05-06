@@ -45,8 +45,8 @@ public class TerraformPackage implements TerraformOperation<String> {
    * Packages a Terraform config as a zip file.
    * <p>
    *   Valid Properties:
-   *   tfModulesDir - the directory where Terraform Modules dependencies (i.e. Maven Terraform dependencies) are stored; defaults to src/main/.tfmodules<br/>
-   *   tfRootDir - the directory containing the Terraform root module configuration; defaults to src/main/tf/{first dir found}<br/>
+   *   tfModulesDir - the directory where Terraform Modules dependencies (i.e. Maven Terraform dependencies) are stored; defaults to src/main/.tfmodules<br>
+   *   tfRootDir - the directory containing the Terraform root module configuration; defaults to src/main/tf/{first dir found}<br>
    *   isFatZip - if "true", then zip contains the Terraform code for all Maven dependencies ( valid values are "true" or "false"); defaults to "false"
    * </p>
    * @param properties  property options for packaging a Terraform configuration

@@ -10,7 +10,7 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * Mojo tfn:package goal.
- * <br/>
+ * <br>
  * Packages terraform artifacts in a zip for deployment.
  */
 @Mojo(name = "package")

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * Mojo terraform destroy goal.
- * <br/>
+ * <br>
  * Runs 'terraform destroy'
  */
 @Mojo(name = "destroy")

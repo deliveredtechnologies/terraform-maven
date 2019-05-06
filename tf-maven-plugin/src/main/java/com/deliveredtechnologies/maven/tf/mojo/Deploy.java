@@ -10,7 +10,7 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * Mojo tf:deploy goal.
- *<br/>
+ *<br>
  * Deploys an artifact to a Maven repo.
  */
 @Mojo(name = "deploy")

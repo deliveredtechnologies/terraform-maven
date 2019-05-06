@@ -19,7 +19,7 @@ public class TerraformCommandLineDecorator implements Executable {
   }
 
   /**
-   * Instantiates TerraformCommandLineDecorator using TerraformCommand.<br/>
+   * Instantiates TerraformCommandLineDecorator using TerraformCommand.<br>
    * The directory where commands are executed is src/main/tf/{root module dir}.
    * @param cmd the Terraform command to be executed
    * @throws IOException

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * Mojo clean goal.
- * <br/>
+ * <br>
  * Deletes all terraform files from terraform configurations along with tf modules directory.
  */
 @Mojo(name = "clean")

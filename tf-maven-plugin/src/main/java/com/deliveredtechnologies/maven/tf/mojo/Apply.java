@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * Mojo terraform apply goal.
- * <br/>
+ * <br>
  * Runs 'terraform apply'
  */
 @Mojo(name = "apply")
