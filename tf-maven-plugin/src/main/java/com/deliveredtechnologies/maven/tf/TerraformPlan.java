@@ -46,7 +46,7 @@ public class TerraformPlan implements TerraformOperation<String> {
   }
 
   public TerraformPlan() throws IOException {
-    this(new TerraformCommandLineDecorator(TerraformCommand.APPLY));
+    this(new TerraformCommandLineDecorator(TerraformCommand.PLAN));
   }
 
   /**
