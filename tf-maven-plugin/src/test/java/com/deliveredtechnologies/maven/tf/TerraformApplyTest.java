@@ -25,7 +25,7 @@ public class TerraformApplyTest {
   public void terraformApplyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform apply -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -auto-approve -no-color someplan.tfplan",
+      "terraform apply -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve someplan.tfplan",
       1111))
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
@@ -34,7 +34,6 @@ public class TerraformApplyTest {
     this.properties.put(TerraformApplyParam.tfVars.property, "key1=value1, key2=value2");
     this.properties.put(TerraformApplyParam.lockTimeout.property, "1000");
     this.properties.put(TerraformApplyParam.target.property, "module1.module2");
-    this.properties.put(TerraformApplyParam.autoApprove.property, "true");
     this.properties.put(TerraformApplyParam.noColor.property, "true");
     this.properties.put(TerraformApplyParam.timeout.property, "1111");
     this.properties.put(TerraformApplyParam.plan.property, "someplan.tfplan");
@@ -46,7 +45,7 @@ public class TerraformApplyTest {
   @Test
   public void terraformApplyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
-    Mockito.when(this.executable.execute(String.format("terraform apply %1$s", TerraformUtils.getTerraformRootModuleDir()))).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform apply -auto-approve %1$s", TerraformUtils.getTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformApply.execute(new Properties()));
@@ -56,7 +55,7 @@ public class TerraformApplyTest {
   @Test
   public void terraformApplyUsesPlanWhenBothPlanAndTfRootDirAreSpecified() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
-    Mockito.when(this.executable.execute("terraform apply someplan.tfplan")).thenReturn("Success!");
+    Mockito.when(this.executable.execute("terraform apply -auto-approve someplan.tfplan")).thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
     this.properties.put(TerraformApplyParam.plan.property, "someplan.tfplan");
     this.properties.put(TerraformApplyParam.tfRootDir.property, "/somedir");

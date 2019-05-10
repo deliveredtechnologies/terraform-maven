@@ -2,6 +2,7 @@ package com.deliveredtechnologies.maven.tf.mojo;
 
 import com.deliveredtechnologies.maven.tf.TerraformInit;
 import com.deliveredtechnologies.maven.tf.TerraformMojo;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;

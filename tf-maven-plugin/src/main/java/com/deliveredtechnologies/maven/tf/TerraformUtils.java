@@ -19,9 +19,10 @@ public class TerraformUtils {
   public static Path getTerraformRootModuleDir() throws IOException {
     Path tfSourcePath = Paths.get("src", "main", "tf");
     if (tfSourcePath.toFile().exists() && tfSourcePath.toFile().isDirectory()) {
-      return Files.walk(Paths.get("src", "main", "tf"), 1)
-          .filter(path -> path.getFileName().toString() != "tf")
-          .findFirst().orElseThrow(() -> new IOException("Terraform root module not found"));
+      return Files.walk(Paths.get("src", "main", "tf"), 2)
+          .filter(path -> !path.toFile().isDirectory())
+          .filter(path -> path.getFileName().toString().endsWith(".tf"))
+          .findFirst().orElseThrow(() -> new IOException("Terraform root module not found")).getParent();
     }
     return Paths.get(".");
   }

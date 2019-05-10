@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -49,8 +50,9 @@ public class TerraformCommandLineDecoratorTest {
   @Test
   public void terraformCommandLineDecoratorSucceedsOnCreationWhenTfSourceDirIsFound() throws IOException {
     Path tfSrcPath = Paths.get("src", "main", "tf");
-    Path rootModulePath = tfSrcPath.resolve("tf").resolve("root");
+    Path rootModulePath = tfSrcPath.resolve("root");
     FileUtils.forceMkdir(rootModulePath.toFile());
+    Files.createFile(rootModulePath.resolve("main.tf"));
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY);
     FileUtils.forceDelete(tfSrcPath.toFile());
   }

@@ -34,7 +34,7 @@ public class TerraformPackage implements TerraformOperation<String> {
   enum TerraformPackageParams {
     tfModulesDir,
     tfRootDir,
-    fatZip;
+    fat;
   }
 
   public TerraformPackage(MavenProject project) {
@@ -60,7 +60,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       Path targetTfRootPath = targetPath.resolve(targetTfRootDir);
       String tfModulesDir = properties.getProperty(TerraformPackageParams.tfModulesDir.toString());
       String tfRootDir = properties.getProperty(TerraformPackageParams.tfRootDir.toString());
-      boolean isFatZip = Boolean.valueOf(properties.getProperty(TerraformPackageParams.fatZip.toString(), "false"));
+      boolean isFatZip = Boolean.valueOf(properties.getProperty(TerraformPackageParams.fat.toString(), "false"));
 
       Path tfModulesPath = !StringUtils.isEmpty(tfModulesDir)
           ? Paths.get(tfModulesDir)

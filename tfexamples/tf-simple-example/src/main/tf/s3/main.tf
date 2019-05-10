@@ -7,17 +7,17 @@ provider "aws" {
   region = "${var.replication_region}"
 }
 
-resource "random_id" "bucket_suffix" {
-  prefix = "bucket"
+resource "random_id" "bucket_name" {
+  prefix = "bucket-"
   byte_length = 8
 }
 
 locals {
-  bucket_name = "${length(var.bucket_name) == 0 ? random_id.bucket_suffix : var.bucket_name}"
+  bucket_name = "${length(var.bucket_name) == 0 ? random_id.bucket_name.hex : var.bucket_name}"
 }
 
 data "template_file" "assume_role_policy" {
-  template = "${file("/policies/assume-role-policy.json")}"
+  template = "${file("policies/assume-role-policy.json")}"
 }
 
 data "template_file" "replication_policy" {

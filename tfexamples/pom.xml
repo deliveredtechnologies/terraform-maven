@@ -10,13 +10,4 @@
   <modules>
     <module>tf-simple-example</module>
   </modules>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.deliveredtechnologies.maven</groupId>
-        <artifactId>tf-maven-plugin</artifactId>
-        <version>0.1-SNAPSHOT</version>
-      </plugin>
-    </plugins>
-  </build>
 </project>

@@ -109,11 +109,12 @@ public class TerraformPlan implements TerraformOperation<String> {
       if (properties.containsKey(TerraformPlanParam.tfRootDir.property)) {
         options.append(properties.getProperty(TerraformPlanParam.tfRootDir.property));
       } else {
-        options.append(TerraformUtils.getTerraformRootModuleDir().toString());
+        options.append(TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
       }
       if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty("timeout")));
       } else {
+        System.out.println(String.format("*** terraform plan options: %1$s ***", options.toString()));
         return terraform.execute(options.toString());
       }
     } catch (InterruptedException | IOException e) {

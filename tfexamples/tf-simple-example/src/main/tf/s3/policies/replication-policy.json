@@ -27,7 +27,7 @@
         "s3:ReplicateDelete"
       ],
       "Effect": "Allow",
-      "Resource": "${replcated_bucket_arn}/*"
+      "Resource": "${bucket_arn}/*"
     }
   ]
 }

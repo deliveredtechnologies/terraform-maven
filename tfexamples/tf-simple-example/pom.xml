@@ -9,4 +9,50 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tf-simple-example</artifactId>
+  <repositories>
+    <repository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <varFiles>${project.build.sourceDirectory}/../tf/s3/tfvars/dev.tfvars</varFiles>
+      </properties>
+    </profile>
+    <profile>
+      <id>test</id>
+      <properties>
+        <varFiles>${project.build.sourceDirectory}/../tf/s3/tfvars/test.tfvars</varFiles>
+      </properties>
+    </profile>
+  </profiles>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.deliveredtechnologies.maven</groupId>
+        <artifactId>tf-maven-plugin</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>terraform-build</id>
+            <phase>install</phase>
+            <goals>
+              <goal>init</goal>
+              <goal>apply</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -29,7 +29,7 @@ public class TerraformDestroyTest {
   public void terraformDestroyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform destroy -lock-timeout=1000 -target=module1.module2 -auto-approve -no-color /somedir",
+      "terraform destroy -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve /somedir",
       1111))
       .thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
@@ -42,7 +42,6 @@ public class TerraformDestroyTest {
     this.properties.put("tfRootDir", "/somedir");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.lockTimeout.property, "1000");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.target.property, "module1.module2");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.autoApprove.property, "true");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.noColor.property, "true");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.tfRootDir.property, "/somedir");
@@ -55,7 +54,7 @@ public class TerraformDestroyTest {
   @Test
   public void terraformDestroyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
-    Mockito.when(this.executable.execute("terraform destroy ")).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform destroy -auto-approve %1$s", TerraformUtils.getTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformDestroy.execute(new Properties()));

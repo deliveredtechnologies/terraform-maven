@@ -44,7 +44,7 @@ public class TerraformPackageTest {
 
   @Test
   public void packageWithFatZipPackagesTfModulesInsideTfRootInTheTargetDir() throws IOException, TerraformException {
-    properties.put(TerraformPackageParams.fatZip.toString(), "true");
+    properties.put(TerraformPackageParams.fat.toString(), "true");
     String response = this.terraformPackage.execute(properties);
 
     Assert.assertEquals(response,

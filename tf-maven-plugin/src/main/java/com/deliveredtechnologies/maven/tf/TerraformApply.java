@@ -19,7 +19,6 @@ public class TerraformApply implements TerraformOperation<String> {
     target("target"),
     plan("plan"),
     tfRootDir("dir"),
-    autoApprove("auto-approve"),
     noColor("no-color"),
     timeout("timeout");
 
@@ -82,7 +81,6 @@ public class TerraformApply implements TerraformOperation<String> {
           continue;
         }
         switch (param) {
-          case autoApprove:
           case noColor:
             options.append(String.format("-%1$s ", param));
             break;
@@ -96,13 +94,15 @@ public class TerraformApply implements TerraformOperation<String> {
       }
     }
 
+    options.append("-auto-approve ");
+
     try {
       if (properties.containsKey(TerraformApplyParam.plan.property)) {
         options.append(properties.getProperty(TerraformApplyParam.plan.property));
       } else if (properties.containsKey(TerraformApplyParam.tfRootDir.property)) {
         options.append(properties.getProperty(TerraformApplyParam.tfRootDir.property));
       } else {
-        options.append(TerraformUtils.getTerraformRootModuleDir().toString());
+        options.append(TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
       }
 
       if (properties.containsKey("timeout")) {
