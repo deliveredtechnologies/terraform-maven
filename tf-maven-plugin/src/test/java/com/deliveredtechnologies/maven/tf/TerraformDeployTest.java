@@ -7,6 +7,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -52,9 +53,13 @@ public class TerraformDeployTest {
     properties.put(TerraformDeployParam.file.toString(), filename);
     properties.put(TerraformDeployParam.pomFile.toString(), pom);
 
-    terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
+    Properties deployFileProps = terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
 
-    Mockito.verify(request, Mockito.times(1)).setProperties(properties);
+    for (String key : properties.stringPropertyNames()) {
+      Assert.assertEquals(properties.getProperty(key), deployFileProps.getProperty(key));
+    }
+
+    Mockito.verify(request, Mockito.times(1)).setProperties(Mockito.any());
     Mockito.verify(request, Mockito.times(1)).setGoals(Arrays.asList("deploy:deploy-file"));
     Mockito.verify(invoker, Mockito.times(1)).execute(request);
   }
@@ -66,15 +71,16 @@ public class TerraformDeployTest {
         .resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
 
     properties.put(TerraformDeployParam.url.toString(), url);
-    terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
 
-    Mockito.verify(request, Mockito.times(1)).setProperties(properties);
+    Properties deployFileProps = terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
+
+    Assert.assertEquals(String.format(targetPath.toString()), deployFileProps.getProperty(TerraformDeployParam.file.toString()));
+    Assert.assertEquals(String.format(Paths.get("pom.xml").toAbsolutePath().toString(), targetPath.toAbsolutePath().toString()), deployFileProps.getProperty(TerraformDeployParam.pomFile.toString()));
+    Assert.assertEquals("zip", deployFileProps.getProperty("packaging"));
+
+    Mockito.verify(request, Mockito.times(1)).setProperties(Mockito.any());
     Mockito.verify(request, Mockito.times(1)).setGoals(Arrays.asList("deploy:deploy-file"));
     Mockito.verify(invoker, Mockito.times(1)).execute(request);
-    Mockito.verify(properties, Mockito.times(1))
-      .put(TerraformDeployParam.file.toString(), String.format("file://%1$s", targetPath.toAbsolutePath().toString()));
-    Mockito.verify(properties, Mockito.times(1))
-      .put(TerraformDeployParam.pomFile.toString(), Paths.get("pom.xml").toAbsolutePath().toString());
   }
 
   @Test(expected = TerraformException.class)

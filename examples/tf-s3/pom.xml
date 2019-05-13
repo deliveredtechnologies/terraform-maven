@@ -3,18 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>tf-examples</artifactId>
-    <groupId>com.maven.deliveredtechnologies.example</groupId>
+    <artifactId>examples</artifactId>
+    <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>tf-simple-example</artifactId>
-  <repositories>
-    <repository>
+  <artifactId>tf-s3</artifactId>
+  <pluginRepositories>
+    <pluginRepository>
       <id>sonatype</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
+    </pluginRepository>
+  </pluginRepositories>
   <profiles>
     <profile>
       <id>dev</id>
@@ -32,16 +32,37 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.deliveredtechnologies.maven</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.deliveredtechnologies</groupId>
         <artifactId>tf-maven-plugin</artifactId>
         <version>0.1-SNAPSHOT</version>
         <executions>
           <execution>
+            <id>terraform-init</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>init</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>terraform-build</id>
             <phase>install</phase>
             <goals>
-              <goal>init</goal>
               <goal>apply</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-plan</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>init</goal>
+              <goal>plan</goal>
             </goals>
           </execution>
           <execution>
