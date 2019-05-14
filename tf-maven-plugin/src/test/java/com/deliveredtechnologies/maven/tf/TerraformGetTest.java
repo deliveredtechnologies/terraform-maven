@@ -28,19 +28,28 @@ public class TerraformGetTest {
 
   private Path tfModules;
 
+  /**
+   * Creates a tfmodules directory and copies the mock artifact zips in.
+   * @throws URISyntaxException
+   * @throws IOException
+   */
   @Before
   public void setup() throws URISyntaxException, IOException {
     Path zipsDir = Paths.get(this.getClass().getResource("/zips").toURI());
-    tfModules  = zipsDir.resolveSibling(".tfModules");
+    tfModules  = zipsDir.resolveSibling(".tfmodules");
     FileUtils.forceMkdir(tfModules.toFile());
     List<Path> zipFiles = Files.walk(zipsDir, 1)
-      .filter(path -> !path.equals(zipsDir))
-      .collect(Collectors.toList());
+        .filter(path -> !path.equals(zipsDir))
+        .collect(Collectors.toList());
     for (Path zipFile : zipFiles) {
-        Files.copy(zipFile, tfModules.resolve(zipFile.getFileName()));
+      Files.copy(zipFile, tfModules.resolve(zipFile.getFileName()));
     }
   }
 
+  /**
+   * Cleans up the tfmodules directory that was created.
+   * @throws IOException
+   */
   @After
   public void teardown() throws IOException {
     FileUtils.forceDelete(tfModules.toFile());
@@ -85,12 +94,35 @@ public class TerraformGetTest {
     terraformGet.expandMavenArtifacts(tfModules);
 
     List<Path> directories = Files.walk(tfModules, 1)
-      .filter(path -> !tfModules.equals(path))
-      .collect(Collectors.toList());
+        .filter(path -> !tfModules.equals(path))
+        .collect(Collectors.toList());
 
     Assert.assertEquals(directories.size(), 3);
     Assert.assertTrue(directories.stream().anyMatch(path -> path.getFileName().toString().equals("my.module2")));
     Assert.assertTrue(directories.stream().anyMatch(path -> path.getFileName().toString().equals("my-module1")));
     Assert.assertTrue(directories.stream().anyMatch(path -> path.getFileName().toString().equals("my-module3")));
+  }
+
+  @Test
+  public void terraformGetConstructorWithLogAndTfModulesStringCreatesInstanceWithoutError() throws IOException {
+    Log log = Mockito.mock(Log.class);
+    TerraformGet terraformGet = new TerraformGet(log, tfModules.toString());
+
+    Assert.assertNotNull(terraformGet);
+  }
+
+  @Test
+  public void terraformGetConstructorWithLogCreatesInstanceWithoutError() throws IOException {
+    Log log = Mockito.mock(Log.class);
+    TerraformGet terraformGet = new TerraformGet(log);
+
+    Assert.assertNotNull(terraformGet);
+  }
+
+  @Test
+  public void terraformGetConstructorWithNoArgsCreatesInstanceWithoutError() throws IOException {
+    TerraformGet terraformGet = new TerraformGet();
+
+    Assert.assertNotNull(terraformGet);
   }
 }

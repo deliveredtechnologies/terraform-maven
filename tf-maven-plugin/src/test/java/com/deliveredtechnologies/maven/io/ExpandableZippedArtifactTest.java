@@ -13,12 +13,13 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Tests for ZippedArtifact.
+ * Tests for ExpandableZippedArtifact.
  */
-public class ZippedArtifactTest {
+public class ExpandableZippedArtifactTest {
 
   private Path zipFileDir;
 
@@ -51,19 +52,19 @@ public class ZippedArtifactTest {
   @Test
   public void zippedArtifactExtractsArtifactsWithaDotInTheName() throws URISyntaxException, IOException {
     Path zipFile = zipFileDir.resolve("tf-module-my.module2-0.1.zip");
-    Expandable expandableArtifact = new ZippedArtifact(zipFile);
+    Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile);
     expandableArtifact.expand();
 
     Path expandedDir = zipFileDir.resolve("my.module2");
     Assert.assertTrue(expandedDir.toFile().isDirectory());
 
     Assert.assertEquals(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .count(), 2);
+        .filter(path -> !path.equals(expandedDir))
+        .count(), 2);
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .filter(path -> !path.equals(expandedDir))
+        .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
 
     Assert.assertFalse(zipFile.toFile().exists());
   }
@@ -72,19 +73,19 @@ public class ZippedArtifactTest {
   public void zippedArtifactExtractsArtifactsWithaReleaseQualifierInTheName() throws URISyntaxException, IOException {
     Log log = Mockito.mock(Log.class);
     Path zipFile = zipFileDir.resolve("tf-module-my-module1-0.12-rc.zip");
-    Expandable expandableArtifact = new ZippedArtifact(zipFile, log);
+    Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile, log);
     expandableArtifact.expand();
 
     Path expandedDir = zipFileDir.resolve("my-module1");
     Assert.assertTrue(expandedDir.toFile().isDirectory());
 
     Assert.assertEquals(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .count(), 2);
+        .filter(path -> !path.equals(expandedDir))
+        .count(), 2);
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .filter(path -> !path.equals(expandedDir))
+        .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
 
     Assert.assertFalse(zipFile.toFile().exists());
 
@@ -94,19 +95,26 @@ public class ZippedArtifactTest {
   @Test
   public void zippedArtifactExtractsSnapshotArtifacts() throws URISyntaxException, IOException {
     Path zipFile = zipFileDir.resolve("tf-module-my-module3-1.2.3-SNAPSHOT.zip");
-    Expandable expandableArtifact = new ZippedArtifact(zipFile);
+    Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile);
     expandableArtifact.expand();
 
     Path expandedDir = zipFileDir.resolve("my-module3");
     Assert.assertTrue(expandedDir.toFile().isDirectory());
 
     Assert.assertEquals(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .count(), 2);
+        .filter(path -> !path.equals(expandedDir))
+        .count(), 2);
 
     Assert.assertTrue(Files.walk(expandedDir, 1)
-      .filter(path -> !path.equals(expandedDir))
-      .allMatch(path -> path.getFileName().toString().startsWith("test.file") && path.getFileName().toString().endsWith(".txt")));
+        .filter(path -> !path.equals(expandedDir))
+        .anyMatch(path -> path.getFileName().toString().equals("test.file1.txt")));
+
+    List<Path> filesInSubDir = Files.walk(expandedDir.resolve("test_dir"), 1)
+        .filter(path -> !path.equals(expandedDir.resolve("test_dir")))
+        .collect(Collectors.toList());
+
+    Assert.assertEquals(1, filesInSubDir.size());
+    Assert.assertEquals("test.file2.txt", filesInSubDir.get(0).getFileName().toString());
 
     Assert.assertFalse(zipFile.toFile().exists());
   }

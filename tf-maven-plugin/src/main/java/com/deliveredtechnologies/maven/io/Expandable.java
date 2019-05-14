@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A compressed artifact that can be expanded.
+ * Interface for a compressed artifact that can be expanded.
  */
 public interface Expandable {
   /**
