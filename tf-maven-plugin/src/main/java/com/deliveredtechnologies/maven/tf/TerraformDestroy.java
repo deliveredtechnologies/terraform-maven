@@ -17,7 +17,6 @@ public class TerraformDestroy implements TerraformOperation<String> {
     lockTimeout("lock-timeout"),
     target("target"),
     tfRootDir("dir"),
-    autoApprove("auto-approve"),
     noColor("no-color"),
     timeout("timeout");
 
@@ -69,7 +68,6 @@ public class TerraformDestroy implements TerraformOperation<String> {
         case target:
           options.append(String.format("-%1$s=%2$s ", param.toString(), properties.getProperty(param.property)));
           break;
-        case autoApprove:
         case noColor:
           options.append(String.format("-%1$s ", param).toString());
           break;
@@ -77,10 +75,14 @@ public class TerraformDestroy implements TerraformOperation<String> {
           break;
       }
     }
-    if (properties.containsKey(TerraformDestroyParam.tfRootDir.property)) {
-      options.append(properties.getProperty(TerraformDestroyParam.tfRootDir.property));
-    }
+    options.append("-auto-approve ");
+
     try {
+      if (properties.containsKey(TerraformDestroyParam.tfRootDir.property)) {
+        options.append(properties.getProperty(TerraformDestroyParam.tfRootDir.property));
+      } else {
+        options.append(TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
+      }
       if (properties.containsKey(TerraformDestroyParam.timeout.property)) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty(TerraformDestroyParam.timeout.property)));
       } else {

@@ -126,7 +126,6 @@ Optional Parameters:
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                                |
 | lockTimeout | Number | Duration to retry a state lock                                                                             |
 | target      | Number | A resource address to target                                                                               |
-| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                                     |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                         |
 | plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used                     |
 | tfRootDir   | String | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory |
@@ -146,7 +145,6 @@ Optional Parameters:
 | ----------- | ------ | ---------------------------------------------------------------------------------------------- |
 | lockTimeout | Number | Duration to retry a state lock                                                                 |
 | target      | Number | A resource address to target                                                                   |
-| autoApprove | Any    | If this property exists, the -auto-approve flag is set                                         |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                             |
 | tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
 | timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; defaults to 10min |
@@ -158,16 +156,16 @@ Optional Parameters:
 Description:
 
 Recursively packages the Terraform files from the root module directory as target/{artifact-id}-{version}.zip.
-Optionally, a fat zip can be created instead, which also includes the Terraform module dependencies if available; see the [tf:get goal](#tfget) above.
+Optionally, a fat compressed package can be created instead, which also includes the Terraform module dependencies if available; see the [tf:get goal](#tfget) above.
 
-_Note: Within the fat zip, module source paths are updated accordingly so that the zip is a wholly contained working module that can be consumed as a module,
+_Note: Within the fat compressed package, module source paths are updated accordingly so that the pacakge is a wholly contained working module that can be consumed as a module,
 extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 
 | Name         | Type    | Description                                                                                   |
 | ------------ | ------- | --------------------------------------------------------------------------------------------- |
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
-| fatZip       | Boolean | Set to true if a fat zip should be created, otherwise false; defaults to false                |
+| fat          | Boolean | Set to true if a fat compressed package should be created, otherwise false; defaults to false |
 
 ---
 

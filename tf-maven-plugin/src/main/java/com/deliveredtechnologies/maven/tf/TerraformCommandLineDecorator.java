@@ -2,6 +2,7 @@ package com.deliveredtechnologies.maven.tf;
 
 import com.deliveredtechnologies.maven.io.CommandLine;
 import com.deliveredtechnologies.maven.io.Executable;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 
@@ -13,6 +14,11 @@ public class TerraformCommandLineDecorator implements Executable {
   private Executable commandLine;
   private TerraformCommand cmd;
 
+  /**
+   * Instantiates TerraformCommandLineDecorator with a TerraformCommand (e.g. INIT, PLAN, etc.) and an Executable (i.e. CommandLine).
+   * @param cmd         A TerraformCommand (e.g. INIT, PLAN, APPLY, etc.)
+   * @param commandLine A CommandLine instance
+   */
   public TerraformCommandLineDecorator(TerraformCommand cmd, Executable commandLine) {
     this.commandLine = commandLine;
     this.cmd = cmd;
@@ -25,8 +31,7 @@ public class TerraformCommandLineDecorator implements Executable {
    * @throws IOException
    */
   public TerraformCommandLineDecorator(TerraformCommand cmd) throws IOException {
-    this.commandLine = new CommandLine(
-      TerraformUtils.getTerraformRootModuleDir());
+    this(cmd, new CommandLine(TerraformUtils.getTerraformRootModuleDir()));
   }
 
   @Override
@@ -44,6 +49,6 @@ public class TerraformCommandLineDecorator implements Executable {
   }
 
   private String getTerraformCommand(String command) {
-    return String.format("terraform %1$s %2$s", cmd.toString(), command);
+    return String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
   }
 }

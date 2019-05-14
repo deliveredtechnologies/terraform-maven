@@ -51,7 +51,7 @@ public class TerraformPlanTest {
   @Test
   public void terraformPlanExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute(String.format("terraform plan -input=false %1$s", TerraformUtils.getTerraformRootModuleDir()))).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform plan -input=false %1$s", TerraformUtils.getTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
     TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformPlan.execute(new Properties()));

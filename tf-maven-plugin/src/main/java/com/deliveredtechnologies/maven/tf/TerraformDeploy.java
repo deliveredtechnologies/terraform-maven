@@ -49,25 +49,35 @@ public class TerraformDeploy implements TerraformOperation<String> {
    * @param properties          Properties to be applied
    * @throws TerraformException
    */
-  final void deployFileToMavenRepo(Invoker invoker, InvocationRequest request, Properties properties) throws TerraformException {
+  final Properties deployFileToMavenRepo(Invoker invoker, InvocationRequest request, Properties properties) throws TerraformException {
+    Properties deployFileProps = new Properties();
+
     if (!properties.containsKey(TerraformDeployParam.url.toString())) {
       throw new TerraformException("missing required parameter: url");
     }
+    deployFileProps.put(TerraformDeployParam.url.toString(), properties.getProperty(TerraformDeployParam.url.toString()));
+
     if (!properties.containsKey(TerraformDeployParam.file.toString())) {
       Path targetPath = Paths.get("target").resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
-      properties.setProperty(TerraformDeployParam.file.toString(), String.format("file://%1$s", targetPath.toAbsolutePath().toString()));
+      deployFileProps.setProperty(TerraformDeployParam.file.toString(), targetPath.toString());
+    } else {
+      deployFileProps.setProperty(TerraformDeployParam.file.toString(), properties.getProperty(TerraformDeployParam.file.toString()));
     }
-    log.info(String.format("Deploying %1$s to %2$s", properties.getProperty(TerraformDeployParam.file.toString()), properties.getProperty(TerraformDeployParam.url.toString())));
+    deployFileProps.put("packaging", "zip");
+    log.info(String.format("Deploying %1$s to %2$s", deployFileProps.getProperty(TerraformDeployParam.file.toString()), deployFileProps.getProperty(TerraformDeployParam.url.toString())));
 
     if (!properties.containsKey(TerraformDeployParam.pomFile.toString())) {
       Path pomFile = Paths.get("pom.xml");
-      properties.setProperty(TerraformDeployParam.pomFile.toString(), pomFile.toAbsolutePath().toString());
+      deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), pomFile.toAbsolutePath().toString());
+    } else {
+      deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.getProperty(TerraformDeployParam.pomFile.toString()));
     }
 
     request.setGoals(Arrays.asList("deploy:deploy-file"));
-    request.setProperties(properties);
+    request.setProperties(deployFileProps);
     try {
       invoker.execute(request);
+      return deployFileProps;
     } catch (MavenInvocationException e) {
       throw new TerraformException("Unable to deploy to Maven repo", e);
     }
