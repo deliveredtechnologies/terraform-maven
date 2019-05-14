@@ -81,9 +81,12 @@ _Note: tf:init depends on tf:get; so tf:get is always executed when tf:init is s
 
 Optional Parameters:
 
-| Name      | Type   | Description                                                                                                         |
-| --------- | ------ | ------------------------------------------------------------------------------------------------------------------- |
-| tfRootDir | String | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}` |
+| Name          | Type    | Description                                                                                                         |
+| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| tfRootDir     | String  | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}` |
+| pluginDir     | String  | Skips plugin installation and loads plugins only from the specified directory                                       |
+| getPlugins    | Boolean | Skips plugin installation                                                                                           |
+| verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                             |
 
 ---
  

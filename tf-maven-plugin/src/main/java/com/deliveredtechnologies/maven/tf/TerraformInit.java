@@ -6,6 +6,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -15,6 +16,26 @@ public class TerraformInit implements TerraformOperation<String> {
 
   private Executable terraform;
   private Log log;
+
+  enum TerraformInitParam {
+    pluginDir("plugin-dir"),
+    tfRootDir("tfRootDir"),
+    verifyPlugins("verify-plugins"),
+    getPlugins("get-plugins");
+
+    Optional<String> name = Optional.empty();
+    String property;
+
+    TerraformInitParam(String name) {
+      this.property = this.toString();
+      this.name = Optional.of(name);
+    }
+
+    @Override
+    public String toString() {
+      return name.orElse(super.toString());
+    }
+  }
 
   public TerraformInit() throws IOException {
     this(new Slf4jMavenAdapter(LoggerFactory.getLogger(TerraformInit.class)), new TerraformCommandLineDecorator(TerraformCommand.INIT));
@@ -46,11 +67,26 @@ public class TerraformInit implements TerraformOperation<String> {
   @Override
   public String execute(Properties properties) throws TerraformException {
     try {
-      //TODO: Make tfRootDir an enum instead of a magic string property.
-      String workingDir = properties.getProperty("tfRootDir", TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
+      StringBuilder options = new StringBuilder();
+      String workingDir = properties.getProperty(TerraformInitParam.tfRootDir.toString(), TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
       log.info(String.format("*** Terraform root module directory is '%1$s' ***", workingDir));
-      String params = String.format("-no-color %1$s", workingDir);
-      return terraform.execute(params);
+
+      for (TerraformInitParam param : TerraformInitParam.values()) {
+        if (properties.containsKey(param.property)) {
+          switch (param) {
+            case pluginDir:
+            case getPlugins:
+            case verifyPlugins:
+              options.append(String.format("-%1$s=%2$s ", param.toString(), properties.getProperty(param.property)));
+              break;
+            default:
+              break;
+          }
+        }
+      }
+
+      options.append(String.format("-no-color %1$s", workingDir));
+      return terraform.execute(options.toString());
     } catch (InterruptedException | IOException e) {
       throw new TerraformException(e);
     }
