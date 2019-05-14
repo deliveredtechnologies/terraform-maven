@@ -39,17 +39,24 @@
         </configuration>
       </plugin>
       <plugin>
+        <!-- disables default jar pacakging: https://stackoverflow.com/questions/2188746/what-is-the-best-way-to-avoid-maven-jar -->
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>never</phase>
+            <configuration>
+              <finalName>unwanted</finalName>
+              <classifier>unwanted</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>com.deliveredtechnologies</groupId>
         <artifactId>tf-maven-plugin</artifactId>
         <version>0.1-SNAPSHOT</version>
         <executions>
-          <execution>
-            <id>terraform-init</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>init</goal>
-            </goals>
-          </execution>
           <execution>
             <id>terraform-build</id>
             <phase>install</phase>
@@ -70,6 +77,13 @@
             <phase>clean</phase>
             <goals>
               <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>package</goal>
             </goals>
           </execution>
         </executions>

@@ -9,6 +9,5 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>tf-s3</module>
-    <module>tf-s3-consumer</module>
   </modules>
 </project>

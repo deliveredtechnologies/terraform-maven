@@ -70,7 +70,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       //copy tfRoot directory to target
       if (targetTfRootPath.toFile().exists()) FileUtils.forceDelete(targetTfRootPath.toFile());
 
-      targetTfRootPath.toFile().mkdir();
+      FileUtils.forceMkdir(targetTfRootPath.toFile());
       List<Path> tfRootDirFiles = Files.walk(tfRootPath, 1)
           .filter(path -> !path.equals(tfRootPath))
           .collect(Collectors.toList());
