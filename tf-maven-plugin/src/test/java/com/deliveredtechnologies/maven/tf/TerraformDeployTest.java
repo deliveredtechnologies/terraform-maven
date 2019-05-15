@@ -65,6 +65,30 @@ public class TerraformDeployTest {
   }
 
   @Test
+  public void deployFileToMavenRepoDeploysWithGeneratedPom() throws TerraformException, MavenInvocationException {
+    String url = "http://someurl.com";
+    String groupId = "com.somegroup";
+    String artifactId = "artifactId";
+    String version = "0.1-SNAPSHOT";
+
+    properties.put(TerraformDeployParam.url.toString(), url);
+    properties.put(TerraformDeployParam.generatePom.toString(), "true");
+    properties.put(TerraformDeployParam.groupId, groupId);
+    properties.put(TerraformDeployParam.artifactId, artifactId);
+    properties.put(TerraformDeployParam.version, version);
+
+    Properties deployFileProps = terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
+
+    for (String key : properties.stringPropertyNames()) {
+      Assert.assertEquals(properties.getProperty(key), deployFileProps.getProperty(key));
+    }
+
+    Mockito.verify(request, Mockito.times(1)).setProperties(Mockito.any());
+    Mockito.verify(request, Mockito.times(1)).setGoals(Arrays.asList("deploy:deploy-file"));
+    Mockito.verify(invoker, Mockito.times(1)).execute(request);
+  }
+
+  @Test
   public void deployFileToMavenRepoDeploysWithPomAndFileOmitted() throws TerraformException, MavenInvocationException {
     String url = "http://someurl.com";
     Path targetPath = Paths.get("target")
