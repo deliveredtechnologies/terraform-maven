@@ -18,11 +18,14 @@ import java.util.Properties;
  */
 public class TerraformDeploy implements TerraformOperation<String> {
 
+  private static String PACKAGING = "zip";
+
   private Log log;
   private MavenProject project;
 
   enum TerraformDeployParam {
-    file, pomFile, url;
+    file, pomFile, url, packaging, generatePom, artifactId, groupId, version;
+
   }
 
   public TerraformDeploy(Log log, MavenProject project) {
@@ -63,14 +66,24 @@ public class TerraformDeploy implements TerraformOperation<String> {
     } else {
       deployFileProps.setProperty(TerraformDeployParam.file.toString(), properties.getProperty(TerraformDeployParam.file.toString()));
     }
-    deployFileProps.put("packaging", "zip");
+    
+    deployFileProps.put(TerraformDeployParam.packaging.toString(), PACKAGING);
     log.info(String.format("Deploying %1$s to %2$s", deployFileProps.getProperty(TerraformDeployParam.file.toString()), deployFileProps.getProperty(TerraformDeployParam.url.toString())));
 
-    if (!properties.containsKey(TerraformDeployParam.pomFile.toString())) {
-      Path pomFile = Paths.get("pom.xml");
-      deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), pomFile.toAbsolutePath().toString());
+    if (properties.containsKey(TerraformDeployParam.generatePom.toString())) {
+      deployFileProps.put(TerraformDeployParam.generatePom.toString(), properties.getProperty(TerraformDeployParam.generatePom.toString()));
+      deployFileProps.put(TerraformDeployParam.artifactId.toString(), project.getArtifactId());
+      deployFileProps.put(TerraformDeployParam.groupId.toString(), project.getGroupId());
+      deployFileProps.put(TerraformDeployParam.version.toString(), project.getVersion());
+      log.info("Using generated POM");
     } else {
-      deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.getProperty(TerraformDeployParam.pomFile.toString()));
+      if (!properties.containsKey(TerraformDeployParam.pomFile.toString())) {
+        Path pomFile = Paths.get(".flattened-pom.xml");
+        deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), pomFile.toAbsolutePath().toString());
+      } else {
+        deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.getProperty(TerraformDeployParam.pomFile.toString()));
+      }
+      log.info(String.format("Using POM: %1$s", deployFileProps.getProperty(TerraformDeployParam.pomFile.toString())));
     }
 
     request.setGoals(Arrays.asList("deploy:deploy-file"));

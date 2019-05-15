@@ -8,7 +8,7 @@
       ],
       "Effect": "Allow",
       "Resource": [
-        "${bucket_arn}"
+        "${source_bucket_arn}"
       ]
     },
     {
@@ -18,7 +18,7 @@
       ],
       "Effect": "Allow",
       "Resource": [
-        "${bucket_arn}/*"
+        "${source_bucket_arn}/*"
       ]
     },
     {
@@ -27,7 +27,7 @@
         "s3:ReplicateDelete"
       ],
       "Effect": "Allow",
-      "Resource": "${bucket_arn}/*"
+      "Resource": "${destination_bucket_arn}/*"
     }
   ]
 }

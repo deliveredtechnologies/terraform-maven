@@ -17,6 +17,11 @@ public class TerraformCmdLineDecorator implements Executable {
     this.cmd = cmd;
   }
 
+  /**
+   * Constructor accepts a TerraformCommand and uses it to decorate a default CommandLine object.
+   * @param cmd           A TerraformCommand (INIT, PLAN, APPLY, etc.)
+   * @throws IOException
+   */
   public TerraformCmdLineDecorator(TerraformCommand cmd) throws IOException {
     this.commandLine = new CommandLine(
       Files.walk(
