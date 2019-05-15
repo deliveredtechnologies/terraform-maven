@@ -5,7 +5,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
   <version>1.0-SNAPSHOT</version>
-  <artifactId>tf-s3</artifactId>
+  <artifactId>tf-s3-consumer</artifactId>
+  <repositories>
+    <repository>
+      <id>local</id>
+      <url>file://${env.HOME}/.m2/repository</url>
+    </repository>
+  </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>sonatype</id>
@@ -52,7 +58,7 @@
       <plugin>
         <groupId>com.deliveredtechnologies</groupId>
         <artifactId>tf-maven-plugin</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
         <executions>
           <execution>
             <id>terraform-build</id>
@@ -87,4 +93,12 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
+      <artifactId>tf-s3</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>zip</type>
+    </dependency>
+  </dependencies>
 </project>
