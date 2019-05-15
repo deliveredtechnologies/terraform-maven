@@ -58,7 +58,7 @@
       <plugin>
         <groupId>com.deliveredtechnologies</groupId>
         <artifactId>tf-maven-plugin</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.1</version>
         <executions>
           <execution>
             <id>terraform-build</id>
