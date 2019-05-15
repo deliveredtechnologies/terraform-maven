@@ -76,7 +76,7 @@ public class TerraformDeploy implements TerraformOperation<String> {
       log.info("Using generated POM");
     } else {
       if (!properties.containsKey(TerraformDeployParam.pomFile.toString())) {
-        Path pomFile = Paths.get("pom.xml");
+        Path pomFile = Paths.get(".flattened-pom.xml");
         deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), pomFile.toAbsolutePath().toString());
       } else {
         deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.getProperty(TerraformDeployParam.pomFile.toString()));

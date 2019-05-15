@@ -99,7 +99,7 @@ public class TerraformDeployTest {
     Properties deployFileProps = terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
 
     Assert.assertEquals(String.format(targetPath.toString()), deployFileProps.getProperty(TerraformDeployParam.file.toString()));
-    Assert.assertEquals(String.format(Paths.get("pom.xml").toAbsolutePath().toString(), targetPath.toAbsolutePath().toString()), deployFileProps.getProperty(TerraformDeployParam.pomFile.toString()));
+    Assert.assertEquals(String.format(Paths.get(".flattened-pom.xml").toAbsolutePath().toString(), targetPath.toAbsolutePath().toString()), deployFileProps.getProperty(TerraformDeployParam.pomFile.toString()));
     Assert.assertEquals("zip", deployFileProps.getProperty("packaging"));
 
     Mockito.verify(request, Mockito.times(1)).setProperties(Mockito.any());
