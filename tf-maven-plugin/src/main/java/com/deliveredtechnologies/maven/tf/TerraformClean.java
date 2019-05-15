@@ -41,11 +41,14 @@ public class TerraformClean implements TerraformOperation<String> {
         throw new IOException(this.tfRootModulePath.toString() + " does not exist!");
       }
 
+      //delete .tfmodules
       StringBuilder response = new StringBuilder("Deleting...\n");
       if (this.tfModulesPath.toFile().exists()) {
         response.append(this.tfModulesPath.toString()).append('\n');
         FileUtils.forceDelete(this.tfModulesPath.toFile());
       }
+
+      //delete terraform files in terraform root module
       List<Path> terraformFiles = Files.walk(this.tfRootModulePath.getParent())
           .filter(path -> path.getFileName().toString().contains(".terraform") || path.getFileName().toString().contains(".tfstate"))
           .collect(Collectors.toList());

@@ -7,6 +7,8 @@ sudo: false
 branches:
   only:
   - develop
+  - /^release\/v.*$/
+  - /^hotfix\/v.*$/
 cache:
   directories:
     - $HOME/.m2

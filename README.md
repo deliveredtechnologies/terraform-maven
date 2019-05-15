@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop&maxAge=600&service=github)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
-[![Maven Central](https://img.shields.io/badge/maven%20central-0.1-green.svg)](https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.1/maven-plugin)
+[![Maven Central](https://img.shields.io/badge/maven%20central-0.1.1-green.svg)](https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.1.1/maven-plugin)
 
 # Terraform Maven Plugin
 
@@ -179,11 +179,15 @@ Description:
 
 Deploys a packaged Terraform zip artifact ([see tf:package](#tfpackage)) with a POM to the specified Maven repo.
 
-| Name    | Type   | Description                                                                                            |
-| ------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| file    | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip            |
-| url     | String | The url of the Maven repo to which the zip file artifact will be deployed                              |
-| pomFile | String | The path to the pom.xml file to attach to the artifact; defaults to pom.xml in the root of the project |
+| Name        | Type   | Description                                                                                                       |
+| ----------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
+| file        | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip                       |
+| url         | String | The url of the Maven repo to which the zip file artifact will be deployed                                         |
+| pomFile     | String | The path to the pom.xml file to attach to the artifact; defaults to .flattened-pom.xml in the root of the project |
+| generatePom | String | If set to "true" then a POM will be generated and attached to the deployment                                      |
+| groupId     | String | The groupId for the generated POM (only used if generatePom=true                                                  |
+| artifactId  | String | The artifactId for the generated POM (only used if generatePom=true                                               |
+| version     | String | The version for the generated POM (only used if generatePom=true                                                  |
 
 ---
 
