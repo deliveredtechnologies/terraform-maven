@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.deliveredtechnologies</groupId>
   <artifactId>tf-maven-plugin</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.1</version>
   <packaging>maven-plugin</packaging>
   <name>tf-maven-plugin</name>
   <description>Terraform Maven Plugin :: Bringing build lifecycle management to Terraform!</description>
