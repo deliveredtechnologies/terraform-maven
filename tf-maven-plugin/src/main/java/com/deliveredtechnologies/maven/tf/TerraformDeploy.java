@@ -25,7 +25,6 @@ public class TerraformDeploy implements TerraformOperation<String> {
 
   enum TerraformDeployParam {
     file, pomFile, url, packaging, generatePom, artifactId, groupId, version;
-
   }
 
   public TerraformDeploy(Log log, MavenProject project) {
