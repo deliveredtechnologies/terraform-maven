@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  */
 public class TerraformGet implements TerraformOperation<List<Path>> {
 
+  private static String PACKAGING = "zip";
+
   private Path tfModules;
   private Log log;
 
@@ -79,8 +81,10 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
   final void getDependenciesFromMavenRepo(Invoker invoker, InvocationRequest request) throws TerraformException {
     log.info("Getting artifact dependencies from Maven");
 
+    //TODO: clean up magic strings
     Properties properties = new Properties();
     properties.setProperty("outputDirectory", tfModules.toAbsolutePath().toString());
+    properties.setProperty("type", PACKAGING);
 
     request.setGoals(Arrays.asList("dependency:copy-dependencies"));
     request.setProperties(properties);
