@@ -179,11 +179,15 @@ Description:
 
 Deploys a packaged Terraform zip artifact ([see tf:package](#tfpackage)) with a POM to the specified Maven repo.
 
-| Name    | Type   | Description                                                                                            |
-| ------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| file    | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip            |
-| url     | String | The url of the Maven repo to which the zip file artifact will be deployed                              |
-| pomFile | String | The path to the pom.xml file to attach to the artifact; defaults to pom.xml in the root of the project |
+| Name        | Type   | Description                                                                                            |
+| ----------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| file        | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip            |
+| url         | String | The url of the Maven repo to which the zip file artifact will be deployed                              |
+| pomFile     | String | The path to the pom.xml file to attach to the artifact; defaults to pom.xml in the root of the project |
+| generatePom | String | If set to "true" then a POM will be generated and attached to the deployment                           |
+| groupId     | String | The groupId for the generated POM (only used if generatePom=true                                       |
+| artifactId  | String | The artifactId for the generated POM (only used if generatePom=true                                    |
+| version     | String | The version for the generated POM (only used if generatePom=true                                       |
 
 ---
 
