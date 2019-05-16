@@ -65,7 +65,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       Path tfModulesPath = !StringUtils.isEmpty(tfModulesDir)
           ? Paths.get(tfModulesDir)
           : TerraformUtils.getDefaultTfModulesDir();
-      Path tfRootPath = !StringUtils.isEmpty(tfRootDir)  ? Paths.get(tfRootDir) : TerraformUtils.getTerraformRootModuleDir();
+      Path tfRootPath = !StringUtils.isEmpty(tfRootDir)  ? Paths.get(tfRootDir) : TerraformUtils.getDefaultTerraformRootModuleDir();
 
       //copy tfRoot directory to target
       if (targetTfRootPath.toFile().exists()) FileUtils.forceDelete(targetTfRootPath.toFile());

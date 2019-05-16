@@ -26,7 +26,7 @@ public class TerraformInitTest {
     String response = terraformInit.execute(new Properties());
 
     Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute("terraform init -no-color " + TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
+    Mockito.verify(commandLine, Mockito.times(1)).execute("terraform init -no-color " + TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
 
     //and now with a tfRootDir specified
     String tfRootDir = "somepath";

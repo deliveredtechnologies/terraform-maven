@@ -30,7 +30,7 @@ public class TerraformClean implements TerraformOperation<String> {
       ? TerraformUtils.getDefaultTfModulesDir()
       : Paths.get(tfModules);
     this.tfRootModulePath = StringUtils.isEmpty(tfRootModule)
-      ? TerraformUtils.getTerraformRootModuleDir()
+      ? TerraformUtils.getDefaultTerraformRootModuleDir()
       : Paths.get(tfModules);
   }
 

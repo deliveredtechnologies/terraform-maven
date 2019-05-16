@@ -102,7 +102,7 @@ public class TerraformApply implements TerraformOperation<String> {
       } else if (properties.containsKey(TerraformApplyParam.tfRootDir.property)) {
         options.append(properties.getProperty(TerraformApplyParam.tfRootDir.property));
       } else {
-        options.append(TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
+        options.append(TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
       }
 
       if (properties.containsKey("timeout")) {

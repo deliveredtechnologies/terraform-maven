@@ -109,7 +109,7 @@ public class TerraformPlan implements TerraformOperation<String> {
       if (properties.containsKey(TerraformPlanParam.tfRootDir.property)) {
         options.append(properties.getProperty(TerraformPlanParam.tfRootDir.property));
       } else {
-        options.append(TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
+        options.append(TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
       }
       if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty("timeout")));

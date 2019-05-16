@@ -81,7 +81,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
       if (properties.containsKey(TerraformDestroyParam.tfRootDir.property)) {
         options.append(properties.getProperty(TerraformDestroyParam.tfRootDir.property));
       } else {
-        options.append(TerraformUtils.getTerraformRootModuleDir().toAbsolutePath().toString());
+        options.append(TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
       }
       if (properties.containsKey(TerraformDestroyParam.timeout.property)) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty(TerraformDestroyParam.timeout.property)));

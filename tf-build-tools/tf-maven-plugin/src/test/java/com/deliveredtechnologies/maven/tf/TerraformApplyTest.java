@@ -45,7 +45,7 @@ public class TerraformApplyTest {
   @Test
   public void terraformApplyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
-    Mockito.when(this.executable.execute(String.format("terraform apply -auto-approve %1$s", TerraformUtils.getTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform apply -auto-approve %1$s", TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformApply.execute(new Properties()));
