@@ -16,15 +16,15 @@ jdk:
 - oraclejdk8
 script:
 - |
-  cd tf-maven-plugin
+  cd tf-build-tools
   echo "*** Downloading the help plugin and getting the project version ***"
   ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
   VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
   if [ $TRAVIS_PULL_REQUEST = "false" ] && echo $VERSION | grep -q SNAPSHOT; then
     echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
-    cp ../.travis.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test jacoco:report coveralls:report deploy
+    cp ../.travis.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
   else
     echo "*** Validating the build ***"
-    ./mvnw clean test jacoco:report coveralls:report
+    ./mvnw clean test coveralls:report
   fi
