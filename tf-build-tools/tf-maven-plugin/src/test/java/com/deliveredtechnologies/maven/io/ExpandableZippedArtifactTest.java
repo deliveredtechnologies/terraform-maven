@@ -51,7 +51,7 @@ public class ExpandableZippedArtifactTest {
 
   @Test
   public void zippedArtifactExtractsArtifactsWithaDotInTheName() throws URISyntaxException, IOException {
-    Path zipFile = zipFileDir.resolve("tf-module-my.module2-0.1.zip");
+    Path zipFile = zipFileDir.resolve("terraform-module-my.module2-0.1.zip");
     Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile);
     expandableArtifact.expand();
 
@@ -72,7 +72,7 @@ public class ExpandableZippedArtifactTest {
   @Test
   public void zippedArtifactExtractsArtifactsWithaReleaseQualifierInTheName() throws URISyntaxException, IOException {
     Log log = Mockito.mock(Log.class);
-    Path zipFile = zipFileDir.resolve("tf-module-my-module1-0.12-rc.zip");
+    Path zipFile = zipFileDir.resolve("terraform-module-my-module1-0.12-rc.zip");
     Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile, log);
     expandableArtifact.expand();
 
@@ -94,7 +94,7 @@ public class ExpandableZippedArtifactTest {
 
   @Test
   public void zippedArtifactExtractsSnapshotArtifacts() throws URISyntaxException, IOException {
-    Path zipFile = zipFileDir.resolve("tf-module-my-module3-1.2.3-SNAPSHOT.zip");
+    Path zipFile = zipFileDir.resolve("terraform-module-my-module3-1.2.3-SNAPSHOT.zip");
     Expandable expandableArtifact = new ExpandableZippedArtifact(zipFile);
     expandableArtifact.expand();
 

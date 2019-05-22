@@ -47,10 +47,11 @@
         <version>0.7.4.201502262128</version>
         <configuration>
           <excludes>
-            <exclude>**/*Test*</exclude>
-            <exclude>**/*Exception*</exclude>
-            <exclude>**/tf/mojo/*</exclude>
+            <exclude>**/terraform/mojo/*</exclude>
           </excludes>
+          <includes>
+            <include>**/terraform/mojo/TerraformMojo*</include>
+          </includes>
         </configuration>
         <executions>
           <execution>
@@ -88,14 +89,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.eluder.coveralls</groupId>
-        <artifactId>coveralls-maven-plugin</artifactId>
-        <version>4.3.0</version>
-        <configuration>
-          <repoToken>OG8RAhndMR8qNlH8e1YUuN85ikl18mYU3</repoToken>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -152,6 +145,11 @@
       <artifactId>mockito-core</artifactId>
       <version>2.27.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.deliveredtechnologies</groupId>
+      <artifactId>tf-cmd-api</artifactId>
+      <version>${parent.version}</version>
     </dependency>
   </dependencies>
 </project>

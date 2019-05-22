@@ -1,6 +1,6 @@
 package com.deliveredtechnologies.maven.logs;
 
-import com.deliveredtechnologies.maven.tf.TerraformException;
+import com.deliveredtechnologies.terraform.TerraformException;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Assert;
 import org.junit.Test;

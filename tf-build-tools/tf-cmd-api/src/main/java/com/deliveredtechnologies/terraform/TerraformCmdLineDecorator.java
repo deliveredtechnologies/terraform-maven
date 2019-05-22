@@ -1,0 +1,46 @@
+package com.deliveredtechnologies.terraform;
+
+import com.deliveredtechnologies.io.CommandLine;
+import com.deliveredtechnologies.io.Executable;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class TerraformCmdLineDecorator implements Executable {
+
+  private CommandLine commandLine;
+  private TerraformCommand cmd;
+
+  public TerraformCmdLineDecorator(TerraformCommand cmd, CommandLine commandLine) {
+    this.commandLine = commandLine;
+    this.cmd = cmd;
+  }
+
+  /**
+   * Constructor accepts a TerraformCommand and uses it to decorate a default CommandLine object.
+   * @param cmd           A TerraformCommand (INIT, PLAN, APPLY, etc.)
+   * @throws IOException
+   */
+  public TerraformCmdLineDecorator(TerraformCommand cmd) throws IOException {
+    this.commandLine = new CommandLine(
+      Files.walk(
+        Paths.get("src", "main", "terraform"), 1)
+             .filter(path -> path.getFileName().toString() != "terraform")
+             .findFirst().orElseThrow(() -> new IOException("Terraform root module not found")));
+  }
+
+  @Override
+  public String execute(String command, int timeout) throws IOException, InterruptedException {
+    return commandLine.execute(getTerraformCommand(command), timeout);
+  }
+
+  @Override
+  public String execute(String command) throws IOException, InterruptedException {
+    return commandLine.execute(getTerraformCommand(command));
+  }
+
+  private String getTerraformCommand(String command) {
+    return String.format("terraform %1$s %2$s", cmd.toString(), command);
+  }
+}

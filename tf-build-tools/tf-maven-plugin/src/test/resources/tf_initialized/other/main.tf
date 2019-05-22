@@ -1,4 +1,4 @@
-#An empty main.tf for testing
+#An empty main.terraform for testing
 
 module "test-module" {
   source = "../../tfmodules/test-module"
