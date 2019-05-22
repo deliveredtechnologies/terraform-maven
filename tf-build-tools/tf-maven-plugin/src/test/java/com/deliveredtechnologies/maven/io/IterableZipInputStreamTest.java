@@ -21,7 +21,7 @@ public class IterableZipInputStreamTest {
 
   @Before
   public void setup() throws URISyntaxException {
-    zipFile = Paths.get(this.getClass().getResource("/zips").toURI()).resolve("terraform-module-my.module2-0.1.zip").toFile();
+    zipFile = Paths.get(this.getClass().getResource("/zips").toURI()).resolve("tf-module-my.module2-0.1.zip").toFile();
   }
 
   @Test

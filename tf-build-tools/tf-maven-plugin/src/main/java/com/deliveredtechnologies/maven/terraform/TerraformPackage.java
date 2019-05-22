@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class TerraformPackage implements TerraformOperation<String> {
 
   static final String targetDir = "target";
-  static final String targetTfRootDir = "terraform-root-module";
+  static final String targetTfRootDir = "tf-root-module";
 
   private MavenProject project;
 
@@ -50,7 +50,7 @@ public class TerraformPackage implements TerraformOperation<String> {
    * <p>
    *   Valid Properties:
    *   tfModulesDir - the directory where Terraform Modules dependencies (i.e. Maven Terraform dependencies) are stored; defaults to src/main/.tfmodules<br>
-   *   tfRootDir - the directory containing the Terraform root module configuration; defaults to src/main/terraform/{first dir found}<br>
+   *   tfRootDir - the directory containing the Terraform root module configuration; defaults to src/main/tf/{first dir found}<br>
    *   isFatZip - if "true", then zip contains the Terraform code for all Maven dependencies ( valid values are "true" or "false"); defaults to "false"
    * </p>
    * @param properties  property options for packaging a Terraform configuration
