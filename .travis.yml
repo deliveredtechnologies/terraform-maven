@@ -9,7 +9,6 @@ branches:
   - develop
   - /^release\/v.*$/
   - /^hotfix\/v.*$/
-  - feature/issue-22-libraries
 cache:
   directories:
     - $HOME/.m2
