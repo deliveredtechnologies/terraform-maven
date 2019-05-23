@@ -25,7 +25,7 @@ jobs:
              pwd
              cd tf-build-tools
              echo "*** Updating maven settings.xml ***"
-             chown -R $USER:$USER /path/to/directory && cp -f ../.mvn.settings.xml ~/.m2/settings.xml
+             chown -R $USER:$USER ~/.m2 && cp -f ../.mvn.settings.xml ~/.m2/settings.xml
 
              echo "*** Downloading the help plugin and getting the project version ***"
              ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
