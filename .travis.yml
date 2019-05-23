@@ -23,7 +23,7 @@ script:
 
   if [ $TRAVIS_PULL_REQUEST = "false" ] && echo $VERSION | grep -q SNAPSHOT; then
     echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
-    cp ../.travis.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
+    cp ../.mvn.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
   else
     echo "*** Validating the build ***"
     ./mvnw clean test coveralls:report

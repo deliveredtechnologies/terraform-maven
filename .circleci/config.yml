@@ -12,6 +12,12 @@ jobs:
     steps:
       - checkout
 
+    branches:
+      only:
+       - develop
+       - /^release\/v.*$/
+       - /^hotfix\/v.*$/
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -30,4 +36,15 @@ jobs:
       - run:
           shell: /bin/sh
           command: |
-             ./mvnw clean test coveralls:report
+             cd tf-build-tools
+             echo "*** Downloading the help plugin and getting the project version ***"
+             ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
+             VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+
+             if [ $CIRCLE_PULL_REQUEST = "" ] && echo $VERSION | grep -q SNAPSHOT; then
+               echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
+               cp ../.mvn.settings.xml ~/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
+             else
+               echo "*** Validating the build ***"
+               ./mvnw clean test coveralls:report
+             fi
