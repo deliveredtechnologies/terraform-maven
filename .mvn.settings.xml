@@ -7,6 +7,6 @@
     </server>
   </servers>
   <pluginGroups>
-    <pluginGroup>com.deliveredtechnologies</pluginGroup>
+    <pluginGroup>org.eluder.coveralls</pluginGroup>
   </pluginGroups>
 </settings>
