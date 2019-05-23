@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
+    # specify the version you desire here
       - image: circleci/openjdk:8-jdk
 
     steps:
@@ -14,9 +14,9 @@ jobs:
 
     branches:
       only:
-       - develop
-       - /^release\/v.*$/
-       - /^hotfix\/v.*$/
+        - develop
+        - /^release\/v.*$/
+        - /^hotfix\/v.*$/
 
       # Download and cache dependencies
       - restore_cache:
