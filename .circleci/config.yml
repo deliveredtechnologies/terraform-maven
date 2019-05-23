@@ -27,7 +27,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: mvn dependency:go-offline
+      - run: cd tf-build-tools && ./mvnw dependency:go-offline
 
       - save_cache:
           paths:
@@ -38,6 +38,7 @@ jobs:
       - run:
           shell: /bin/sh
           command: |
+             pwd
              cd tf-build-tools
              echo "*** Downloading the help plugin and getting the project version ***"
              ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
