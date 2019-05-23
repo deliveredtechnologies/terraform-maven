@@ -37,5 +37,5 @@ jobs:
              else
                echo "*** Validating the build ***"
                cat ~/.m2/settings.xml
-               ./mvnw clean install
+               ./mvnw clean install coveralls:report
              fi
