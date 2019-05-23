@@ -33,8 +33,8 @@ jobs:
 
              if [ $CIRCLE_PULL_REQUEST = "" ] && echo $VERSION | grep -q SNAPSHOT; then
                echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
-               ./mvnw clean test coveralls:report deploy
+               ./mvnw clean install coveralls:report deploy
              else
                echo "*** Validating the build ***"
-               ./mvnw clean test coveralls:report
+               ./mvnw clean install coveralls:report
              fi
