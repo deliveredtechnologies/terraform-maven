@@ -6,4 +6,7 @@
       <password>${env.OSSRH_PASSWORD}</password>
     </server>
   </servers>
+  <pluginGroups>
+    <pluginGroup>com.deliveredtechnologies</pluginGroup>
+  </pluginGroups>
 </settings>

@@ -24,13 +24,16 @@ jobs:
           command: |
              pwd
              cd tf-build-tools
+             echo "*** Updating maven settings.xml ***"
+             cp ../.mvn.settings.xml ~/.m2/settings.xml
+             
              echo "*** Downloading the help plugin and getting the project version ***"
              ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version
              VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
              if [ $CIRCLE_PULL_REQUEST = "" ] && echo $VERSION | grep -q SNAPSHOT; then
                echo "*** Validating the build and deploying to Sonatype SNAPSHOT repo ***"
-               cp ../.mvn.settings.xml ~/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
+               ./mvnw clean test coveralls:report deploy
              else
                echo "*** Validating the build ***"
                ./mvnw clean test coveralls:report
