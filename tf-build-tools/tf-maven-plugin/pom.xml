@@ -48,10 +48,8 @@
         <configuration>
           <excludes>
             <exclude>**/terraform/mojo/*</exclude>
+            <exclude>**/maven/logs/*</exclude>
           </excludes>
-          <includes>
-            <include>**/terraform/mojo/TerraformMojo*</include>
-          </includes>
         </configuration>
         <executions>
           <execution>
