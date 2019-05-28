@@ -1,0 +1,12 @@
+<settings>
+  <servers>
+    <server>
+      <id>ossrh</id>
+      <username>${env.OSSRH_USERNAME}</username>
+      <password>${env.OSSRH_PASSWORD}</password>
+    </server>
+  </servers>
+  <pluginGroups>
+    <pluginGroup>org.eluder.coveralls</pluginGroup>
+  </pluginGroups>
+</settings>

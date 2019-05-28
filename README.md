@@ -37,7 +37,7 @@ Now, all of that Maven goodness can be used with Terraform.
     Hooray, Maven! 
 * Packaging as Part of the Build Lifecycle
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
-    or it can package that same Terraform root module with its dependencies for deployment into an isolated environemnt
+    or it can package that same Terraform root module with its dependencies for deployment into an isolated environment
     or Terraform Enterprise. It's all part of a single Maven goal/command.
 * Deploying Terraform Artifacts to a Maven Repo with an Attached POM is a Snap
   * By default the [deploy goal](#tfdeploy) deploys a zip artifact packaged by the [package goal](#tfpackage) to a Maven repo
