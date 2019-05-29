@@ -36,6 +36,7 @@ public class CompressableGZipTarFileTest extends CompressableFileTest {
         tarEntryNames.add(entry.getName());
       }
 
+      Assert.assertEquals(6, count);
       Assert.assertTrue(tarEntryNames.contains("test1/test1.1/test1.1.txt"));
       Assert.assertTrue(tarEntryNames.contains("test1/test.txt"));
       Assert.assertTrue(tarEntryNames.contains("test2/test2.txt"));

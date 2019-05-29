@@ -1,6 +1,7 @@
 package com.deliveredtechnologies.maven.terraform;
 
 import com.deliveredtechnologies.maven.io.Compressable;
+import com.deliveredtechnologies.maven.io.CompressableGZipTarFile;
 import com.deliveredtechnologies.maven.io.CompressableZipFile;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
@@ -38,7 +39,7 @@ public class TerraformPackage implements TerraformOperation<String> {
   enum TerraformPackageParams {
     tfModulesDir,
     tfRootDir,
-    fat;
+    fatTar;
   }
 
   public TerraformPackage(MavenProject project) {
@@ -51,7 +52,7 @@ public class TerraformPackage implements TerraformOperation<String> {
    *   Valid Properties:
    *   tfModulesDir - the directory where Terraform Modules dependencies (i.e. Maven Terraform dependencies) are stored; defaults to src/main/.tfmodules<br>
    *   tfRootDir - the directory containing the Terraform root module configuration; defaults to src/main/tf/{first dir found}<br>
-   *   isFatZip - if "true", then zip contains the Terraform code for all Maven dependencies ( valid values are "true" or "false"); defaults to "false"
+   *   fatTar - if "true", then tar.gz contains the Terraform code for all Maven dependencies ( valid values are "true" or "false"); defaults to "false"
    * </p>
    * @param properties  property options for packaging a Terraform configuration
    * @return            String message with the zip filename included
@@ -64,7 +65,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       Path targetTfRootPath = targetPath.resolve(targetTfRootDir);
       String tfModulesDir = properties.getProperty(TerraformPackageParams.tfModulesDir.toString());
       String tfRootDir = properties.getProperty(TerraformPackageParams.tfRootDir.toString());
-      boolean isFatZip = Boolean.valueOf(properties.getProperty(TerraformPackageParams.fat.toString(), "false"));
+      boolean isFatTar = Boolean.valueOf(properties.getProperty(TerraformPackageParams.fatTar.toString(), "false"));
 
       Path tfModulesPath = !StringUtils.isEmpty(tfModulesDir)
           ? Paths.get(tfModulesDir)
@@ -87,14 +88,15 @@ public class TerraformPackage implements TerraformOperation<String> {
         }
       }
 
-      if (isFatZip) {
+      if (isFatTar) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
         //copy tfmodules directory into tfRoot directory; i.e. {targetTfRootDir}/{tfModulesDir} if it exists
         if (tfModulesPath.toFile().exists() && tfModulesPath.toFile().isDirectory()) {
           FileUtils.copyDirectory(tfModulesPath.toFile(), targetTfRootPath.resolve(tfModulesPath.getFileName().toString()).toFile());
         }
+        return String.format("Created fatTar gzipped tar file '%1$s'", createGZippedTar(targetPath, targetTfRootPath));
       }
-      return String.format("Created zip '%1$s'", createZip(targetPath, targetTfRootPath));
+      return String.format("Created zip file '%1$s'", createZip(targetPath, targetTfRootPath));
     } catch (IOException e) {
       throw new TerraformException(e.getMessage(), e);
     }
@@ -130,5 +132,16 @@ public class TerraformPackage implements TerraformOperation<String> {
       .forEach(compressor::addToCompressedFile);
     compressor.compress();
     return zipFilename;
+  }
+
+  private String createGZippedTar(Path targetDir, Path targetTfRootPath) throws IOException {
+    String tarFilename = targetDir.resolve(
+      String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion())).toString();
+    Compressable compressor = new CompressableGZipTarFile(tarFilename, targetTfRootPath);
+    Files.walk(targetTfRootPath, 1)
+      .filter(path -> !path.equals(targetTfRootPath))
+      .forEach(compressor::addToCompressedFile);
+    compressor.compress();
+    return tarFilename;
   }
 }
