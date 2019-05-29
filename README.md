@@ -165,11 +165,11 @@ Optionally, a fat compressed package can be created instead, which also includes
 _Note: Within the fat compressed package, module source paths are updated accordingly so that the pacakge is a wholly contained working module that can be consumed as a module,
 extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 
-| Name         | Type    | Description                                                                                   |
-| ------------ | ------- | --------------------------------------------------------------------------------------------- |
-| tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
-| tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
-| fat          | Boolean | Set to true if a fat compressed package should be created, otherwise false; defaults to false |
+| Name         | Type    | Description                                                                                          |
+| ------------ | ------- | -----------------------------------------------------------------------------------------------------|
+| tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found}        |
+| tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules        |
+| fatTar       | Boolean | Set to true if a fat compressed tar.gz package should be created, otherwise false; defaults to false |
 
 ---
 

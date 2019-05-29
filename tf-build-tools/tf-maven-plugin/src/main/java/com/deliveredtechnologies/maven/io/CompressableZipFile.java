@@ -12,7 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Class abstraction for creating a ZIP file.
+ * Creates a ZIP file.
  */
 public class CompressableZipFile implements Compressable {
   private static int BUFFER_SIZE = 4096;
