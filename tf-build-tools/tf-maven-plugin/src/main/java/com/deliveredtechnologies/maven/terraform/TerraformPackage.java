@@ -136,7 +136,7 @@ public class TerraformPackage implements TerraformOperation<String> {
 
   private String createGZippedTar(Path targetDir, Path targetTfRootPath) throws IOException {
     String tarFilename = targetDir.resolve(
-      String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion())).toString();
+        String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion())).toString();
     Compressable compressor = new CompressableGZipTarFile(tarFilename, targetTfRootPath);
     Files.walk(targetTfRootPath, 1)
       .filter(path -> !path.equals(targetTfRootPath))

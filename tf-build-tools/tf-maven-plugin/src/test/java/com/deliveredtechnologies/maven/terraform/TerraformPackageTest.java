@@ -56,7 +56,7 @@ public class TerraformPackageTest {
     properties.put(TerraformPackageParams.fatTar.toString(), "true");
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
-      .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
+        .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
 
     Assert.assertEquals(response, String.format("Created fatTar gzipped tar file '%1$s'", tarFilePath.toString()));
     Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
@@ -101,7 +101,7 @@ public class TerraformPackageTest {
   @Test
   public void packageGoalWithNoFatZipPackagesOnlyTfRootContentsInTheTargetDir() throws TerraformException, IOException {
     Path zipFilePath = Paths.get(TerraformPackage.targetDir)
-      .resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
+        .resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
     String response = this.terraformPackage.execute(properties);
 
     Assert.assertEquals(response, String.format("Created zip file '%1$s'", zipFilePath.toString()));
