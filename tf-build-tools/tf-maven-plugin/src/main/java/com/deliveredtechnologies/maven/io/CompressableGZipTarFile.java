@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Creates a Gzipped Tar File
+ * Creates a Gzipped Tar File.
  */
 public class CompressableGZipTarFile implements Compressable {
   private static int BUFFER_SIZE = 4096;
@@ -26,10 +26,19 @@ public class CompressableGZipTarFile implements Compressable {
   private String filename;
   private Optional<Path> relativizeFrom = Optional.empty();
 
+  /**
+   * Instantiates CompressableGZipTarFile with a target filename using complete paths for all tar file entries.
+   * @param filename  target/destination tar.gz filename
+   */
   public CompressableGZipTarFile(String filename) {
     this(filename, null);
   }
 
+  /**
+   * Instantiates CompressableGZipTarFile with a target filename and a path to relativize entries from.
+   * @param filename        target/destination tar.gz filename
+   * @param relativizeFrom  Path to relativize tar entries from
+   */
   public CompressableGZipTarFile(String filename, Path relativizeFrom) {
     this.filename = filename;
     this.relativizeFrom = Optional.ofNullable(relativizeFrom);
