@@ -56,10 +56,7 @@ public class TerraformDeploy implements TerraformOperation<String> {
   final Properties deployFileToMavenRepo(Invoker invoker, InvocationRequest request, Properties properties) throws TerraformException {
     Properties deployFileProps = new Properties();
 
-    if (!properties.containsKey(TerraformDeployParam.url.toString())) {
-      throw new TerraformException("missing required parameter: url");
-    }
-    deployFileProps.put(TerraformDeployParam.url.toString(), properties.getProperty(TerraformDeployParam.url.toString()));
+    deployFileProps.put(TerraformDeployParam.url.toString(), properties.getProperty(TerraformDeployParam.url.toString(), String.format("file://%1$s", Paths.get(System.getenv("HOME"), ".m2", "repository"))));
 
     if (!properties.containsKey(TerraformDeployParam.file.toString())) {
       Path targetPath = Paths.get("target").resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));

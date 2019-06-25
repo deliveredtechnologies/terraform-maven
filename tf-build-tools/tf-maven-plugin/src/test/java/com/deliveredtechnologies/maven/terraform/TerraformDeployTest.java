@@ -108,7 +108,6 @@ public class TerraformDeployTest {
     Mockito.verify(invoker, Mockito.times(1)).execute(request);
   }
 
-  @Test(expected = TerraformException.class)
   public void deployFileToMavenRepoDeploysWithUrlOmitted() throws TerraformException, MavenInvocationException {
     terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
   }

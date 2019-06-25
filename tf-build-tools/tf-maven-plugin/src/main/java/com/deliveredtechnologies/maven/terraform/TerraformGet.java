@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class TerraformGet implements TerraformOperation<List<Path>> {
 
-  private static String PACKAGING = "zip";
+  private static final String PACKAGING = "zip";
 
   private Path tfModules;
   private Log log;

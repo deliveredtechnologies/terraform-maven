@@ -1,10 +1,13 @@
 package com.deliveredtechnologies.io;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,8 +18,14 @@ public class CommandLine implements Executable {
   private static int DEFAULT_TIMEOUT = 600000;
 
   private Path directory;
+  private Optional<Logger> logger;
 
   public CommandLine(Path directory) {
+    this(directory, null);
+  }
+
+  public CommandLine(Path directory, Logger logger) {
+    this.logger = Optional.ofNullable(logger);
     this.directory = directory;
   }
 
@@ -48,6 +57,7 @@ public class CommandLine implements Executable {
         "-c",
         command
       };
+      logger.ifPresent(log -> log.debug(Arrays.stream(cmd).reduce("", (stringA, stringB) -> stringA + stringB)));
       ProcessBuilder processBuilder = new ProcessBuilder(cmd);
       processBuilder.directory(directory.toFile());
       process = processBuilder.start();
