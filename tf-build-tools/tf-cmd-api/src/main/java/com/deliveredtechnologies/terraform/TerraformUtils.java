@@ -21,9 +21,7 @@ public class TerraformUtils {
    */
   public static Path getDefaultTerraformRootModuleDir() throws IOException {
     Path tfSourcePath = Paths.get("src", "main", "tf");
-    System.out.println("tfSourcePath: " + tfSourcePath.toAbsolutePath().toString());
     if (tfSourcePath.toFile().exists() && tfSourcePath.toFile().isDirectory()) {
-      System.out.println("within if");
       return Files.walk(Paths.get("src", "main", "tf"), 2)
           .filter(path -> !path.toFile().isDirectory())
           .filter(path -> path.getFileName().toString().endsWith(".tf"))

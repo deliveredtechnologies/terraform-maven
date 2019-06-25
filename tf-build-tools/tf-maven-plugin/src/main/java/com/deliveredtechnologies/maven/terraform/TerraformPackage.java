@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -32,6 +33,8 @@ public class TerraformPackage implements TerraformOperation<String> {
 
   static final String targetDir = "target";
   static final String targetTfRootDir = "tf-root-module";
+  static final List<String> excludedFiles = Arrays.asList(new String[] {".terraform"});
+
 
   private MavenProject project;
 
@@ -80,7 +83,7 @@ public class TerraformPackage implements TerraformOperation<String> {
           .filter(path -> !path.equals(tfRootPath))
           .collect(Collectors.toList());
 
-      for (Path file : tfRootDirFiles) {
+      for (Path file : tfRootDirFiles.stream().filter(f -> !excludedFiles.contains(f.getFileName().toString())).collect(Collectors.toList())) {
         if (file.toFile().isDirectory()) {
           FileUtils.copyDirectory(file.toFile(), targetTfRootPath.resolve(file.getFileName().toString()).toFile());
         } else {

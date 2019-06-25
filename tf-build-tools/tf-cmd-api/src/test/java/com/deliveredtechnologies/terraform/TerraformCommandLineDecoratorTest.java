@@ -53,7 +53,7 @@ public class TerraformCommandLineDecoratorTest {
     Path tfSrcPath = Paths.get("src", "main", "tf");
     Path rootModulePath = tfSrcPath.resolve("root");
     FileUtils.forceMkdir(rootModulePath.toFile());
-    Files.createFile(rootModulePath.resolve("main.terraform"));
+    Files.createFile(rootModulePath.resolve("main.tf"));
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY);
     FileUtils.forceDelete(tfSrcPath.toFile());
   }
