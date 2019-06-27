@@ -1,9 +1,0 @@
-.idea
-target
-*.iml
-*.class
-*.tfstate
-*.tfstate.backup
-.tfmodules
-.terraform
-.gpg
