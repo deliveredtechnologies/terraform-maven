@@ -110,19 +110,13 @@ public class TerraformPlan implements TerraformOperation<String> {
     }
 
     try {
-      if (properties.containsKey(TerraformPlanParam.tfRootDir.property)) {
-        String tfModuleDir = properties.getProperty(TerraformPlanParam.tfRootDir.property);
-        options.append(tfModuleDir);
-        System.out.println("specified " + tfModuleDir);
-      } else {
-        String tfModuleDir = TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString();
-        System.out.println("default: " + tfModuleDir);
-        options.append(tfModuleDir);
-      }
+      String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
+        properties.getProperty(TerraformPlanParam.tfRootDir.property,
+          TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
+      options.append(tfModuleDir);
       if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty("timeout")));
       } else {
-        System.out.println(String.format("*** terraform plan options: %1$s ***", options.toString()));
         return terraform.execute(options.toString());
       }
     } catch (InterruptedException | IOException e) {

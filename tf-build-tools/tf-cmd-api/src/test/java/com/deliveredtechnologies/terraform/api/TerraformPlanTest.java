@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -29,9 +31,10 @@ public class TerraformPlanTest {
 
   @Test
   public void terraformPlanExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
+    Path tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath();
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform plan -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy /my/terraform/root/dir",
+      "terraform plan -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy " + tfRootDir.toString(),
       1111))
       .thenReturn("Success!");
     TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
@@ -47,7 +50,7 @@ public class TerraformPlanTest {
     this.properties.put(TerraformPlan.TerraformPlanParam.tfState.property, "my.tfstate");
     this.properties.put(TerraformPlan.TerraformPlanParam.noColor.property, "true");
     this.properties.put(TerraformPlan.TerraformPlanParam.timeout.property, "1111");
-    this.properties.put(TerraformPlan.TerraformPlanParam.tfRootDir.property, "/my/terraform/root/dir");
+    this.properties.put(TerraformPlan.TerraformPlanParam.tfRootDir.property, tfRootDir.toString());
 
     Assert.assertEquals("Success!", terraformPlan.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
@@ -55,8 +58,9 @@ public class TerraformPlanTest {
 
   @Test
   public void terraformPlanExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
+    Path tfRootDir = TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath();
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute(String.format("terraform plan -input=false %1$s", TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform plan -input=false %1$s", tfRootDir))).thenReturn("Success!");
     TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformPlan.execute(new Properties()));
