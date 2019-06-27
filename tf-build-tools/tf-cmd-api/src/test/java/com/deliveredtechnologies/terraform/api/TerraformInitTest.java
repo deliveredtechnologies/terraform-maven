@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -33,13 +34,13 @@ public class TerraformInitTest {
     Mockito.verify(commandLine, Mockito.times(1)).execute("terraform init -no-color " + TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
 
     //and now with a tfRootDir specified
-    String tfRootDir = "somepath";
+    String tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath().toString();
     Properties properties = new Properties();
     properties.put(TerraformInitParam.tfRootDir.toString(), tfRootDir);
     response = terraformInit.execute(properties);
 
     Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -no-color %1$s", tfRootDir));
+    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -no-color %1$s", TerraformUtils.getTerraformRootModuleDir(tfRootDir)));
   }
 
   @Test
@@ -50,7 +51,7 @@ public class TerraformInitTest {
     Mockito.when(commandLine.execute(Mockito.anyString())).thenReturn(successMessage);
     TerraformOperation<String> terraformInit = new TerraformInit(terraformDecorator);
 
-    String tfRootDir = "somepath";
+    String tfRootDir = "test";
     String pluginDir = "somepluginpath";
     Properties properties = new Properties();
     properties.put(TerraformInitParam.tfRootDir.property, tfRootDir);
@@ -60,7 +61,7 @@ public class TerraformInitTest {
     String response = terraformInit.execute(properties);
 
     Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -plugin-dir=%1$s -verify-plugins=false -get-plugins=false -no-color %2$s", pluginDir, tfRootDir));
+    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -plugin-dir=%1$s -verify-plugins=false -get-plugins=false -no-color %2$s", pluginDir, Paths.get("src", "main", "tf", tfRootDir).toAbsolutePath().toString()));
   }
 
   @Test(expected = TerraformException.class)

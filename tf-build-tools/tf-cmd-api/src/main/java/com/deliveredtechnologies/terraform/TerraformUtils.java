@@ -42,9 +42,9 @@ public class TerraformUtils {
     if (tfmodule.contains("/")) { //relative or absolute path
       path = Paths.get(tfmodule);
     } else {
-      path = Paths.get("src", "main", "terraform", tfmodule);
+      path = Paths.get("src", "main", "tf", tfmodule);
     }
-    if (!Arrays.stream(path.toFile().listFiles()).anyMatch(p -> p.isFile() && p.getName().endsWith(".terraform"))) {
+    if (!path.toFile().exists() || !Arrays.stream(path.toFile().listFiles()).anyMatch(p -> p.isFile() && p.getName().endsWith(".tf"))) {
       throw new TerraformException(String.format("%1$s does not contain any Terraform (*.terraform) files!", tfmodule));
     }
 
