@@ -30,12 +30,11 @@ public class TerraformCleanTest {
    */
   @Before
   public void setup() throws URISyntaxException, IOException {
-    Path tfInitDir = Paths.get(this.getClass().getResource("/tf_initialized").toURI());
+    Path tfInitDir = Paths.get("target", "test-classes", "tf_initialized");
     Path tfModulesDir = Paths.get(this.getClass().getResource("/tfmodules").toURI());
     this.tfInitWorkingDir = tfModulesDir.resolveSibling("tf_initialized_working");
     this.tfModulesWorkingDir = tfModulesDir.resolveSibling("tfModules_working");
     this.tfInitWorkingDir.toFile().mkdir();
-    //this.tfModulesWorkingDir.toFile().mkdir();
 
     FileUtils.copyDirectory(tfModulesDir.toFile(), tfModulesWorkingDir.toFile());
 
@@ -57,15 +56,14 @@ public class TerraformCleanTest {
   public void terraformCleanCleansUpTerraformStateFilesAndTerraformWorkingDirectory() throws IOException, TerraformException {
     TerraformClean terraformClean = new TerraformClean(
         this.tfModulesWorkingDir.toString(),
-        this.tfInitWorkingDir.toString());
+        this.tfInitWorkingDir.resolve("root").toString());
 
     terraformClean.execute(new Properties());
 
     Assert.assertFalse(this.tfModulesWorkingDir.toFile().exists());
 
     Assert.assertFalse(Files.walk(this.tfInitWorkingDir)
-        .filter(path -> path.getFileName().toString().startsWith("terraform"))
-        .filter(path -> path.getFileName().toString().equals(".terraform"))
+        .filter(path -> path.getFileName().toString().endsWith(".terraform") || path.getFileName().toString().endsWith(".tfstate"))
         .findAny().isPresent());
   }
 
