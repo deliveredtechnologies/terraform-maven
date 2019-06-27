@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop&maxAge=600&service=github)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
-[![Maven Central](https://img.shields.io/badge/maven%20central-0.1.1-green.svg)](https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.1.1/maven-plugin)
+[![Maven Central](https://img.shields.io/badge/maven%20central-0.2-green.svg)](https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2/maven-plugin)
 
 # Terraform Maven Plugin
 

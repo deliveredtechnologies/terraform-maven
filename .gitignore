@@ -6,3 +6,4 @@ target
 *.tfstate.backup
 .tfmodules
 .terraform
+.gpg
