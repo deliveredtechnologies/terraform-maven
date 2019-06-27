@@ -74,7 +74,7 @@ public class TerraformInit implements TerraformOperation<String> {
     try {
       StringBuilder options = new StringBuilder();
       String workingDir = TerraformUtils.getTerraformRootModuleDir(
-        properties.getProperty(TerraformInitParam.tfRootDir.toString(),
+          properties.getProperty(TerraformInitParam.tfRootDir.toString(),
           TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
       log.info(String.format("*** Terraform root module directory is '%1$s' ***", workingDir));
 

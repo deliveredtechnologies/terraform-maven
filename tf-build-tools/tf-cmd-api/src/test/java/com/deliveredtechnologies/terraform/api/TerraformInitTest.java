@@ -7,7 +7,10 @@ import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformInit.TerraformInitParam;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -19,6 +22,18 @@ import java.util.Properties;
  * Tests for TerraformInit.
  */
 public class TerraformInitTest {
+
+  /**
+   * Sets up the default terraform directory.
+   * @throws IOException
+   */
+  @Before
+  public void setup() throws IOException {
+    FileUtils.copyDirectory(
+        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
+        Paths.get("src", "main", "tf", "test").toFile()
+    );
+  }
 
   @Test
   public void executeCallsTerraformInitCommandWithNoOptions() throws IOException, InterruptedException, TerraformException {
@@ -72,5 +87,10 @@ public class TerraformInitTest {
     TerraformOperation<String> terraformInit = new TerraformInit(tfExecutable);
 
     terraformInit.execute(new Properties());
+  }
+
+  @After
+  public void destroy() throws IOException {
+    FileUtils.forceDelete(Paths.get("src", "main", "tf").toFile());
   }
 }

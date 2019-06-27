@@ -111,7 +111,7 @@ public class TerraformPlan implements TerraformOperation<String> {
 
     try {
       String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-        properties.getProperty(TerraformPlanParam.tfRootDir.property,
+          properties.getProperty(TerraformPlanParam.tfRootDir.property,
           TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
       options.append(tfModuleDir);
       if (properties.containsKey("timeout")) {

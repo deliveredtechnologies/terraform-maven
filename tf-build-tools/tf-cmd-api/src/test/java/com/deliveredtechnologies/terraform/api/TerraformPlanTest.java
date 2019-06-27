@@ -6,6 +6,8 @@ import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +25,16 @@ public class TerraformPlanTest {
   private Properties properties;
   private Executable executable;
 
+  /**
+   * Sets up the properties, mock(s) and the default terraform directory.
+   * @throws IOException
+   */
   @Before
-  public void setup() {
+  public void setup() throws IOException {
+    FileUtils.copyDirectory(
+        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
+        Paths.get("src", "main", "tf", "test").toFile()
+    );
     properties = new Properties();
     executable = Mockito.mock(Executable.class);
   }
@@ -72,5 +82,10 @@ public class TerraformPlanTest {
     Mockito.when(this.executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
     TerraformPlan terraformPlan = new TerraformPlan(this.executable);
     terraformPlan.execute(properties);
+  }
+
+  @After
+  public void destroy() throws IOException {
+    FileUtils.forceDelete(Paths.get("src", "main", "tf").toFile());
   }
 }

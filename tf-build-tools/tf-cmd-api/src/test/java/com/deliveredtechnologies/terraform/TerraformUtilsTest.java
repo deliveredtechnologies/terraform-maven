@@ -16,7 +16,7 @@ public class TerraformUtilsTest {
   }
 
   @Test
-  public void getTerraformRootModuleDirReturnsTheCurrentDirWhenTheTfSourceDirIsNotFound() throws IOException {
+  public void getTerraformRootModuleDirReturnsTheDefaultDirWhenTheTfSourceDirIsNotFound() throws IOException {
     Path tfRootModulePath = TerraformUtils.getDefaultTerraformRootModuleDir();
     Assert.assertEquals(Paths.get("."), tfRootModulePath);
   }
