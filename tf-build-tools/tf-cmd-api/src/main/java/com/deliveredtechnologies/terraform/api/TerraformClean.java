@@ -27,13 +27,13 @@ public class TerraformClean implements TerraformOperation<String> {
    * @param tfRootModule  the Terraform root module directory; defaults to src/main/terraform/{first dir} if empty
    * @throws IOException
    */
-  public TerraformClean(String tfModules, String tfRootModule) throws IOException {
+  public TerraformClean(String tfModules, String tfRootModule) throws IOException, TerraformException {
     this.tfModulesPath = StringUtils.isEmpty(tfModules)
       ? TerraformUtils.getDefaultTfModulesDir()
       : Paths.get(tfModules);
-    this.tfRootModulePath = StringUtils.isEmpty(tfRootModule)
+    this.tfRootModulePath = (StringUtils.isEmpty(tfRootModule)
       ? TerraformUtils.getDefaultTerraformRootModuleDir()
-      : Paths.get(tfModules);
+      : TerraformUtils.getTerraformRootModuleDir(tfRootModule)).getParent();
   }
 
   @Override

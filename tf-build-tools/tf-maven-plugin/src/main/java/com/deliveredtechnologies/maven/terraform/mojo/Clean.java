@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
+import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformClean;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -26,7 +27,7 @@ public class Clean extends TerraformMojo<String> {
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
       execute(new TerraformClean(tfModulesDir, tfRootDir), System.getProperties());
-    } catch (IOException e) {
+    } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
   }

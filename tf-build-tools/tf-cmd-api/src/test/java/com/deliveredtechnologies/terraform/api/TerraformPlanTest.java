@@ -6,12 +6,16 @@ import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -21,17 +25,26 @@ public class TerraformPlanTest {
   private Properties properties;
   private Executable executable;
 
+  /**
+   * Sets up the properties, mock(s) and the default terraform directory.
+   * @throws IOException
+   */
   @Before
-  public void setup() {
+  public void setup() throws IOException {
+    FileUtils.copyDirectory(
+        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
+        Paths.get("src", "main", "tf", "test").toFile()
+    );
     properties = new Properties();
     executable = Mockito.mock(Executable.class);
   }
 
   @Test
   public void terraformPlanExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
+    Path tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath();
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform plan -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy /my/terraform/root/dir",
+      "terraform plan -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy " + tfRootDir.toString(),
       1111))
       .thenReturn("Success!");
     TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
@@ -47,7 +60,7 @@ public class TerraformPlanTest {
     this.properties.put(TerraformPlan.TerraformPlanParam.tfState.property, "my.tfstate");
     this.properties.put(TerraformPlan.TerraformPlanParam.noColor.property, "true");
     this.properties.put(TerraformPlan.TerraformPlanParam.timeout.property, "1111");
-    this.properties.put(TerraformPlan.TerraformPlanParam.tfRootDir.property, "/my/terraform/root/dir");
+    this.properties.put(TerraformPlan.TerraformPlanParam.tfRootDir.property, tfRootDir.toString());
 
     Assert.assertEquals("Success!", terraformPlan.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
@@ -55,8 +68,9 @@ public class TerraformPlanTest {
 
   @Test
   public void terraformPlanExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
+    Path tfRootDir = TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath();
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute(String.format("terraform plan -input=false %1$s", TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
+    Mockito.when(this.executable.execute(String.format("terraform plan -input=false %1$s", tfRootDir))).thenReturn("Success!");
     TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformPlan.execute(new Properties()));
@@ -68,5 +82,10 @@ public class TerraformPlanTest {
     Mockito.when(this.executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
     TerraformPlan terraformPlan = new TerraformPlan(this.executable);
     terraformPlan.execute(properties);
+  }
+
+  @After
+  public void destroy() throws IOException {
+    FileUtils.forceDelete(Paths.get("src", "main", "tf").toFile());
   }
 }
