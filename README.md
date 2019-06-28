@@ -228,7 +228,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-maven-starter</artifactId>
-    <version>0.2</version>
+    <version>0.2.1</version>
   </parent>
 ```
 
@@ -239,7 +239,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-maven-starter</artifactId>
-      <version>0.2</version>
+      <version>0.2.1</version>
       <type>pom</type>
     </dependency>
   </dependencies>
