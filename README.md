@@ -1,7 +1,7 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2/jar
-[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2/pom
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.2-green.svg
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2.1/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2.1/jar
+[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2.1/pom
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.2.1-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -228,7 +228,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-maven-starter</artifactId>
-    <version>0.2</version>
+    <version>0.2.1</version>
   </parent>
 ```
 
@@ -239,7 +239,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-maven-starter</artifactId>
-      <version>0.2</version>
+      <version>0.2.1</version>
       <type>pom</type>
     </dependency>
   </dependencies>
