@@ -83,7 +83,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
 
     try {
       String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-        properties.getProperty(TerraformDestroyParam.tfRootDir.property,
+          properties.getProperty(TerraformDestroyParam.tfRootDir.property,
           TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
       options.append(tfModuleDir);
 

@@ -30,8 +30,8 @@ public class TerraformDestroyTest {
   @Before
   public void setup() throws IOException {
     FileUtils.copyDirectory(
-      Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
-      Paths.get("src", "main", "tf", tfRootModule).toFile()
+        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
+        Paths.get("src", "main", "tf", tfRootModule).toFile()
     );
 
     properties = new Properties();

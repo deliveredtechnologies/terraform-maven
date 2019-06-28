@@ -105,7 +105,7 @@ public class TerraformApply implements TerraformOperation<String> {
         options.append(properties.getProperty(TerraformApplyParam.plan.property));
       } else {
         String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-          properties.getProperty(TerraformApplyParam.tfRootDir.property,
+            properties.getProperty(TerraformApplyParam.tfRootDir.property,
             TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
         options.append(tfModuleDir);
       }

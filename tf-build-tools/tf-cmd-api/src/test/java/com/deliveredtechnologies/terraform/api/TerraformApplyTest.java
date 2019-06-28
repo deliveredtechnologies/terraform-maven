@@ -23,11 +23,15 @@ public class TerraformApplyTest {
   private Executable executable;
   private String tfRootModule = "test";
 
+  /**
+   * Sets up properties, Mock(s) and creates the terraform root module source.
+   * @throws IOException
+   */
   @Before
   public void setup() throws IOException {
     FileUtils.copyDirectory(
-      Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
-      Paths.get("src", "main", "tf", tfRootModule).toFile()
+        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
+        Paths.get("src", "main", "tf", tfRootModule).toFile()
     );
 
     properties = new Properties();
