@@ -82,11 +82,11 @@ public class TerraformDestroy implements TerraformOperation<String> {
     options.append("-auto-approve ");
 
     try {
-      if (properties.containsKey(TerraformDestroyParam.tfRootDir.property)) {
-        options.append(properties.getProperty(TerraformDestroyParam.tfRootDir.property));
-      } else {
-        options.append(TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
-      }
+      String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
+        properties.getProperty(TerraformDestroyParam.tfRootDir.property,
+          TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
+      options.append(tfModuleDir);
+
       if (properties.containsKey(TerraformDestroyParam.timeout.property)) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty(TerraformDestroyParam.timeout.property)));
       } else {
