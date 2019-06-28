@@ -6,7 +6,7 @@
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.2</version>
+  <version>0.2.1</version>
   <modules>
     <module>tf-cmd-api</module>
     <module>tf-maven-plugin</module>

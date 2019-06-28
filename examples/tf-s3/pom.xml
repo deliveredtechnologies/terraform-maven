@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-maven-starter</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2.1</version>
   </parent>
   <artifactId>tf-s3</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
@@ -21,7 +21,7 @@
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-maven-starter</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2</version>
       <type>pom</type>
     </dependency>
   </dependencies>
