@@ -1,3 +1,8 @@
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2/jar
+[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2/pom
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.2-green.svg
+
 ![terraform-maven](.docs/MavenTerraform.png)
 
 ---
@@ -5,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop&maxAge=600&service=github)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
-[![Maven Central](https://img.shields.io/badge/maven%20central-0.2-green.svg)](https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2/maven-plugin)
+[![Maven Central][maven-badge]][tf-maven-plugin]
 
 # Terraform Maven Plugin
 
@@ -15,6 +20,7 @@ Now, all of that Maven goodness can be used with Terraform.
 
 ### Contents
 
+* [Artifacts in This Repository](#artifacts-in-this-repository)
 * [Benefits of the Terraform Maven Plugin](#benefits-of-the-terraform-maven-plugin)
 * [Maven Goals](#maven-goals)
   * [tf:get](#tfget)
@@ -25,6 +31,15 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:package](#tfpackage)
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
+* [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
+
+### Artifacts in This Repository
+
+| Artifact Name    | Version                                           | Description                 |
+|------------------|---------------------------------------------------|-----------------------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | Terraform Maven Plugin      |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | Terraform Command API       |
+| tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | Terraform Maven starter POM |
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -201,3 +216,76 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 | ------------ | ------ | ---------------------------------------------------------------------------------------------- |
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
+
+### Setting Up a Terraform Maven Project
+
+1. Create a generic Maven project. [see Maven Getting Started Guide](https://maven.apache.org/guides/getting-started/index.html)
+2. Add a _src/main/tf_ directory, under which one or more Terraform root module will reside.
+3. Add the Terraform Maven Starter POM as the parent project by adding the following to the POM under the _project_ tag.
+
+```xml
+  <parent>
+    <groupId>com.deliveredtechnologies</groupId>
+    <artifactId>tf-maven-starter</artifactId>
+    <version>0.2</version>
+  </parent>
+```
+
+4. Add the Terraform Maven starter POM as a dependency as follows.
+
+```xml
+  <dependencies>
+    <dependency>
+      <groupId>com.deliveredtechnologies</groupId>
+      <artifactId>tf-maven-starter</artifactId>
+      <version>0.2</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+```
+
+5. Configure the build plugins with the Terraform Maven Starter POM.
+
+```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-install</id>
+            <phase>never</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.deliveredtechnologies</groupId>
+        <artifactId>tf-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+```
+
+### How to Use the Terraform Maven Projects
+
+If you used the Starter POM, the following Terraform Maven goals are mapped to the project's Maven phases.
+
+| Maven Phase | Terraform Maven Goals |
+|-------------|-----------------------|
+| install     | deploy                |
+| validate    | init, plan            |
+| clean       | clean                 |
+| package     | package               |
+| deploy      | deploy                |
