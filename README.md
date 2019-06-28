@@ -32,6 +32,7 @@ Now, all of that Maven goodness can be used with Terraform.
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
+* [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
 
 ### Artifacts in This Repository
 
@@ -278,7 +279,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
   </build>
 ```
 
-### How to Use the Terraform Maven Projects
+### How to Use Terraform Maven Projects
 
 If you used the Starter POM, the following Terraform Maven goals are mapped to the project's Maven phases.
 
