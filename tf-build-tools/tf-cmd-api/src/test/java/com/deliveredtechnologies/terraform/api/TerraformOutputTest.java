@@ -22,6 +22,11 @@ public class TerraformOutputTest {
   private Properties properties;
   private Executable terraform;
 
+  /**
+   * Sets up mocks and properties.
+   * @throws IOException
+   * @throws InterruptedException
+   */
   @Before
   public void setup() throws IOException, InterruptedException {
     commandLine = Mockito.mock(Executable.class);
