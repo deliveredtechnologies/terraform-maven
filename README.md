@@ -1,7 +1,7 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2.1/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2.1/jar
-[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2.1/pom
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.2.1-green.svg
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2.6/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2.6/jar
+[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2.6/pom
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.2.6-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
