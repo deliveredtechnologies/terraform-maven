@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.deliveredtechnologies</groupId>
-    <artifactId>tf-build-tools</artifactId>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.deliveredtechnologies</groupId>
+  <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.2.3</version>
+  <version>0.2.5</version>
+  <description>Terraform Build Tools: The parent POM project for Java and Terraform Tools</description>
   <modules>
     <module>tf-cmd-api</module>
     <module>tf-maven-plugin</module>
@@ -63,16 +64,12 @@
       </activation>
       <properties>
         <nexus.server.url>https://oss.sonatype.org/content/repositories/snapshots</nexus.server.url>
-        <maven.deploy.skip>false</maven.deploy.skip>
-        <maven.install.skip>false</maven.install.skip>
       </properties>
     </profile>
     <profile>
       <id>release</id>
       <properties>
         <nexus.server.url>https://oss.sonatype.org/</nexus.server.url>
-        <maven.deploy.skip>false</maven.deploy.skip>
-        <maven.install.skip>flase</maven.install.skip>
         <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
       </properties>
       <build>
@@ -152,7 +149,7 @@
             <configuration>
               <serverId>${nexus.server.id}</serverId>
               <nexusUrl>${nexus.server.url}</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
             </configuration>
           </plugin>
         </plugins>
@@ -161,6 +158,32 @@
   </profiles>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.1.0</version>
+        <configuration>
+          <flattenMode>minimum</flattenMode>
+        </configuration>
+        <executions>
+          <!-- enable flattening -->
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <!-- ensure proper cleanup -->
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
