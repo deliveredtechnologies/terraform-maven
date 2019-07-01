@@ -64,6 +64,8 @@
       </activation>
       <properties>
         <nexus.server.url>https://oss.sonatype.org/content/repositories/snapshots</nexus.server.url>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.install.skip>true</maven.install.skip>
       </properties>
     </profile>
     <profile>
