@@ -6,7 +6,8 @@
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.2.1</version>
+  <version>0.3-SNAPSHOT</version>
+  <description>The parent Maven project for tf-maven-starter, tf-maven-plugin and tf-cmd-api</description>
   <modules>
     <module>tf-cmd-api</module>
     <module>tf-maven-plugin</module>
@@ -63,16 +64,12 @@
       </activation>
       <properties>
         <nexus.server.url>https://oss.sonatype.org/content/repositories/snapshots</nexus.server.url>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <maven.install.skip>true</maven.install.skip>
       </properties>
     </profile>
     <profile>
       <id>release</id>
       <properties>
         <nexus.server.url>https://oss.sonatype.org/</nexus.server.url>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <maven.install.skip>true</maven.install.skip>
         <gpg.skip>true</gpg.skip>
         <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
       </properties>
