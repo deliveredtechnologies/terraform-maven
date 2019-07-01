@@ -6,7 +6,7 @@
   <groupId>com.deliveredtechnologies</groupId>
   <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.2.5</version>
+  <version>0.2.6</version>
   <description>Terraform Build Tools: The parent POM project for Java and Terraform Tools</description>
   <modules>
     <module>tf-cmd-api</module>
@@ -165,6 +165,7 @@
         <artifactId>flatten-maven-plugin</artifactId>
         <version>1.1.0</version>
         <configuration>
+          <updatePomFile>true</updatePomFile>
           <flattenMode>minimum</flattenMode>
         </configuration>
         <executions>
