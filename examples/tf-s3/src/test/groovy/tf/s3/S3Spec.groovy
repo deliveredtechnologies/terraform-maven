@@ -10,32 +10,32 @@ import groovy.json.JsonSlurper
 import spock.lang.Specification
 
 class S3Spec extends Specification {
-    private Properties tfProperties = new Properties()
+    private Properties tfProperties
     private def jsonOutput
+    private TerraformInit init = new TerraformInit()
+    private TerraformApply apply = new TerraformApply()
+    private TerraformOutput output = new TerraformOutput()
 
     def setup() {
+        tfProperties = new Properties()
         tfProperties.put("tfRootDir", "s3")
 
-        def init = new TerraformInit()
-        def apply = new TerraformApply()
-        def output = new TerraformOutput("s3")
-
-        init.execute(tfProperties)
-        apply.execute(tfProperties)
         String tfOutput = output.execute([tfProperties])
         JsonSlurper slurper = new JsonSlurper()
         jsonOutput = slurper.parseText(tfOutput)
-
     }
 
     def "S3 module provisiones a bucket in AWS"() {
         given:
+            init.execute(tfProperties)
+            apply.execute(tfProperties)
+
+        when:
             AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient()
             String bucketName = jsonOutput.bucket_arns.value[(jsonOutput.bucket_arns.value.lastIndexOf(":") + 1)..-1]
-        when:
-            boolean bucketExists = s3.doesBucketExistV2(bucketName)
+
         then:
-            bucketExists
+            s3.doesBucketExistV2(bucketName)
     }
 
     def cleanup() {
