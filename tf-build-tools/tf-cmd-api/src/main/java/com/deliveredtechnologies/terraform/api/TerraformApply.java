@@ -48,6 +48,10 @@ public class TerraformApply implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.APPLY));
   }
 
+  public TerraformApply(String tfRootDir) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.APPLY, tfRootDir));
+  }
+
   /**
    * Executes terraform apply.
    * <p>
@@ -103,11 +107,6 @@ public class TerraformApply implements TerraformOperation<String> {
     try {
       if (properties.containsKey(TerraformApplyParam.plan.property)) {
         options.append(properties.getProperty(TerraformApplyParam.plan.property));
-      } else {
-        String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-            properties.getProperty(TerraformApplyParam.tfRootDir.property,
-            TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
-        options.append(tfModuleDir);
       }
 
       if (properties.containsKey("timeout")) {

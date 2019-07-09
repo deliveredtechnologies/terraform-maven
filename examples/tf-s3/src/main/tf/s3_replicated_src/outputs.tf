@@ -1,6 +1,6 @@
 output "bucket_arn" {
   description = "bucket arn"
-  value = "${aws_s3_bucket.bucket.arn}"
+  value = "${aws_s3_bucket.source_bucket.arn}"
 }
 
 output "kms_key_arn" {
