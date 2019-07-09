@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -42,7 +41,7 @@ public class TerraformDestroyTest {
   public void terraformDestroyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
     Mockito.when(this.executable.execute(
-      String.format("terraform destroy -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve %1$s", TerraformUtils.getTerraformRootModuleDir(tfRootModule).toAbsolutePath().toString()),
+      "terraform destroy -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve ",
       1111))
       .thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
@@ -51,7 +50,6 @@ public class TerraformDestroyTest {
     this.properties.put(TerraformDestroy.TerraformDestroyParam.target.property, "module1.module2");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.noColor.property, "true");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.tfRootDir.property, tfRootModule);
 
     Assert.assertEquals("Success!", terraformDestroy.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
@@ -60,7 +58,7 @@ public class TerraformDestroyTest {
   @Test
   public void terraformDestroyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
-    Mockito.when(this.executable.execute(String.format("terraform destroy -auto-approve %1$s", TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath()))).thenReturn("Success!");
+    Mockito.when(this.executable.execute("terraform destroy -auto-approve ")).thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
 
     Assert.assertEquals("Success!", terraformDestroy.execute(new Properties()));

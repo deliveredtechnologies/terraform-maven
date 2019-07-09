@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,7 +22,6 @@ public class TerraformPlan implements TerraformOperation<String> {
     lockTimeout("lock-timeout"),
     target("target"),
     planOutputFile("out"),
-    tfRootDir("dir"),
     planInput("input"),
     refreshState("refresh"),
     tfState("state"),
@@ -100,7 +98,6 @@ public class TerraformPlan implements TerraformOperation<String> {
           case noColor:
             options.append(String.format("-%1$s ", param));
             break;
-          case tfRootDir:
           case timeout:
             break;
           default:

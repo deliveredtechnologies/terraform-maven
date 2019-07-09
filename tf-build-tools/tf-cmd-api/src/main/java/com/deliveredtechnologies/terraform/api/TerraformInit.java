@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,6 @@ public class TerraformInit implements TerraformOperation<String> {
 
   enum TerraformInitParam {
     pluginDir("plugin-dir"),
-    tfRootDir("tfRootDir"),
     verifyPlugins("verify-plugins"),
     getPlugins("get-plugins");
 
