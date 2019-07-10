@@ -164,6 +164,7 @@ Optional Parameters:
 | Name        | Type   | Description                                                                                    |
 | ----------- | ------ | ---------------------------------------------------------------------------------------------- |
 | lockTimeout | Number | Duration to retry a state lock                                                                 |
+| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                |
 | target      | Number | A resource address to target                                                                   |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                             |
 | tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
