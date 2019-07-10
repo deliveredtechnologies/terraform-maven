@@ -19,6 +19,7 @@ resource "aws_kms_key" "kmskey" {
 resource "aws_s3_bucket" "bucket" {
   bucket = "${local.bucket_name}"
   acl    = "private"
+  force_destroy = "true"
 
   versioning {
     enabled = "${var.is_versioned}"

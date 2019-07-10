@@ -3,6 +3,18 @@
   "Statement": [
     {
       "Action": [
+        "s3:ListBucket",
+        "s3:Get",
+        "s3:DeleteBucket"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${source_bucket_arn}",
+        "${destination_bucket_arn}"
+      ]
+    },
+    {
+      "Action": [
         "s3:GetReplicationConfiguration",
         "s3:ListBucket",
         "s3:Get"
@@ -25,6 +37,8 @@
     },
     {
       "Action": [
+        "s3:ListBucket",
+        "s3:Get",
         "s3:ReplicateObject",
         "s3:ReplicateDelete",
         "s3:ReplicateTags",

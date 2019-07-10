@@ -41,7 +41,7 @@ public class TerraformCommandLineDecorator implements Executable {
    * @throws IOException
    */
   public TerraformCommandLineDecorator(TerraformCommand cmd, String tfRootDir) throws IOException, TerraformException {
-    this(cmd, new CommandLine(TerraformUtils.getTerraformRootModuleDir(tfRootDir)));
+    this(cmd, new CommandLine(tfRootDir == null ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir)));
   }
 
   @Override

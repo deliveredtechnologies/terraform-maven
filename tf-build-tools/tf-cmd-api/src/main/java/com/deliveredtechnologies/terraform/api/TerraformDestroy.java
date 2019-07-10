@@ -19,6 +19,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
   enum TerraformDestroyParam {
     lockTimeout("lock-timeout"),
     target("target"),
+    tfVars("var"),
     noColor("no-color"),
     timeout("timeout");
 
@@ -68,6 +69,13 @@ public class TerraformDestroy implements TerraformOperation<String> {
     StringBuilder options = new StringBuilder();
     for (TerraformDestroyParam param : TerraformDestroyParam.values()) {
       if (!properties.containsKey(param.property)) continue;
+
+      if (param == TerraformDestroyParam.tfVars) {
+        for (String var : ((String)properties.get(param.property)).split(",")) {
+          options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+        }
+        continue;
+      }
 
       switch (param) {
         case lockTimeout:
