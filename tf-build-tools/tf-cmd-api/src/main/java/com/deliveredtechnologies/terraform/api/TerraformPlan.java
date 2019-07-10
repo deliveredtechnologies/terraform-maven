@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,7 +22,6 @@ public class TerraformPlan implements TerraformOperation<String> {
     lockTimeout("lock-timeout"),
     target("target"),
     planOutputFile("out"),
-    tfRootDir("dir"),
     planInput("input"),
     refreshState("refresh"),
     tfState("state"),
@@ -51,6 +49,10 @@ public class TerraformPlan implements TerraformOperation<String> {
 
   public TerraformPlan() throws IOException {
     this(new TerraformCommandLineDecorator(TerraformCommand.PLAN));
+  }
+
+  public TerraformPlan(String tfRootDir) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.PLAN, tfRootDir));
   }
 
   /**
@@ -96,7 +98,6 @@ public class TerraformPlan implements TerraformOperation<String> {
           case noColor:
             options.append(String.format("-%1$s ", param));
             break;
-          case tfRootDir:
           case timeout:
             break;
           default:
@@ -110,11 +111,6 @@ public class TerraformPlan implements TerraformOperation<String> {
     }
 
     try {
-      String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-          properties.getProperty(TerraformPlanParam.tfRootDir.property,
-          TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
-      options.append(tfModuleDir);
-
       if (properties.containsKey("timeout")) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty("timeout")));
       } else {

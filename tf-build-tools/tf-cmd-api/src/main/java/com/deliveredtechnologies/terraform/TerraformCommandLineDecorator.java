@@ -34,6 +34,16 @@ public class TerraformCommandLineDecorator implements Executable {
     this(cmd, new CommandLine(TerraformUtils.getDefaultTerraformRootModuleDir()));
   }
 
+  /**
+   * Instantiates TerraformCommandLineDecorator using TerraformCommand.<br>
+   * The directory where commands are executed is based on {tfRootDir}.
+   * @param cmd the Terraform command to be executed
+   * @throws IOException
+   */
+  public TerraformCommandLineDecorator(TerraformCommand cmd, String tfRootDir) throws IOException, TerraformException {
+    this(cmd, new CommandLine(tfRootDir == null ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir)));
+  }
+
   @Override
   public String execute(String command, int timeout) throws IOException, InterruptedException {
     return commandLine.execute(getTerraformCommand(command), timeout);

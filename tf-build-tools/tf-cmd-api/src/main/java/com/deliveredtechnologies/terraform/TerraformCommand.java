@@ -1,7 +1,7 @@
 package com.deliveredtechnologies.terraform;
 
 public enum TerraformCommand {
-  INIT("init"), PLAN("plan"), APPLY("apply"), DESTROY("destroy"), OUT("out");
+  INIT("init"), PLAN("plan"), APPLY("apply"), DESTROY("destroy"), OUTPUT("output");
 
   private String value;
 

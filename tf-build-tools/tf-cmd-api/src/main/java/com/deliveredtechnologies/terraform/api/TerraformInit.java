@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,6 @@ public class TerraformInit implements TerraformOperation<String> {
 
   enum TerraformInitParam {
     pluginDir("plugin-dir"),
-    tfRootDir("tfRootDir"),
     verifyPlugins("verify-plugins"),
     getPlugins("get-plugins");
 
@@ -46,8 +44,16 @@ public class TerraformInit implements TerraformOperation<String> {
     this(LoggerFactory.getLogger(TerraformInit.class), new TerraformCommandLineDecorator(TerraformCommand.INIT));
   }
 
+  public TerraformInit(String tfRootDir) throws IOException, TerraformException {
+    this(LoggerFactory.getLogger(TerraformInit.class), new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
+  }
+
   public TerraformInit(Logger log) throws IOException {
     this(log, new TerraformCommandLineDecorator(TerraformCommand.INIT));
+  }
+
+  public TerraformInit(Logger log, String tfRootDir) throws IOException, TerraformException {
+    this(log, new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
   }
 
   TerraformInit(Executable terraform) {
@@ -73,10 +79,6 @@ public class TerraformInit implements TerraformOperation<String> {
   public String execute(Properties properties) throws TerraformException {
     try {
       StringBuilder options = new StringBuilder();
-      String workingDir = TerraformUtils.getTerraformRootModuleDir(
-          properties.getProperty(TerraformInitParam.tfRootDir.toString(),
-          TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
-      log.info(String.format("*** Terraform root module directory is '%1$s' ***", workingDir));
 
       for (TerraformInitParam param : TerraformInitParam.values()) {
         if (properties.containsKey(param.property)) {
@@ -92,7 +94,7 @@ public class TerraformInit implements TerraformOperation<String> {
         }
       }
 
-      options.append(String.format("-no-color %1$s", workingDir));
+      options.append("-no-color ");
       return terraform.execute(options.toString());
     } catch (InterruptedException | IOException e) {
       throw new TerraformException(e);

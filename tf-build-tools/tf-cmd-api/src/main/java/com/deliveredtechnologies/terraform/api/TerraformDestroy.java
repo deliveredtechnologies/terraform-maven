@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -20,7 +19,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
   enum TerraformDestroyParam {
     lockTimeout("lock-timeout"),
     target("target"),
-    tfRootDir("dir"),
+    tfVars("var"),
     noColor("no-color"),
     timeout("timeout");
 
@@ -46,6 +45,10 @@ public class TerraformDestroy implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.DESTROY));
   }
 
+  public TerraformDestroy(String tfRootDir) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.DESTROY, tfRootDir));
+  }
+
   /**
    * Executes terraform destroy. <br>
    * <p>
@@ -67,6 +70,13 @@ public class TerraformDestroy implements TerraformOperation<String> {
     for (TerraformDestroyParam param : TerraformDestroyParam.values()) {
       if (!properties.containsKey(param.property)) continue;
 
+      if (param == TerraformDestroyParam.tfVars) {
+        for (String var : ((String)properties.get(param.property)).split(",")) {
+          options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+        }
+        continue;
+      }
+
       switch (param) {
         case lockTimeout:
         case target:
@@ -82,11 +92,6 @@ public class TerraformDestroy implements TerraformOperation<String> {
     options.append("-auto-approve ");
 
     try {
-      String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-          properties.getProperty(TerraformDestroyParam.tfRootDir.property,
-          TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
-      options.append(tfModuleDir);
-
       if (properties.containsKey(TerraformDestroyParam.timeout.property)) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty(TerraformDestroyParam.timeout.property)));
       } else {

@@ -4,8 +4,8 @@ import com.deliveredtechnologies.maven.io.ExpandableZippedArtifact;
 
 import com.deliveredtechnologies.maven.logs.Slf4jMavenAdapter;
 import com.deliveredtechnologies.terraform.TerraformException;
+import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformOperation;
-import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +40,7 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
    * @param tfModules the common modules directory; if null, it's defaulted to src/main/.tfmodules
    */
   public TerraformGet(Log log, String tfModules) throws IOException {
-    //TODO: Use TerraformUtils to determine the tfModules directory instead of reimplementing it here.
-    this(log, StringUtils.isEmpty(tfModules) ? Paths.get("src", "main", ".tfmodules") : Paths.get(tfModules));
+    this(log, TerraformUtils.getDefaultTfModulesDir());
   }
 
   protected TerraformGet(Log log, Path tfModules) throws IOException {
