@@ -64,7 +64,6 @@ public class TerraformPlan implements TerraformOperation<String> {
    *   lockTimeout - state file lock timeout<br>
    *   target - resource target<br>
    *   planInput - ask for input for variables not directly set<br>
-   *   tfRootDir - the directory in which to run the apply command
    *   planOutputFile - path to save the generated execution plan<br>
    *   refreshState - if true then refresh the state prior to running plan<br>
    *   tfState - path to the state file; defaults to "terraform.tfstate"<br>
