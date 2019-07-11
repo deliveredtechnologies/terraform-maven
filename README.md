@@ -1,7 +1,11 @@
 [tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2.6/maven-plugin
 [tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2.6/jar
 [tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2.6/pom
+[tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
+[tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
+[tf-maven-starter-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-starter/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.2.6-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.3-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -36,11 +40,11 @@ Now, all of that Maven goodness can be used with Terraform.
 
 ### Artifacts in This Repository
 
-| Artifact Name    | Version                                           | Description                 |
-|------------------|---------------------------------------------------|-----------------------------|
-| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | Terraform Maven Plugin      |
-| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | Terraform Command API       |
-| tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | Terraform Maven starter POM |
+| Artifact Name    | Version                                           | Latest Snapshot                                                      | Description                 |
+|------------------|---------------------------------------------------|----------------------------------------------------------------------|-----------------------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin      |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API       |
+| tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-starter-snapshot] | Terraform Maven starter POM |
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -98,12 +102,13 @@ _Note: tf:init depends on tf:get; so tf:get is always executed when tf:init is s
 
 Optional Parameters:
 
-| Name          | Type    | Description                                                                                                         |
-| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| tfRootDir     | String  | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}` |
-| pluginDir     | String  | Skips plugin installation and loads plugins only from the specified directory                                       |
-| getPlugins    | Boolean | Skips plugin installation                                                                                           |
-| verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                             |
+| Name          | Type    | Description                                                                                                                |
+| ------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| tfRootDir     | String  | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}`        |
+| pluginDir     | String  | Skips plugin installation and loads plugins only from the specified directory                                              |
+| getPlugins    | Boolean | Skips plugin installation                                                                                                  |
+| backendConfig | String  | A comma delimited string of optional backend config (e.g. backendConfig="region=us-east-1,bucket=mybucket,key=/some/path") | 
+| verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                                    |
 
 ---
  
