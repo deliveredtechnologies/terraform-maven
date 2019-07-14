@@ -41,7 +41,7 @@ public class TerraformDestroyTest {
   public void terraformDestroyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform destroy -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve ",
+      "terraform destroy -lock-timeout=1000 -target=module1.module2 -var 'var1=one' -var 'var2=two' -no-color -auto-approve ",
       1111))
       .thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
@@ -50,6 +50,7 @@ public class TerraformDestroyTest {
     this.properties.put(TerraformDestroy.TerraformDestroyParam.target.property, "module1.module2");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.noColor.property, "true");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.tfVars.property, "var1=one,var2=two");
 
     Assert.assertEquals("Success!", terraformDestroy.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());

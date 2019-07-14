@@ -66,7 +66,7 @@ public class TerraformInitTest {
     String response = terraformInit.execute(properties);
 
     Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("-plugin-dir=somepluginpath -verify-plugins=false -get-plugins=false -backend-config=\"bucket=mybucket\" -backend-config=\"key=/path/to/my/key\" -backend-config=\"region=us-east-1\" -no-color ", pluginDir));
+    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -plugin-dir=somepluginpath -verify-plugins=false -get-plugins=false -backend-config=\"bucket=mybucket\" -backend-config=\"key=/path/to/my/key\" -backend-config=\"region=us-east-1\" -no-color ", pluginDir));
   }
 
   @Test(expected = TerraformException.class)
