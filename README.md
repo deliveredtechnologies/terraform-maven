@@ -1,7 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.2.6/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.2.6/jar
-[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.2.6/pom
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.2.6-green.svg
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.3/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.3/jar
+[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.3/pom
+[tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
+[tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
+[tf-maven-starter-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-starter/
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.3-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.3-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -9,7 +13,7 @@
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
-[![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop&maxAge=600&service=github)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
 [![Maven Central][maven-badge]][tf-maven-plugin]
 
 # Terraform Maven Plugin
@@ -36,11 +40,11 @@ Now, all of that Maven goodness can be used with Terraform.
 
 ### Artifacts in This Repository
 
-| Artifact Name    | Version                                           | Description                 |
-|------------------|---------------------------------------------------|-----------------------------|
-| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | Terraform Maven Plugin      |
-| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | Terraform Command API       |
-| tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | Terraform Maven starter POM |
+| Artifact Name    | Version                                           | Latest Snapshot                                                      | Description                 |
+|------------------|---------------------------------------------------|----------------------------------------------------------------------|-----------------------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin      |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API       |
+| tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-starter-snapshot] | Terraform Maven starter POM |
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -98,12 +102,13 @@ _Note: tf:init depends on tf:get; so tf:get is always executed when tf:init is s
 
 Optional Parameters:
 
-| Name          | Type    | Description                                                                                                         |
-| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| tfRootDir     | String  | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}` |
-| pluginDir     | String  | Skips plugin installation and loads plugins only from the specified directory                                       |
-| getPlugins    | Boolean | Skips plugin installation                                                                                           |
-| verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                             |
+| Name          | Type    | Description                                                                                                                |
+| ------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| tfRootDir     | String  | The root module directory location where terraform will be initialized; defaults to `src/main/tf/{first dir found}`        |
+| pluginDir     | String  | Skips plugin installation and loads plugins only from the specified directory                                              |
+| getPlugins    | Boolean | Skips plugin installation                                                                                                  |
+| backendConfig | String  | A comma delimited string of optional backend config (e.g. backendConfig="region=us-east-1,bucket=mybucket,key=/some/path") | 
+| verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                                    |
 
 ---
  
@@ -164,6 +169,7 @@ Optional Parameters:
 | Name        | Type   | Description                                                                                    |
 | ----------- | ------ | ---------------------------------------------------------------------------------------------- |
 | lockTimeout | Number | Duration to retry a state lock                                                                 |
+| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                |
 | target      | Number | A resource address to target                                                                   |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                             |
 | tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |

@@ -1,2 +1,2 @@
 region = "us-east-2"
-environment = "test"
+environment = "dev"

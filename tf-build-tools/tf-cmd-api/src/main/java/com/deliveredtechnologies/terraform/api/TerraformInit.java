@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +23,9 @@ public class TerraformInit implements TerraformOperation<String> {
 
   enum TerraformInitParam {
     pluginDir("plugin-dir"),
-    tfRootDir("tfRootDir"),
     verifyPlugins("verify-plugins"),
-    getPlugins("get-plugins");
+    getPlugins("get-plugins"),
+    backendConfig("backend-config");
 
     Optional<String> name = Optional.empty();
     String property;
@@ -46,8 +45,16 @@ public class TerraformInit implements TerraformOperation<String> {
     this(LoggerFactory.getLogger(TerraformInit.class), new TerraformCommandLineDecorator(TerraformCommand.INIT));
   }
 
+  public TerraformInit(String tfRootDir) throws IOException, TerraformException {
+    this(LoggerFactory.getLogger(TerraformInit.class), new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
+  }
+
   public TerraformInit(Logger log) throws IOException {
     this(log, new TerraformCommandLineDecorator(TerraformCommand.INIT));
+  }
+
+  public TerraformInit(Logger log, String tfRootDir) throws IOException, TerraformException {
+    this(log, new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
   }
 
   TerraformInit(Executable terraform) {
@@ -63,7 +70,9 @@ public class TerraformInit implements TerraformOperation<String> {
    * Executes terraform init. <br>
    * <p>
    *   Valid Properties: <br>
-   *   tfRootDir - the directory where terraform init is called
+   *   pluginDir - skips plugin installation and loads plugins only from the specified directory <br>
+   *   verifyPlugins - skips release signature validation when installing downloaded plugins (not recommended) <br>
+   *   getPlugins - skips plugin installation when false <br>
    * </p>
    * @param properties  paramter options and properties for terraform init
    * @return            the output of terraform init
@@ -73,13 +82,16 @@ public class TerraformInit implements TerraformOperation<String> {
   public String execute(Properties properties) throws TerraformException {
     try {
       StringBuilder options = new StringBuilder();
-      String workingDir = TerraformUtils.getTerraformRootModuleDir(
-          properties.getProperty(TerraformInitParam.tfRootDir.toString(),
-          TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
-      log.info(String.format("*** Terraform root module directory is '%1$s' ***", workingDir));
 
       for (TerraformInitParam param : TerraformInitParam.values()) {
         if (properties.containsKey(param.property)) {
+
+          if (param == TerraformInitParam.backendConfig) {
+            for (String file : (properties.getProperty(param.property)).split(",")) {
+              options.append(String.format("-%1$s=\"%2$s\" ", param, file.trim()));
+            }
+          }
+
           switch (param) {
             case pluginDir:
             case getPlugins:
@@ -92,7 +104,7 @@ public class TerraformInit implements TerraformOperation<String> {
         }
       }
 
-      options.append(String.format("-no-color %1$s", workingDir));
+      options.append("-no-color ");
       return terraform.execute(options.toString());
     } catch (InterruptedException | IOException e) {
       throw new TerraformException(e);

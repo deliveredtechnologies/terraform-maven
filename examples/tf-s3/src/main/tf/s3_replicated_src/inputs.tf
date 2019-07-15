@@ -16,9 +16,12 @@ variable "environment" {
   default = "dev"
 }
 
-variable "is_versioned" {
-  description = "true if versioning is to be enabled, otherwise false; defaults to false"
+variable "destination_bucket_arn" {
+  description = "arn of the destination bucket for replication"
   type = "string"
-  default = false
 }
 
+variable "destination_kms_key_arn" {
+  description = "arn of the destination kms key"
+  type = "string"
+}

@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -22,7 +21,6 @@ public class TerraformApply implements TerraformOperation<String> {
     lockTimeout("lock-timeout"),
     target("target"),
     plan("plan"),
-    tfRootDir("dir"),
     noColor("no-color"),
     timeout("timeout");
 
@@ -48,6 +46,10 @@ public class TerraformApply implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.APPLY));
   }
 
+  public TerraformApply(String tfRootDir) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.APPLY, tfRootDir));
+  }
+
   /**
    * Executes terraform apply.
    * <p>
@@ -57,7 +59,6 @@ public class TerraformApply implements TerraformOperation<String> {
    *   lockTimeout - state file lock timeout<br>
    *   target - resource target<br>
    *   autoApprove - approve without prompt<br>
-   *   tfRootDir - the directory in which to run the apply command
    *   plan - the plan file to run the apply against<br>
    *   noColor - remove color encoding from output<br>
    *   timeout - how long in milliseconds the terraform apply command can run<br>
@@ -90,7 +91,6 @@ public class TerraformApply implements TerraformOperation<String> {
             break;
           case timeout:
           case plan:
-          case tfRootDir:
             break;
           default:
             options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
@@ -103,11 +103,6 @@ public class TerraformApply implements TerraformOperation<String> {
     try {
       if (properties.containsKey(TerraformApplyParam.plan.property)) {
         options.append(properties.getProperty(TerraformApplyParam.plan.property));
-      } else {
-        String tfModuleDir = TerraformUtils.getTerraformRootModuleDir(
-            properties.getProperty(TerraformApplyParam.tfRootDir.property,
-            TerraformUtils.getDefaultTerraformRootModuleDir().toString())).toAbsolutePath().toString();
-        options.append(tfModuleDir);
       }
 
       if (properties.containsKey("timeout")) {

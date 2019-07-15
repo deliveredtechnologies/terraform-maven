@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformInit.TerraformInitParam;
 
 import org.apache.commons.io.FileUtils;
@@ -46,16 +45,7 @@ public class TerraformInitTest {
     String response = terraformInit.execute(new Properties());
 
     Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute("terraform init -no-color " + TerraformUtils.getDefaultTerraformRootModuleDir().toAbsolutePath().toString());
-
-    //and now with a tfRootDir specified
-    String tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath().toString();
-    Properties properties = new Properties();
-    properties.put(TerraformInitParam.tfRootDir.toString(), tfRootDir);
-    response = terraformInit.execute(properties);
-
-    Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -no-color %1$s", TerraformUtils.getTerraformRootModuleDir(tfRootDir)));
+    Mockito.verify(commandLine, Mockito.times(1)).execute("terraform init -no-color ");
   }
 
   @Test
@@ -69,14 +59,14 @@ public class TerraformInitTest {
     String tfRootDir = "test";
     String pluginDir = "somepluginpath";
     Properties properties = new Properties();
-    properties.put(TerraformInitParam.tfRootDir.property, tfRootDir);
     properties.put(TerraformInitParam.getPlugins.property, "false");
     properties.put(TerraformInitParam.pluginDir.property, pluginDir);
     properties.put(TerraformInitParam.verifyPlugins.property, "false");
+    properties.put(TerraformInitParam.backendConfig.property, "bucket=mybucket,key=/path/to/my/key,region=us-east-1");
     String response = terraformInit.execute(properties);
 
     Assert.assertEquals(successMessage, response);
-    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -plugin-dir=%1$s -verify-plugins=false -get-plugins=false -no-color %2$s", pluginDir, Paths.get("src", "main", "tf", tfRootDir).toAbsolutePath().toString()));
+    Mockito.verify(commandLine, Mockito.times(1)).execute(String.format("terraform init -plugin-dir=somepluginpath -verify-plugins=false -get-plugins=false -backend-config=\"bucket=mybucket\" -backend-config=\"key=/path/to/my/key\" -backend-config=\"region=us-east-1\" -no-color ", pluginDir));
   }
 
   @Test(expected = TerraformException.class)
