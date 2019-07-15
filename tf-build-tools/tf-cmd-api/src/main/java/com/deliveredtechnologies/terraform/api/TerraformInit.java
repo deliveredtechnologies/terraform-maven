@@ -24,7 +24,8 @@ public class TerraformInit implements TerraformOperation<String> {
   enum TerraformInitParam {
     pluginDir("plugin-dir"),
     verifyPlugins("verify-plugins"),
-    getPlugins("get-plugins");
+    getPlugins("get-plugins"),
+    backendConfig("backend-config");
 
     Optional<String> name = Optional.empty();
     String property;
@@ -69,7 +70,9 @@ public class TerraformInit implements TerraformOperation<String> {
    * Executes terraform init. <br>
    * <p>
    *   Valid Properties: <br>
-   *   tfRootDir - the directory where terraform init is called
+   *   pluginDir - skips plugin installation and loads plugins only from the specified directory <br>
+   *   verifyPlugins - skips release signature validation when installing downloaded plugins (not recommended) <br>
+   *   getPlugins - skips plugin installation when false <br>
    * </p>
    * @param properties  paramter options and properties for terraform init
    * @return            the output of terraform init
@@ -82,6 +85,13 @@ public class TerraformInit implements TerraformOperation<String> {
 
       for (TerraformInitParam param : TerraformInitParam.values()) {
         if (properties.containsKey(param.property)) {
+
+          if (param == TerraformInitParam.backendConfig) {
+            for (String file : (properties.getProperty(param.property)).split(",")) {
+              options.append(String.format("-%1$s=\"%2$s\" ", param, file.trim()));
+            }
+          }
+
           switch (param) {
             case pluginDir:
             case getPlugins:

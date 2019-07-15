@@ -56,7 +56,6 @@ public class TerraformDestroy implements TerraformOperation<String> {
    *   lockTimeout - state file lock timeout<br>
    *   target - resource target<br>
    *   autoApprove - approve without prompt<br>
-   *   tfRootDir - the directory in which to run the apply command
    *   noColor - remove color encoding from output<br>
    *   timeout - how long in milliseconds the terraform apply command can run<br>
    * </p>
