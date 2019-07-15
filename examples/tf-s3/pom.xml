@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-maven-starter</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
   </parent>
   <artifactId>tf-s3</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
@@ -21,13 +21,13 @@
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-maven-starter</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.3</version>
       <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-cmd-api</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.3-</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
