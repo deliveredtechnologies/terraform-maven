@@ -196,11 +196,11 @@ Optionally, a fat compressed package can be created instead, which also includes
 _Note: Within the fat compressed package, module source paths are updated accordingly so that the pacakge is a wholly contained working module that can be consumed as a module,
 extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 
-| Name         | Type    | Description                                                                                          |
-| ------------ | ------- | -----------------------------------------------------------------------------------------------------|
-| tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found}        |
-| tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules        |
-| fatTar       | Boolean | Set to true if a fat compressed tar.gz package should be created, otherwise false; defaults to false |
+| Name         | Type    | Description                                                                                                                                       |
+| ------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------|
+| tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} or src/main/tf if there are multiple source modules |
+| tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules                                                     |
+| fatTar       | Boolean | Set to true if a fat compressed tar.gz package should be created, otherwise false; defaults to false                                              |
 
 ---
 
@@ -213,7 +213,7 @@ Deploys a packaged Terraform zip artifact ([see tf:package](#tfpackage)) with a 
 | Name        | Type   | Description                                                                                                       |
 | ----------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
 | file        | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip                       |
-| url         | String | The url of the Maven repo to which the zip file artifact will be deployed                                         |
+| url         | String | The url of the Maven repo to which the zip file artifact will be deployed; defaults to {HOME}/.m2/repository      |
 | pomFile     | String | The path to the pom.xml file to attach to the artifact; defaults to .flattened-pom.xml in the root of the project |
 | generatePom | String | If set to "true" then a POM will be generated and attached to the deployment                                      |
 | groupId     | String | The groupId for the generated POM (only used if generatePom=true                                                  |
