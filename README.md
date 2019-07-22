@@ -245,20 +245,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 </properties>
 ```
 
-4. Add the following dependencies in the POM
-
-```xml
-  <dependencies>
-    <dependency>
-      <groupId>com.deliveredtechnologies</groupId>
-      <artifactId>tf-maven-starter</artifactId>
-      <version>${tf-maven-version}</version>
-      <type>pom</type>
-    </dependency>
-  </dependencies>
-```
-
-5. Configure the build plugins for the Terraform Maven Plugin (see the [tf-s3 example](examples/tf-s3) for reference).
+4. Configure the build plugins for the Terraform Maven Plugin (see the [tf-s3 example](examples/tf-s3) for reference).
 
 ```xml
   <build>

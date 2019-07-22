@@ -24,12 +24,6 @@
   <dependencies>
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
-      <artifactId>tf-maven-starter</artifactId>
-      <version>${tf-maven-version}</version>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-cmd-api</artifactId>
       <version>${tf-maven-version}</version>
     </dependency>
