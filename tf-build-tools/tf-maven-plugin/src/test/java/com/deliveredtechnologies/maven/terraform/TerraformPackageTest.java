@@ -6,6 +6,7 @@ import com.deliveredtechnologies.maven.terraform.TerraformPackage.TerraformPacka
 import com.deliveredtechnologies.terraform.TerraformException;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.project.MavenProject;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -122,6 +124,36 @@ public class TerraformPackageTest {
 
       Assert.assertEquals(1, count);
       Assert.assertTrue(zipEntryNames.contains("main.tf"));
+    }
+  }
+
+  @Test
+  public void packageGoalWithNoFatZipAndMultipleModulesPackagesBothTfSourceModulesInTheTargetDir() throws TerraformException, IOException, URISyntaxException {
+    properties.remove(TerraformPackageParams.tfRootDir.toString());
+    this.tfRoot = Paths.get(this.getClass().getResource("/tf_initialized").toURI());
+    FileUtils.copyDirectory(this.tfRoot.toFile(), Paths.get("src", "main", "tf").toFile());
+    Path zipFilePath = Paths.get(TerraformPackage.targetDir)
+        .resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
+    String response = this.terraformPackage.execute(properties);
+
+    Assert.assertEquals(response, String.format("Created zip file '%1$s'", zipFilePath.toString()));
+    Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("root")));
+    Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("other")));
+
+    try (IterableZipInputStream zipStream = new IterableZipInputStream(new FileInputStream(zipFilePath.toFile()))) {
+      int count = 0;
+      Set<String> zipEntryNames = new HashSet<>();
+      for (ZipEntry entry : zipStream) {
+        count++;
+        zipEntryNames.add(entry.getName());
+      }
+
+      Assert.assertEquals(4, count);
+      Assert.assertTrue(zipEntryNames.contains("root/"));
+      Assert.assertTrue(zipEntryNames.contains("other/"));
+      Assert.assertTrue(zipEntryNames.contains("root/main.tf"));
+      Assert.assertTrue(zipEntryNames.contains("other/main.tf"));
     }
   }
 }

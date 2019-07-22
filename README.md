@@ -1,9 +1,7 @@
 [tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.3/maven-plugin
 [tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.3/jar
-[tf-maven-starter]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-starter/0.3/pom
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
-[tf-maven-starter-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-starter/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.3-green.svg
 [maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.4-green.svg
 
@@ -45,16 +43,14 @@ Now, all of that Maven goodness can be used with Terraform.
 |------------------|---------------------------------------------------|----------------------------------------------------------------------|-----------------------------|
 | tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin      |
 | tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API       |
-| tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-starter-snapshot] | Terraform Maven starter POM |
 
 ### Repository Directory Structure
 * examples - Terraform Maven example projects
   * tf-s3 - A Terraform Maven s3 example project
   * tf-s3-consumer - An example project that consumes the tf-s3 project as a dependency
-* tf-build-tools - The parent project of tf-maven-plugin, tf-cmd-api and tf-maven-starter
+* tf-build-tools - The parent project of the tf-maven-plugin and tf-cmd-api projects
   * tf-maven-plugin - The Terraform Maven Plugin project
   * tf-cmd-api - A Java API for Terraform project
-  * tf-maven-starter - A Terraform Maven Plugin Starter POM project
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -241,70 +237,136 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 
 1. Create a generic Maven project. [see Maven Getting Started Guide](https://maven.apache.org/guides/getting-started/index.html)
 2. Add a _src/main/tf_ directory, under which one or more Terraform root module will reside.
-3. Add the Terraform Maven Starter POM as the parent project by adding the following to the POM under the _project_ tag.
+3. Add a paramater to the POM that specifies the version of the Terraform Maven Plugin
 
 ```xml
-  <parent>
-    <groupId>com.deliveredtechnologies</groupId>
-    <artifactId>tf-maven-starter</artifactId>
-    <version>0.3</version>
-  </parent>
+<properties>
+  <tf-maven-version>0.4-SNAPSHOT</tf-maven-version>
+</properties>
 ```
 
-4. Add the Terraform Maven starter POM as a dependency as follows.
+4. Add the following dependencies in the POM
 
 ```xml
   <dependencies>
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-maven-starter</artifactId>
-      <version>0.3</version>
+      <version>${tf-maven-version}</version>
       <type>pom</type>
     </dependency>
   </dependencies>
 ```
 
-5. Configure the build plugins with the Terraform Maven Starter POM.
+5. Configure the build plugins for the Terraform Maven Plugin (see the [tf-s3 example](examples/tf-s3) for reference).
 
 ```xml
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-install</id>
-            <phase>never</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.deliveredtechnologies</groupId>
-        <artifactId>tf-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>flatten-maven-plugin</artifactId>
-      </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>default-install</id>
+              <phase>never</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <!-- disables default jar packaging: https://stackoverflow.com/questions/2188746/what-is-the-best-way-to-avoid-maven-jar -->
+          <artifactId>maven-jar-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>default-jar</id>
+              <phase>never</phase>
+              <configuration>
+                <finalName>unwanted</finalName>
+                <classifier>unwanted</classifier>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>com.deliveredtechnologies</groupId>
+          <artifactId>tf-maven-plugin</artifactId>
+          <version>${project.parent.version}</version>
+          <executions>
+            <execution>
+              <id>terraform-clean</id>
+              <phase>clean</phase>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>terraform-install</id>
+              <phase>install</phase>
+              <goals>
+                <goal>deploy</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>terraform-package</id>
+              <phase>package</phase>
+              <goals>
+                <goal>package</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>terraform-deploy</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <version>1.1.0</version>
+          <configuration>
+          </configuration>
+          <executions>
+            <!-- enable flattening -->
+            <execution>
+              <id>flatten</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+            </execution>
+            <!-- ensure proper cleanup -->
+            <execution>
+              <id>flatten.clean</id>
+              <phase>clean</phase>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
     </plugins>
   </build>
 ```
 
+_**Note: An archetype that creates new Terraform Maven projects is a planned enhancement._
+
 ### How to Use Terraform Maven Projects
 
-If you used the Starter POM, the following Terraform Maven goals are mapped to the project's Maven phases.
+If you used the above configuration, the following Terraform Maven goals are mapped to the project's Maven phases.
 
 | Maven Phase | Terraform Maven Goals |
 |-------------|-----------------------|
-| install     | apply                 |
+| install     | deploy                |
 | clean       | clean                 |
 | package     | package               |
 | deploy      | deploy                |
