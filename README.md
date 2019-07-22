@@ -5,7 +5,7 @@
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-maven-starter-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-starter/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.3-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.3-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.4-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -25,6 +25,7 @@ Now, all of that Maven goodness can be used with Terraform.
 ### Contents
 
 * [Artifacts in This Repository](#artifacts-in-this-repository)
+* [Repository Directory Structure](#repo-directory-structure)
 * [Benefits of the Terraform Maven Plugin](#benefits-of-the-terraform-maven-plugin)
 * [Maven Goals](#maven-goals)
   * [tf:get](#tfget)
@@ -46,6 +47,15 @@ Now, all of that Maven goodness can be used with Terraform.
 | tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API       |
 | tf-maven-starter | [![Maven Central][maven-badge]][tf-maven-starter] | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-starter-snapshot] | Terraform Maven starter POM |
 
+### Repository Directory Structure
+* examples - Terraform Maven example projects
+  * tf-s3 - A Terraform Maven s3 example project
+  * tf-s3-consumer - An example project that consumes the tf-s3 project as a dependency
+* tf-build-tools - The parent project of tf-maven-plugin, tf-cmd-api and tf-maven-starter
+  * tf-maven-plugin - The Terraform Maven Plugin project
+  * tf-cmd-api - A Java API for Terraform project
+  * tf-maven-starter - A Terraform Maven Plugin Starter POM project
+
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
   * Terraform really has no dependency management to speak of. Even when you use Terraform Enterprise or some other private
@@ -63,6 +73,9 @@ Now, all of that Maven goodness can be used with Terraform.
   * By default the [deploy goal](#tfdeploy) deploys a zip artifact packaged by the [package goal](#tfpackage) to a Maven repo
     along with the POM of the current Maven Terraform project. But if you want to point to a differnt POM or a different
     artifact for deployment, it can do that too. Easy peasy.
+* Terraform support for Java testing frameworks
+  * The tf-cmd-api artifact provides Java support for Terraform, which can be used to easily integrate
+    mature Java testing frameworks, like Spock or JUnit. One example of this is the [[tf-s3 example in this repo]](examples/tf-s3).
 * Simple Integration with CI Tools
   * Get rid of hundreds of lines of untested code in your CI tool and replace it with tested build lifecycle management
     using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraform build logic 
@@ -234,7 +247,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-maven-starter</artifactId>
-    <version>0.2.1</version>
+    <version>0.3</version>
   </parent>
 ```
 
@@ -245,7 +258,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
       <artifactId>tf-maven-starter</artifactId>
-      <version>0.2.1</version>
+      <version>0.3</version>
       <type>pom</type>
     </dependency>
   </dependencies>
@@ -291,8 +304,7 @@ If you used the Starter POM, the following Terraform Maven goals are mapped to t
 
 | Maven Phase | Terraform Maven Goals |
 |-------------|-----------------------|
-| install     | deploy                |
-| validate    | init, plan            |
+| install     | apply                 |
 | clean       | clean                 |
 | package     | package               |
 | deploy      | deploy                |
