@@ -37,7 +37,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
 
-Not finding what you are looking for? [Try the Wiki!](wiki)
+Not finding what you are looking for? [Try the Wiki!](/deliveredtechnologies/terraform-maven/wiki)
 
 <hr>
 
