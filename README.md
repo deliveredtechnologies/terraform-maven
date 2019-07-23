@@ -16,9 +16,9 @@
 
 # Terraform Maven Plugin
 
-The Terraform Maven Plugin brings Maven to Terraform and greatly enhances the Terraform project
-lifecycle and dependency management experience. Maven in some form has been the standard for Java project management for over a decade.
-Now, all of that Maven goodness can be used with Terraform.
+The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Terraform’s project lifecycle and dependency management capability. Maven in some form has been the standard for Java project management for over a decade. Now, all of that Maven goodness can be used with Terraform!
+
+<hr>
 
 ### Contents
 
@@ -39,9 +39,7 @@ Now, all of that Maven goodness can be used with Terraform.
 
 Not finding what you are looking for? [Try the Wiki!](wiki)
 
-
 <hr>
-
 
 ### Artifacts in This Repository
 
