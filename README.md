@@ -36,6 +36,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:clean](#tfclean)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
+* [Articles](#articles)
 
 Not finding what you are looking for? [Try the Wiki!](https://github.com/deliveredtechnologies/terraform-maven/wiki)
 
@@ -361,3 +362,7 @@ If you used the above configuration, the following Terraform Maven goals are map
 | clean       | clean                 |
 | package     | package               |
 | deploy      | deploy                |
+
+### Articles
+
+* [Unit Testing Terraform](https://medium.com/@claytonlong_34858/unit-testing-terraform-e592a5c3777f)
