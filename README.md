@@ -37,6 +37,8 @@ Now, all of that Maven goodness can be used with Terraform.
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
 
+Not finding what you are looking for? [Try the Wiki!](wiki)
+
 ### Artifacts in This Repository
 
 | Artifact Name    | Version                                           | Latest Snapshot                                                      | Description                 |
