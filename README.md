@@ -277,7 +277,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
         <plugin>
           <groupId>com.deliveredtechnologies</groupId>
           <artifactId>tf-maven-plugin</artifactId>
-          <version>${project.parent.version}</version>
+          <version>${tf-maven-version}</version>
           <executions>
             <execution>
               <id>terraform-clean</id>
