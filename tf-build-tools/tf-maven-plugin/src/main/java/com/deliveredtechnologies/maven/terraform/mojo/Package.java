@@ -19,6 +19,6 @@ public class Package extends TerraformMojo<String> {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    execute(new TerraformPackage(project), System.getProperties());
+    execute(new TerraformPackage(project, getLog()), System.getProperties());
   }
 }
