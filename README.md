@@ -39,6 +39,10 @@ Now, all of that Maven goodness can be used with Terraform.
 
 Not finding what you are looking for? [Try the Wiki!](wiki)
 
+
+---
+
+
 ### Artifacts in This Repository
 
 | Artifact Name    | Version                                           | Latest Snapshot                                                      | Description                 |
