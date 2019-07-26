@@ -123,6 +123,7 @@ Optional Parameters:
 | getPlugins    | Boolean | Skips plugin installation                                                                                                  |
 | backendConfig | String  | A comma delimited string of optional backend config (e.g. backendConfig="region=us-east-1,bucket=mybucket,key=/some/path") | 
 | verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                                    |
+| skipTfGet     | Boolean | If set to true, tf:init is done without running tf:get                                                                     |
 
 ---
  
@@ -136,7 +137,7 @@ Optional Parameters:
 
 | Name           | Type    | Description                                                                                                |
 | -------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
-| tfVarFiles       | String  | A comma delimited string of tfvars files (e.g. -var-file=foo)                                              |
+| tfVarFiles     | String  | A comma delimited string of tfvars files (e.g. -var-file=foo)                                              |
 | tfVars         | String  | A comma delimited string of tfvars (e.g. -var 'name=value')                                                |
 | lockTimeout    | Number  | Duration to retry a state lock                                                                             |
 | target         | Number  | A resource address to target                                                                               |
@@ -161,7 +162,7 @@ Optional Parameters:
 
 | Name        | Type   | Description                                                                                                |
 | ----------- | ------ | ---------------------------------------------------------------------------------------------------------- |
-| tfVarFiles    | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                                              |
+| tfVarFiles  | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                                              |
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                                |
 | lockTimeout | Number | Duration to retry a state lock                                                                             |
 | target      | Number | A resource address to target                                                                               |
