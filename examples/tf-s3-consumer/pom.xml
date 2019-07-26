@@ -22,7 +22,12 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
-
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.9</version>
+    </dependency>
     <dependency>
       <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
       <artifactId>tf-s3</artifactId>

@@ -68,6 +68,9 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
 
   @Override
   public List<Path> execute(Properties properties) throws TerraformException {
+    if (Boolean.valueOf(properties.getProperty("skipTfGet", "false"))) {
+      return new ArrayList<Path>();
+    }
     getDependenciesFromMavenRepo(new DefaultInvoker(), new DefaultInvocationRequest());
     return expandMavenArtifacts(tfModules);
   }
@@ -84,7 +87,7 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
     //TODO: clean up magic strings
     Properties properties = new Properties();
     properties.setProperty("outputDirectory", tfModules.toAbsolutePath().toString());
-    properties.setProperty("type", PACKAGING);
+    properties.setProperty("includeTypes", PACKAGING);
 
     request.setGoals(Arrays.asList("dependency:copy-dependencies"));
     request.setProperties(properties);

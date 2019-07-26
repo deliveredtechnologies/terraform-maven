@@ -2,6 +2,7 @@ package com.deliveredtechnologies.terraform;
 
 import com.deliveredtechnologies.terraform.TerraformException;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +40,9 @@ public class TerraformUtils {
    */
   public static Path getTerraformRootModuleDir(String tfmodule) throws IOException, TerraformException {
     Path path;
-    if (tfmodule.contains("/")) { //relative or absolute path
+    if (tfmodule.startsWith("tf-examples")) {
+      path = Paths.get("src", "main", tfmodule);
+    } else if (tfmodule.contains(File.separator)) { //relative or absolute path
       path = Paths.get(tfmodule);
     } else {
       path = Paths.get("src", "main", "tf", tfmodule);
