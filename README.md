@@ -1,8 +1,8 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.3/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.3/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.4/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.4/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.3-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.4-green.svg
 [maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.4-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
@@ -247,7 +247,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 
 ```xml
 <properties>
-  <tf-maven-version>0.4-SNAPSHOT</tf-maven-version>
+  <tf-maven-version>0.4</tf-maven-version>
 </properties>
 ```
 
