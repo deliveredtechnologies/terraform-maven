@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.deliveredtechnologies</groupId>
-  <artifactId>tf-build-tools</artifactId>
+  <artifactId>tf-maven-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.0</version>
   <description>Parent project of tf-build-tools; used to enable synk security scans</description>
