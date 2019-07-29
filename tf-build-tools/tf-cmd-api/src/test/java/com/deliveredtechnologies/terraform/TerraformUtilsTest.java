@@ -38,4 +38,18 @@ public class TerraformUtilsTest {
       FileUtils.forceDelete(Paths.get("src", "main", "tf").toFile());
     }
   }
+
+  @Test
+  public void getTerraformExampleModuleDirReturnsTheRootModuleDirRelativeToTheTfExamplesDir() throws IOException, TerraformException {
+    try {
+      FileUtils.copyDirectory(
+          Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
+          Paths.get("src", "main", "tf-examples", "test").toFile()
+      );
+      Path tfRootModulePath = TerraformUtils.getTerraformRootModuleDir("tf-examples/test");
+      Assert.assertEquals(Paths.get("src", "main", "tf-examples", "test"), tfRootModulePath);
+    } finally {
+      FileUtils.forceDelete(Paths.get("src", "main", "tf-examples").toFile());
+    }
+  }
 }

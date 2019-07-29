@@ -3,16 +3,22 @@ package com.deliveredtechnologies.maven.terraform;
 import com.deliveredtechnologies.maven.io.Compressable;
 import com.deliveredtechnologies.maven.io.CompressableGZipTarFile;
 import com.deliveredtechnologies.maven.io.CompressableZipFile;
+import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformOperation;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,9 +39,9 @@ public class TerraformPackage implements TerraformOperation<String> {
 
   static final String targetDir = "target";
   static final String targetTfRootDir = "tf-root-module";
-  static final List<String> excludedFiles = Arrays.asList(new String[] {".terraform"});
+  static final List<String> excludedFiles = Arrays.asList(new String[] {".terraform", "terraform.tfstate", "terraform.tfstate.backup", ".terraform.tfstate.lock.info"});
 
-
+  private Logger logger;
   private MavenProject project;
 
   //TODO: Consider using intsance variables instead.
@@ -45,8 +51,17 @@ public class TerraformPackage implements TerraformOperation<String> {
     fatTar;
   }
 
-  public TerraformPackage(MavenProject project) {
+  public TerraformPackage(MavenProject project, Logger logger) {
+    this.logger = logger;
     this.project = project;
+  }
+
+  public TerraformPackage(MavenProject project, Log log) {
+    this(project, new MavenSlf4jAdapter(log));
+  }
+
+  public TerraformPackage(MavenProject project) {
+    this(project, LoggerFactory.getLogger(TerraformPackage.class));
   }
 
   /**
@@ -73,7 +88,15 @@ public class TerraformPackage implements TerraformOperation<String> {
       Path tfModulesPath = !StringUtils.isEmpty(tfModulesDir)
           ? Paths.get(tfModulesDir)
           : TerraformUtils.getDefaultTfModulesDir();
-      Path tfRootPath = !StringUtils.isEmpty(tfRootDir)  ? Paths.get(tfRootDir) : TerraformUtils.getDefaultTerraformRootModuleDir();
+      logger.debug(String.format("tfModulesPath is %1$s", tfModulesPath.toAbsolutePath().toString()));
+
+      File tfSourceFile = Paths.get("src", "main", "tf").toFile();
+      Path tfRootPath = !StringUtils.isEmpty(tfRootDir)
+          ? TerraformUtils.getTerraformRootModuleDir(tfRootDir)
+          : (tfSourceFile.exists() && tfSourceFile.isDirectory() && tfSourceFile.listFiles().length > 1
+              ? tfSourceFile.toPath()
+              : TerraformUtils.getDefaultTerraformRootModuleDir());
+      logger.debug(String.format("tfRootPath is %1$s", tfRootPath.toAbsolutePath().toString()));
 
       //copy tfRoot directory to target
       if (targetTfRootPath.toFile().exists()) FileUtils.forceDelete(targetTfRootPath.toFile());
@@ -85,7 +108,12 @@ public class TerraformPackage implements TerraformOperation<String> {
 
       for (Path file : tfRootDirFiles.stream().filter(f -> !excludedFiles.contains(f.getFileName().toString())).collect(Collectors.toList())) {
         if (file.toFile().isDirectory()) {
-          FileUtils.copyDirectory(file.toFile(), targetTfRootPath.resolve(file.getFileName().toString()).toFile());
+          FileUtils.copyDirectory(file.toFile(), targetTfRootPath.resolve(file.getFileName().toString()).toFile(), new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+              return excludedFiles.stream().noneMatch(excludedFile -> pathname.getName().endsWith(excludedFile));
+            }
+          });
         } else {
           Files.copy(file, targetTfRootPath.resolve(file.getFileName().toString()));
         }

@@ -64,7 +64,7 @@ public class TerraformGetTest {
     TerraformGet terraformGet = new TerraformGet(log, tfModules);
     Properties properties = new Properties();
     properties.setProperty("outputDirectory", tfModules.toAbsolutePath().toString());
-    properties.setProperty("type", "zip");
+    properties.setProperty("includeTypes", "zip");
 
     terraformGet.getDependenciesFromMavenRepo(invoker, request);
 
