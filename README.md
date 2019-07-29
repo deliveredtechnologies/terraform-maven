@@ -12,7 +12,6 @@
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
-[![Known Vulnerabilities](https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg)](https://snyk.io/test/github/deliveredtechnologies/terraform-maven)
 [![Maven Central][maven-badge]][tf-maven-plugin]
 
 # Terraform Maven Plugin
@@ -45,10 +44,10 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 
 ### Artifacts in This Repository
 
-| Artifact Name    | Version                                           | Latest Snapshot                                                      | Description                 |
-|------------------|---------------------------------------------------|----------------------------------------------------------------------|-----------------------------|
-| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin      |
-| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API       |
+| Artifact Name | Version | Latest Snapshot | Security Scan Results | Description |
+|---------------|---------|-----------------|-----------------------|-------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | [![tf-maven-plugin vulnerabilities](https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml)](https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml) | Terraform Maven Plugin      |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | [![tf-cmd-api vulnerabilities](https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml)](https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml) | Terraform Command API       |
 
 ### Repository Directory Structure
 * examples - Terraform Maven example projects
