@@ -3,11 +3,12 @@
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.4-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.4-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
 ---
+
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
@@ -44,10 +45,10 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 
 ### Artifacts in This Repository
 
-| Artifact Name    | Version                                           | Latest Snapshot                                                      | Description                 |
-|------------------|---------------------------------------------------|----------------------------------------------------------------------|-----------------------------|
-| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin      |
-| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API       |
+| Artifact Name | Version | Latest Snapshot | Security Scan Results | Description |
+|---------------|---------|-----------------|-----------------------|-------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | [![tf-maven-plugin vulnerabilities](https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml)](https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml) | Terraform Maven Plugin      |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | [![tf-cmd-api vulnerabilities](https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml)](https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml) | Terraform Command API       |
 
 ### Repository Directory Structure
 * examples - Terraform Maven example projects
@@ -350,8 +351,22 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
     </plugins>
   </build>
 ```
+5. Instead of doing all the above steps you can simply build the module/project by running the [Maven Archetype Plugin](https://maven.apache.org/guides/mini/guide-creating-archetypes.html) which creates project from an archetype.
 
-_**Note: An archetype that creates new Terraform Maven projects is a planned enhancement._
+An example on how to generate the project using an archetype is shown below
+
+```
+mvn -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId=tf-s3-archetype -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+
+Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name> 
+
+or
+
+mvn -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId=tf-s3-archetype
+ 
+After running the above command mvn interactive console prompt for the required arguments (ex: groupId and artifactId) and creates project accrodingly
+```
+
 
 ### How to Use Terraform Maven Projects
 

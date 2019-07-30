@@ -11,6 +11,7 @@
   <modules>
     <module>tf-cmd-api</module>
     <module>tf-maven-plugin</module>
+    <module>tf-s3-archetype</module>
   </modules>
   <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
