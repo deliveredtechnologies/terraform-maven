@@ -357,19 +357,22 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 
 Instead of doing all the above steps you can simply build the module/project by running the [Maven Archetype Plugin](https://maven.apache.org/guides/mini/guide-creating-archetypes.html) which creates project from an archetype.
 
-An example on how to generate the project using an archetype is shown below
+An example on how to generate the project using an archetype is shown below.
 
-```
+```bash
 mvn -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+```
 
-Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name> 
+Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
 
 or
 
+```bash
 mvn -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype"
- 
-After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accrodingly
-```
+``` 
+
+After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
+
 
 ### How to Use Terraform Maven Projects
 
