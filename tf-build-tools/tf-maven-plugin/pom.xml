@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
   </parent>
   <artifactId>tf-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
@@ -112,6 +112,17 @@
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-dependency-plugin</artifactId>
       <version>3.1.1</version>
+      <exclusions>
+        <exclusion>  <!-- declare the exclusion here -->
+          <groupId>org.apache.struts</groupId>
+          <artifactId>struts-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-core</artifactId>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
