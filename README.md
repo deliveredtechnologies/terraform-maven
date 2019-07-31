@@ -36,6 +36,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
+* [Setting Up a Terraform Maven Project Using an ArcheType](#setting-up-a-terraform-maven-project-using-an-archetype)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
 * [Articles](#articles)
 
@@ -351,22 +352,24 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
     </plugins>
   </build>
 ```
-5. Instead of doing all the above steps you can simply build the module/project by running the [Maven Archetype Plugin](https://maven.apache.org/guides/mini/guide-creating-archetypes.html) which creates project from an archetype.
+
+### Setting Up a Terraform Maven Project Using an ArcheType
+
+Instead of doing all the above steps you can simply build the module/project by running the [Maven Archetype Plugin](https://maven.apache.org/guides/mini/guide-creating-archetypes.html) which creates project from an archetype.
 
 An example on how to generate the project using an archetype is shown below
 
 ```
-mvn -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId=tf-s3-archetype -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name> 
 
 or
 
-mvn -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId=tf-s3-archetype
+mvn -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype"
  
-After running the above command mvn interactive console prompt for the required arguments (ex: groupId and artifactId) and creates project accrodingly
+After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accrodingly
 ```
-
 
 ### How to Use Terraform Maven Projects
 
