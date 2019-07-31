@@ -10,7 +10,12 @@
   <packaging>pom</packaging>
 
   <name>tf-s3-archetype</name>
-
+  <properties>
+    <maven.deploy.skip>false</maven.deploy.skip>
+    <maven.install.skip>false</maven.install.skip>
+    <gpg.skip>false</gpg.skip>
+    <skipNexusStagingDeployMojo>false</skipNexusStagingDeployMojo>
+  </properties>
   <build>
     <extensions>
       <extension>
@@ -19,7 +24,6 @@
         <version>2.4</version>
       </extension>
     </extensions>
-
     <pluginManagement>
       <plugins>
         <plugin>
