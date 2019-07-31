@@ -380,7 +380,6 @@ mvn -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-ar
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
 
-
 ### How to Use Terraform Maven Projects
 
 If you used the above configuration, the following Terraform Maven goals are mapped to the project's Maven phases.
