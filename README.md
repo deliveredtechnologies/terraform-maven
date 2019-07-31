@@ -65,6 +65,7 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 * tf-build-tools - The parent project of the tf-maven-plugin and tf-cmd-api projects
   * tf-maven-plugin - The Terraform Maven Plugin project
   * tf-cmd-api - A Java API for Terraform project
+  * tf-s3-archetype - An Archetype for a S3 Terraform Project
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
