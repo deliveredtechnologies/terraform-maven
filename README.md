@@ -3,11 +3,12 @@
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.4-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.4-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
 ---
+
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 [![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
@@ -35,6 +36,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
+* [Setting Up a Terraform Maven Project Using an ArcheType](#setting-up-a-terraform-maven-project-using-an-archetype)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
 * [Articles](#articles)
 
@@ -351,7 +353,26 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
   </build>
 ```
 
-_**Note: An archetype that creates new Terraform Maven projects is a planned enhancement._
+### Setting Up a Terraform Maven Project Using an ArcheType
+
+Instead of doing all the above steps you can simply build the module/project by running the [Maven Archetype Plugin](https://maven.apache.org/guides/mini/guide-creating-archetypes.html) which creates project from an archetype.
+
+An example on how to generate the project using an archetype is shown below.
+
+```bash
+mvn -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+```
+
+Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
+
+or
+
+```bash
+mvn -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype"
+``` 
+
+After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
+
 
 ### How to Use Terraform Maven Projects
 
