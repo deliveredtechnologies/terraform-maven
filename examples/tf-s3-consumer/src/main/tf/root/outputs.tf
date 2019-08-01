@@ -1,9 +1,5 @@
-output "bucket_arns" {
+output "bucket_arn" {
   description = "The arn of the S3 bucket"
-  value = "${element(local.bucket_arns, 0)}"
+  value = "${module.s3.bucket_arn}"
 }
 
-output "replicated_bucket_arn" {
-  description = "The arn of the S3 bucket that objects are replicated to"
-  value = "${element(local.bucket_arns, 1)}"
-}
