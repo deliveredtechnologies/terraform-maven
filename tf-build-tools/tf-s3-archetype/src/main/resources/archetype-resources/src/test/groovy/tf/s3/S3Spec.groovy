@@ -1,7 +1,4 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
-package ${package}
+package tf.s3
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
@@ -29,7 +26,7 @@ class S3Spec extends Specification {
             AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion("us-east-1").build()
 
             tfProperties.put('tfRootDir', stackName)
-            tfProperties.put('tfVars', "region=${symbol_dollar}{region},environment=${symbol_dollar}{environment}".toString())
+            tfProperties.put('tfVars', "region=${region},environment=${environment}".toString())
 
         when:
             init.execute(tfProperties)
@@ -69,7 +66,7 @@ class S3Spec extends Specification {
 
         when:
             //provision destination bucket
-            tfDestProperties.put('tfVars', "region=${symbol_dollar}{destRegion},environment=${symbol_dollar}{environment},is_versioned=true".toString())
+            tfDestProperties.put('tfVars', "region=${destRegion},environment=${environment},is_versioned=true".toString())
 
             initDest.execute(tfDestProperties)
             applyDest.execute(tfDestProperties)
@@ -79,7 +76,7 @@ class S3Spec extends Specification {
             String destBucketName = destBucketArn[(destBucketArn.lastIndexOf(":") + 1)..-1]
 
             //provision source bucket with replication to destination bucket
-            tfSrcProperties.put('tfVars', "region=${symbol_dollar}{srcRegion},environment=${symbol_dollar}{environment},destination_bucket_arn=${symbol_dollar}{destBucketArn},destination_kms_key_arn=${symbol_dollar}{destKmsKeyArn}".toString())
+            tfSrcProperties.put('tfVars', "region=${srcRegion},environment=${environment},destination_bucket_arn=${destBucketArn},destination_kms_key_arn=${destKmsKeyArn}".toString())
 
             initSrc.execute(tfSrcProperties)
             applySrc.execute(tfSrcProperties)
