@@ -5,7 +5,7 @@
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.5-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5.1-green.svg
 [tf-maven-plugin-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-cmd-api-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml
@@ -65,7 +65,7 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 * tf-build-tools - The parent project of the tf-maven-plugin and tf-cmd-api projects
   * tf-maven-plugin - The Terraform Maven Plugin project
   * tf-cmd-api - A Java API for Terraform project
-  * tf-s3-archetype - An Archetype for a S3 Terraform Project
+* tf-s3-archetype - An Archetype for a S3 Terraform Project
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
