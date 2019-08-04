@@ -8,6 +8,5 @@
   <modules>
     <module>tf-s3</module>
     <module>tf-s3-consumer</module>
-  <module>tf-s3-archetype-example</module>
   </modules>
 </project>
