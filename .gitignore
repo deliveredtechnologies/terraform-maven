@@ -7,3 +7,4 @@ target
 .tfmodules
 .terraform
 .gpg
+.flattened-pom.xml
