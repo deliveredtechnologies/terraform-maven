@@ -395,3 +395,4 @@ If you used the above configuration, the following Terraform Maven goals are map
 ### Articles
 
 * [Unit Testing Terraform](https://medium.com/@claytonlong_34858/unit-testing-terraform-e592a5c3777f)
+* [Maven Gives Terraform a Big Boost](https://dzone.com/articles/maven-gives-terraform-a-big-boost)
