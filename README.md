@@ -257,7 +257,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 
 ```xml
 <properties>
-  <tf-maven-version>0.5.1</tf-maven-version>
+  <tf-maven-version>0.5.2</tf-maven-version>
 </properties>
 ```
 
@@ -368,7 +368,7 @@ Instead of doing all the above steps you can simply build the module/project by 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersionId=0.5.2 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -376,7 +376,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype"
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersionId=0.5.2
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
@@ -395,3 +395,4 @@ If you used the above configuration, the following Terraform Maven goals are map
 ### Articles
 
 * [Unit Testing Terraform](https://medium.com/@claytonlong_34858/unit-testing-terraform-e592a5c3777f)
+* [Maven Gives Terraform a Big Boost](https://dzone.com/articles/maven-gives-terraform-a-big-boost)
