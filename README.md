@@ -41,6 +41,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:package](#tfpackage)
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
+* [Getting Started](https://github.com/deliveredtechnologies/terraform-maven/wiki/Getting-Started)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
 * [Setting Up a Terraform Maven Project Using an ArcheType](#setting-up-a-terraform-maven-project-using-an-archetype)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
@@ -74,7 +75,7 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
     that module is sourced. The Terraform Maven Plugin allows you to specify your dependencies for Terraform the same way
     you specify your dependencies with Java: in an external [Maven POM file](https://maven.apache.org/pom.html). And
     because it's Maven, Terraform modules sourced from Maven repos can also take advantage of version ranges and 
-    Maven's SNAPSHOT functionality. No more modifying code for version updates! No more sourcing obscure URLs!
+    Maven's SNAPSHOT functionality. It also resoolves transitive dependencies. No more modifying code for version updates! No more sourcing obscure URLs!
     Hooray, Maven! 
 * Packaging as Part of the Build Lifecycle
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
