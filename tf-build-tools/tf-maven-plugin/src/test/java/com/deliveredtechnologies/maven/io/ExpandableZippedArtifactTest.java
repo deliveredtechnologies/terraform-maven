@@ -1,6 +1,5 @@
 package com.deliveredtechnologies.maven.io;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.After;
 import org.junit.Assert;
@@ -8,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -46,7 +46,7 @@ public class ExpandableZippedArtifactTest {
    */
   @After
   public void teardown() throws IOException {
-    FileUtils.forceDelete(zipFileDir.toFile());
+    Files.walk(zipFileDir).map(path -> path.toFile()).forEach(File::delete);
   }
 
   @Test
