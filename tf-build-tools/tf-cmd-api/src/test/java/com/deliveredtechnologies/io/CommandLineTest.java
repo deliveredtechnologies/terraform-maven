@@ -25,11 +25,11 @@ public class CommandLineTest {
   public void executeRunsCommandOnCommandLineShellAndReturnsTheOutput() throws IOException, InterruptedException {
     String echoString = "Hello World!";
     Executable commandLine = new CommandLine(directory);
-    String output = commandLine.execute(String.format("echo \"%1$s\"", echoString));
-    Assert.assertEquals(String.format("%1$s\n", echoString), output);
+    String output = commandLine.execute(String.format("echo %1$s", echoString));
+    Assert.assertEquals(String.format("%1$s%n", echoString), output);
 
-    output = commandLine.execute(String.format("echo \"%1$s\"", echoString), 1000);
-    Assert.assertEquals(String.format("%1$s\n", echoString), output);
+    output = commandLine.execute(String.format("echo %1$s", echoString), 1000);
+    Assert.assertEquals(String.format("%1$s%n", echoString), output);
   }
 
   @Test(expected = IOException.class)
