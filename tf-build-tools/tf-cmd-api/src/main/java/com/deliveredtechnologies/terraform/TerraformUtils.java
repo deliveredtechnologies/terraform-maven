@@ -1,6 +1,7 @@
 package com.deliveredtechnologies.terraform;
 
-import com.deliveredtechnologies.terraform.TerraformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,18 +16,25 @@ import java.util.Arrays;
 public class TerraformUtils {
   private TerraformUtils() { }
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(TerraformUtils.class);
+
   /**
    * Gets the default Terraform root module directory `src/main/terraform/{root module dir}`.
    * @return  a Path corresponding to the Terraform root module directory
    * @throws IOException
    */
   public static Path getDefaultTerraformRootModuleDir() throws IOException {
-    Path tfSourcePath = Paths.get("src", "main", "tf");
-    if (tfSourcePath.toFile().exists() && tfSourcePath.toFile().isDirectory()) {
-      return Files.walk(Paths.get("src", "main", "tf"), 2)
+    try {
+      Path tfSourcePath = Paths.get("src", "main", "tf");
+      if (tfSourcePath.toFile().exists() && tfSourcePath.toFile().isDirectory()) {
+        return Files.walk(tfSourcePath, 2)
           .filter(path -> !path.toFile().isDirectory())
           .filter(path -> path.getFileName().toString().endsWith(".tf"))
           .findFirst().orElseThrow(() -> new IOException("Terraform root module not found")).getParent();
+      }
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      LOGGER.info("Unable to determine default Terraform root module directory; using current directory.");
     }
     return Paths.get(".");
   }
