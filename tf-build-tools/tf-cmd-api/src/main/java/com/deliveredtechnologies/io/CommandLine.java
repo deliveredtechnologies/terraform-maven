@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -49,15 +48,14 @@ public class CommandLine implements Executable {
         command
       };
       ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-      processBuilder.directory(directory.toFile());
-      process = processBuilder.inheritIO().start();
+      processBuilder.directory(directory.toAbsolutePath().toFile());
+      process = processBuilder.start();
     } else {
       String[] cmd = new String[] {
         "bash",
         "-c",
         command
       };
-      logger.ifPresent(log -> log.debug(Arrays.stream(cmd).reduce("", (stringA, stringB) -> stringA + stringB)));
       ProcessBuilder processBuilder = new ProcessBuilder(cmd);
       processBuilder.directory(directory.toFile());
       process = processBuilder.start();

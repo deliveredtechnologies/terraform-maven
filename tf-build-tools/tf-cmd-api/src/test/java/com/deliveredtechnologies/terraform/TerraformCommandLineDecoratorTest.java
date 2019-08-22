@@ -3,15 +3,16 @@ package com.deliveredtechnologies.terraform;
 import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 public class TerraformCommandLineDecoratorTest {
 
@@ -50,11 +51,14 @@ public class TerraformCommandLineDecoratorTest {
 
   @Test
   public void terraformCommandLineDecoratorSucceedsOnCreationWhenTfSourceDirIsFound() throws IOException {
-    Path tfSrcPath = Paths.get("src", "main", "tf");
+    Path tfMainPath = Paths.get("src", "main");
+    Path tfSrcPath = tfMainPath.resolve("tf");
+    if (tfSrcPath.toFile().exists()) Files.delete(tfSrcPath);
     Path rootModulePath = tfSrcPath.resolve("root");
-    FileUtils.forceMkdir(rootModulePath.toFile());
+    Files.createDirectory(tfSrcPath);
+    Files.createDirectory(rootModulePath);
     Files.createFile(rootModulePath.resolve("main.tf"));
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY);
-    FileUtils.forceDelete(tfSrcPath.toFile());
+    Files.walk(tfSrcPath).sorted(Comparator.reverseOrder()).map(path -> path.toFile()).forEach(File::delete);
   }
 }

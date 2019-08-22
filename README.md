@@ -1,11 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.5.2/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.5.2/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.5.2/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.5.3/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.5.3/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.5.3/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.5.2-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5.2-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.5.3-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5.3-green.svg
 [tf-maven-plugin-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-cmd-api-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml
@@ -41,6 +41,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:package](#tfpackage)
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
+* [Getting Started](https://github.com/deliveredtechnologies/terraform-maven/wiki/Getting-Started)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
 * [Setting Up a Terraform Maven Project Using an ArcheType](#setting-up-a-terraform-maven-project-using-an-archetype)
 * [How to Use Terraform Maven Projects](#how-to-use-terraform-maven-projects)
@@ -65,7 +66,7 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 * tf-build-tools - The parent project of the tf-maven-plugin and tf-cmd-api projects
   * tf-maven-plugin - The Terraform Maven Plugin project
   * tf-cmd-api - A Java API for Terraform project
-* tf-s3-archetype - An Archetype for a S3 Terraform Project
+  * tf-s3-archetype - An Archetype for a S3 Terraform Project
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
@@ -74,7 +75,7 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
     that module is sourced. The Terraform Maven Plugin allows you to specify your dependencies for Terraform the same way
     you specify your dependencies with Java: in an external [Maven POM file](https://maven.apache.org/pom.html). And
     because it's Maven, Terraform modules sourced from Maven repos can also take advantage of version ranges and 
-    Maven's SNAPSHOT functionality. No more modifying code for version updates! No more sourcing obscure URLs!
+    Maven's SNAPSHOT functionality. It also resoolves transitive dependencies. No more modifying code for version updates! No more sourcing obscure URLs!
     Hooray, Maven! 
 * Packaging as Part of the Build Lifecycle
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
