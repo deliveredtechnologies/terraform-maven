@@ -1,11 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.5.2/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.5.2/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.5.2/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.5.3/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.5.3/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.5.3/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.5.2-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5.2-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.5.3-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.5.3-green.svg
 [tf-maven-plugin-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-cmd-api-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml
