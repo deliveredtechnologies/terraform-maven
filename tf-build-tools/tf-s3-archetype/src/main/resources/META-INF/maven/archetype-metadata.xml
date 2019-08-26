@@ -33,9 +33,9 @@ under the License.
       </includes>
     </fileSet>
     <fileSet encoding="UTF-8">
-      <directory>src/test/groovy</directory>
+      <directory>src/test/groovy/tf/s3</directory>
       <includes>
-        <include>**/*.groovy</include>
+        <include>S3Spec.groovy</include>
       </includes>
     </fileSet>
   </fileSets>
