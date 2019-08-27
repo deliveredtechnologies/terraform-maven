@@ -55,4 +55,12 @@ public class TerraformOutputTest {
     Assert.assertEquals(successResponse, terraformOutput.execute(properties));
     Mockito.verify(commandLine, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
   }
+
+  @Test(expected = TerraformException.class)
+  public void terraformExecuteThrowsTerraformException() throws IOException, InterruptedException, TerraformException {
+    Mockito.when(terraform.execute(Mockito.anyString())).thenThrow(new IOException());
+    
+    TerraformOutput terraformOutput = new TerraformOutput(terraform);
+    terraformOutput.execute(properties);
+  }
 }

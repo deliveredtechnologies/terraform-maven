@@ -24,7 +24,10 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
     try {
       Object response = tfOperation.execute(properties);
       if (response instanceof String) {
-        getLog().info((String) response);
+        String responseString = (String)response;
+        if (!responseString.isEmpty()) {
+          getLog().info((String) response);
+        }
       }
     } catch (TerraformException e) {
       throw new MojoExecutionException("Failed to execute terraform operation", e);

@@ -1,9 +1,12 @@
 package com.deliveredtechnologies.terraform.api;
 
+import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
+import com.deliveredtechnologies.terraform.TerraformUtils;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -15,12 +18,12 @@ public class TerraformOutput implements TerraformOperation<String> {
     this.terraform = terraform;
   }
 
-  public TerraformOutput() throws IOException {
-    this(new TerraformCommandLineDecorator(TerraformCommand.OUTPUT));
+  public TerraformOutput() throws IOException, TerraformException {
+    this(new String());
   }
 
   public TerraformOutput(String tfRootDir) throws IOException, TerraformException {
-    this(new TerraformCommandLineDecorator(TerraformCommand.OUTPUT, tfRootDir));
+    this(new TerraformCommandLineDecorator(TerraformCommand.OUTPUT, new CommandLine(tfRootDir == null || tfRootDir.isEmpty() ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir), false, LoggerFactory.getLogger(CommandLine.class))));
   }
 
   /**

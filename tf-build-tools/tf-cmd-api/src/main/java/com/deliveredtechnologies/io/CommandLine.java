@@ -17,6 +17,7 @@ public class CommandLine implements Executable {
   private static int DEFAULT_TIMEOUT = 600000;
 
   private Path directory;
+  private boolean inheritIO;
   private Optional<Logger> logger;
 
   public CommandLine(Path directory) {
@@ -24,7 +25,18 @@ public class CommandLine implements Executable {
   }
 
   public CommandLine(Path directory, Logger logger) {
+    this(directory, true, logger);
+  }
+
+  /**
+   * CommandLine Constructor.
+   * @param directory the directory in which to run the command
+   * @param inheritIO true if the process running the command should inherit the stdout of the parent process
+   * @param logger    SLF4J Logger
+   */
+  public CommandLine(Path directory, boolean inheritIO, Logger logger) {
     this.logger = Optional.ofNullable(logger);
+    this.inheritIO = inheritIO;
     this.directory = directory;
   }
 
@@ -40,35 +52,45 @@ public class CommandLine implements Executable {
   public String execute(String command, int timeout) throws IOException, InterruptedException {
     boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 
-    Process process;
+    ProcessBuilder processBuilder;
+    Optional<String> output;
+    Optional<String> error;
     if (isWindows) {
       String[] cmd = new String[] {
         "cmd.exe",
         "/c",
         command
       };
-      ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+      processBuilder = new ProcessBuilder(cmd);
       processBuilder.directory(directory.toAbsolutePath().toFile());
-      process = processBuilder.start();
     } else {
       String[] cmd = new String[] {
         "bash",
         "-c",
         command
       };
-      ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+      processBuilder = new ProcessBuilder(cmd);
       processBuilder.directory(directory.toFile());
-      process = processBuilder.start();
     }
 
-    String output = IOUtils.toString(new InputStreamReader(process.getInputStream()));
-    String error = IOUtils.toString(new InputStreamReader(process.getErrorStream()));
+    Process process;
+    if (inheritIO) {
+      processBuilder = processBuilder.inheritIO();
+      output = Optional.empty();
+      error = Optional.empty();
+      process = processBuilder.start();
+    } else {
+      process = processBuilder.start();
+      output = Optional.ofNullable(IOUtils.toString(new InputStreamReader(process.getInputStream())));
+      error = Optional.ofNullable(IOUtils.toString(new InputStreamReader(process.getErrorStream())));
+    }
+
     process.waitFor(timeout, TimeUnit.MILLISECONDS);
 
     if (process.exitValue() > 0) {
-      throw new IOException("Exit value was greater than zero!\n" + error);
+      throw new IOException("Exit value was greater than zero!\n" + error.orElse(""));
     }
-    return output;
+    return output.orElse("");
   }
 
   @Override
