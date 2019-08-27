@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,7 +26,7 @@ public class CommandLineTest {
   @Test
   public void executeRunsCommandOnCommandLineShellAndReturnsTheOutput() throws IOException, InterruptedException {
     String echoString = "Hello World!";
-    Executable commandLine = new CommandLine(directory);
+    Executable commandLine = new CommandLine(directory, false, LoggerFactory.getLogger(CommandLine.class));
     String output = commandLine.execute(String.format("echo %1$s", echoString));
     Assert.assertEquals(String.format("%1$s%n", echoString), output);
 
@@ -38,7 +39,7 @@ public class CommandLineTest {
     boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
     Path path = Paths.get("src", "main", "tf", "root");
     FileUtils.forceMkdir(path.toFile());
-    Executable commandLine = new CommandLine(path);
+    Executable commandLine = new CommandLine(path, false, LoggerFactory.getLogger(CommandLine.class));;
     if (isWindows) {
       String output = commandLine.execute("cd");
       Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
@@ -52,7 +53,7 @@ public class CommandLineTest {
   @Test(expected = IOException.class)
   public void executeThatErrorsOnItsCommandThrowsTheErrorOutput() throws IOException, InterruptedException {
     String errorCommand = "exit 1";
-    Executable commandLine = new CommandLine(directory);
+    Executable commandLine = new CommandLine(directory, false, LoggerFactory.getLogger(CommandLine.class));
     String output = commandLine.execute(errorCommand);
   }
 }
