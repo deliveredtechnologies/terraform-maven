@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
-    <version>0.6</version>
+    <version>0.7-SNAPSHOT</version>
   </parent>
   <artifactId>tf-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
@@ -107,6 +107,11 @@
       <artifactId>maven-plugin-annotations</artifactId>
       <version>3.4</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.19</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
