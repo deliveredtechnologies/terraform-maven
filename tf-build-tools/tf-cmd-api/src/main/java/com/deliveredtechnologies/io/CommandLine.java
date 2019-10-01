@@ -84,7 +84,7 @@ public class CommandLine implements Executable {
       output = Optional.ofNullable(IOUtils.toString(new InputStreamReader(process.getInputStream())));
       error = Optional.ofNullable(IOUtils.toString(new InputStreamReader(process.getErrorStream())));
     }
-
+    addShutdownHook(process);
     process.waitFor(timeout, TimeUnit.MILLISECONDS);
 
     if (process.exitValue() > 0) {
@@ -100,5 +100,9 @@ public class CommandLine implements Executable {
 
   public Path getDirectory() {
     return this.directory;
+  }
+
+  private void addShutdownHook(Process process) {
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> process.destroyForcibly()));
   }
 }
