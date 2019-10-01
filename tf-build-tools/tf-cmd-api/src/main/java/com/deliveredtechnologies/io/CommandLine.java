@@ -56,9 +56,11 @@ public class CommandLine implements Executable {
     Optional<String> output;
     Optional<String> error;
     if (isWindows) {
+      String defaultWindowsShell = "cmd.exe";
+      String shell = System.getProperty("shellPath", System.getenv("SHELL_PATH") == null ? defaultWindowsShell : System.getenv("SHELL_PATH"));
       String[] cmd = new String[] {
-        "cmd.exe",
-        "/c",
+        shell,
+        shell.equals(defaultWindowsShell) ? "/c" : "-c",
         command
       };
       processBuilder = new ProcessBuilder(cmd);
