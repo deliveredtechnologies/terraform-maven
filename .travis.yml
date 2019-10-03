@@ -16,6 +16,7 @@ jdk:
 - openjdk8
 script:
 - |
+  echo "*** Sourcing the Terraform binary from HashiCorp ***"
   curl -g https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o ./terraform.zip && unzip terraform.zip -d ./terraform
   PATH=$PATH:$(pwd)/terraform
   cd tf-build-tools
@@ -25,8 +26,8 @@ script:
 
   if [ $TRAVIS_PULL_REQUEST = "false" ] && echo $VERSION | grep -q SNAPSHOT; then
     echo "*** Validating the build and deploying to Sonatype's SNAPSHOT repo ***"
-    cp ../.mvn.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy -X
+    cp ../.mvn.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
   else
     echo "*** Validating the build ***"
-    ./mvnw clean test coveralls:report -X
+    ./mvnw clean test coveralls:report
   fi
