@@ -26,5 +26,5 @@ script:
     cp ../.mvn.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy -X
   else
     echo "*** Validating the build ***"
-    ./mvnw clean test coveralls:report
+    ./mvnw clean test coveralls:report -X
   fi
