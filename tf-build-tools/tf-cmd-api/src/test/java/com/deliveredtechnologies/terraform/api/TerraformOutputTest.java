@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -62,5 +63,14 @@ public class TerraformOutputTest {
     
     TerraformOutput terraformOutput = new TerraformOutput(terraform);
     terraformOutput.execute(properties);
+  }
+
+  @Test
+  public void terraformOuputPassesLoggerToExecutable() {
+    Executable executable = Mockito.mock(Executable.class);
+    Logger logger = Mockito.mock(Logger.class);
+    TerraformOutput terraformOutput = new TerraformOutput(executable, logger);
+
+    Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
   }
 }

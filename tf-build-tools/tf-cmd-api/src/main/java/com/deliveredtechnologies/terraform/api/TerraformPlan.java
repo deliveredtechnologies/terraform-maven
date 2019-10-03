@@ -4,6 +4,7 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -47,12 +48,25 @@ public class TerraformPlan implements TerraformOperation<String> {
     this.terraform = terraform;
   }
 
+  TerraformPlan(Executable terraform, Logger logger) {
+    this.terraform = terraform;
+    this.terraform.setLogger(logger);
+  }
+
   public TerraformPlan() throws IOException {
     this(new TerraformCommandLineDecorator(TerraformCommand.PLAN));
   }
 
+  public TerraformPlan(Logger logger) throws IOException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.PLAN, logger));
+  }
+
   public TerraformPlan(String tfRootDir) throws IOException, TerraformException {
     this(new TerraformCommandLineDecorator(TerraformCommand.PLAN, tfRootDir));
+  }
+
+  public TerraformPlan(String tfRootDir, Logger logger) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.PLAN, tfRootDir), logger);
   }
 
   /**

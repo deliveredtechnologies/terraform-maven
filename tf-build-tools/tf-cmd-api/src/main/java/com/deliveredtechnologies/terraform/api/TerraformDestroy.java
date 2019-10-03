@@ -4,6 +4,7 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,8 +38,17 @@ public class TerraformDestroy implements TerraformOperation<String> {
     }
   }
 
+  TerraformDestroy(Executable terraform, Logger logger) {
+    this.terraform = terraform;
+    this.terraform.setLogger(logger);
+  }
+
   TerraformDestroy(Executable terraform) {
     this.terraform = terraform;
+  }
+
+  public TerraformDestroy(Logger logger) throws IOException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.DESTROY, logger));
   }
 
   public TerraformDestroy() throws IOException {
@@ -47,6 +57,10 @@ public class TerraformDestroy implements TerraformOperation<String> {
 
   public TerraformDestroy(String tfRootDir) throws IOException, TerraformException {
     this(new TerraformCommandLineDecorator(TerraformCommand.DESTROY, tfRootDir));
+  }
+
+  public TerraformDestroy(String tfRootDir, Logger logger) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.DESTROY, tfRootDir), logger);
   }
 
   /**

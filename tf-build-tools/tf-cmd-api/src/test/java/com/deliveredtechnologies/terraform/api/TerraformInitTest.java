@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -77,6 +78,15 @@ public class TerraformInitTest {
     TerraformOperation<String> terraformInit = new TerraformInit(tfExecutable);
 
     terraformInit.execute(new Properties());
+  }
+
+  @Test
+  public void terraformInitPassesLoggerToExecutable() {
+    Executable executable = Mockito.mock(Executable.class);
+    Logger logger = Mockito.mock(Logger.class);
+    TerraformInit terraformInit = new TerraformInit(executable, logger);
+
+    Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
   }
 
   @After

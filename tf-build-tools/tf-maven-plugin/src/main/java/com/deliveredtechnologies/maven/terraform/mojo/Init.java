@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
+import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformInit;
 
@@ -25,7 +26,7 @@ public class Init extends TerraformMojo<String> {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
-      execute(new TerraformInit(tfRootDir), System.getProperties());
+      execute(new TerraformInit(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
