@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -71,6 +72,15 @@ public class TerraformDestroyTest {
     Mockito.when(this.executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
     TerraformDestroy terraformDestroy = new TerraformDestroy(this.executable);
     terraformDestroy.execute(properties);
+  }
+
+  @Test
+  public void terraformDestroyPassesLoggerToExecutable() {
+    Executable executable = Mockito.mock(Executable.class);
+    Logger logger = Mockito.mock(Logger.class);
+    TerraformDestroy terraformDestroy = new TerraformDestroy(executable, logger);
+
+    Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
   }
 
   @After

@@ -2,6 +2,7 @@ package com.deliveredtechnologies.io;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,10 +19,10 @@ public class CommandLine implements Executable {
 
   private Path directory;
   private boolean inheritIO;
-  private Optional<Logger> logger;
+  private Logger logger;
 
   public CommandLine(Path directory) {
-    this(directory, null);
+    this(directory, LoggerFactory.getLogger(CommandLine.class));
   }
 
   public CommandLine(Path directory, Logger logger) {
@@ -35,7 +36,7 @@ public class CommandLine implements Executable {
    * @param logger    SLF4J Logger
    */
   public CommandLine(Path directory, boolean inheritIO, Logger logger) {
-    this.logger = Optional.ofNullable(logger);
+    this.logger = logger;
     this.inheritIO = inheritIO;
     this.directory = directory;
   }
@@ -74,6 +75,8 @@ public class CommandLine implements Executable {
       processBuilder = new ProcessBuilder(cmd);
       processBuilder.directory(directory.toFile());
     }
+    logger.debug(String.format("*** directory: %1$s ***", getDirectory().toAbsolutePath()));
+    logger.debug(String.format("*** command: %1$s ***", command));
 
     Process process;
     if (inheritIO) {
@@ -98,6 +101,11 @@ public class CommandLine implements Executable {
   @Override
   public String execute(String command) throws IOException, InterruptedException {
     return this.execute(command, DEFAULT_TIMEOUT);
+  }
+
+  @Override
+  public void setLogger(Logger logger) {
+    this.logger = logger;
   }
 
   public Path getDirectory() {

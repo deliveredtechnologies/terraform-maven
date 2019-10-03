@@ -6,6 +6,7 @@ import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -18,12 +19,21 @@ public class TerraformOutput implements TerraformOperation<String> {
     this.terraform = terraform;
   }
 
+  TerraformOutput(Executable terraform, Logger logger) {
+    this.terraform = terraform;
+    this.terraform.setLogger(logger);
+  }
+
   public TerraformOutput() throws IOException, TerraformException {
     this(new String());
   }
 
   public TerraformOutput(String tfRootDir) throws IOException, TerraformException {
     this(new TerraformCommandLineDecorator(TerraformCommand.OUTPUT, new CommandLine(tfRootDir == null || tfRootDir.isEmpty() ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir), false, LoggerFactory.getLogger(CommandLine.class))));
+  }
+
+  public TerraformOutput(String tfRootDir, Logger logger) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.OUTPUT, new CommandLine(tfRootDir == null || tfRootDir.isEmpty() ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir), false, logger)));
   }
 
   /**

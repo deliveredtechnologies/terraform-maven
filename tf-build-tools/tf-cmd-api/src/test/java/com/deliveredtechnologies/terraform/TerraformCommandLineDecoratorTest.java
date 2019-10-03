@@ -6,6 +6,7 @@ import com.deliveredtechnologies.io.Executable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,5 +61,32 @@ public class TerraformCommandLineDecoratorTest {
     Files.createFile(rootModulePath.resolve("main.tf"));
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY);
     Files.walk(tfSrcPath).sorted(Comparator.reverseOrder()).map(path -> path.toFile()).forEach(File::delete);
+  }
+
+  @Test
+  public void loggerPassedToTerraformCommandLineDecoratorIsUsedInCommandLineObject() throws IOException, InterruptedException {
+    Logger logger = Mockito.mock(Logger.class);
+    TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, logger);
+    terraformCommandLineDecorator.execute("");
+
+    Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
+
+    logger = Mockito.mock(Logger.class);
+    terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, new CommandLine(TerraformUtils.getDefaultTerraformRootModuleDir()), logger);
+    terraformCommandLineDecorator.execute("");
+
+    Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
+
+    Executable executable = Mockito.mock(Executable.class);
+    terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, executable);
+    terraformCommandLineDecorator.setLogger(logger);
+
+    Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
+  }
+
+  @Test
+  public void terraformCommandLineDecoratorDoesntBlowUpWithoutLogging() throws IOException, InterruptedException {
+    TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION);
+    terraformCommandLineDecorator.execute("");
   }
 }

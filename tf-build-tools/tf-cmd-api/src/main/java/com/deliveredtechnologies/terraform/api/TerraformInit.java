@@ -5,7 +5,6 @@ import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -19,7 +18,7 @@ import java.util.Properties;
 public class TerraformInit implements TerraformOperation<String> {
 
   private Executable terraform;
-  private Logger log;
+  private Logger logger;
 
   enum TerraformInitParam {
     pluginDir("plugin-dir"),
@@ -42,28 +41,28 @@ public class TerraformInit implements TerraformOperation<String> {
   }
 
   public TerraformInit() throws IOException {
-    this(LoggerFactory.getLogger(TerraformInit.class), new TerraformCommandLineDecorator(TerraformCommand.INIT));
+    this(new TerraformCommandLineDecorator(TerraformCommand.INIT));
   }
 
   public TerraformInit(String tfRootDir) throws IOException, TerraformException {
-    this(LoggerFactory.getLogger(TerraformInit.class), new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
+    this(new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
   }
 
-  public TerraformInit(Logger log) throws IOException {
-    this(log, new TerraformCommandLineDecorator(TerraformCommand.INIT));
+  public TerraformInit(Logger logger) throws IOException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.INIT, logger));
   }
 
-  public TerraformInit(Logger log, String tfRootDir) throws IOException, TerraformException {
-    this(log, new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir));
+  public TerraformInit(String tfRootDir, Logger logger) throws IOException, TerraformException {
+    this(new TerraformCommandLineDecorator(TerraformCommand.INIT, tfRootDir), logger);
   }
 
   TerraformInit(Executable terraform) {
-    this(LoggerFactory.getLogger(TerraformInit.class), terraform);
+    this.terraform = terraform;
   }
 
-  TerraformInit(Logger log, Executable terraform) {
-    this.log = log;
+  TerraformInit(Executable terraform, Logger logger) {
     this.terraform = terraform;
+    this.terraform.setLogger(logger);
   }
 
   /**
