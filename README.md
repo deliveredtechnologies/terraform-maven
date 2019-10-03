@@ -268,7 +268,7 @@ Terraform commands executed on Windows operating systems by default use the Wind
 which is not strictly compatible with Terraform as of Terraform v0.12 (e.g. -var parameters fail).
 
 However, Git Bash can be used in place of the default Windows command line to improve compatibility with Terraform 
-commands. To enable Git Bash, either set a Java system property `shellPath` or a environment variable `SHELL_PATH` to 
+commands. To enable Git Bash, either set a Java system property `shellPath` or an environment variable `SHELL_PATH` to 
 the absolute path of the Git Bash executable.    
 
 ### Setting Up a Terraform Maven Project
