@@ -16,6 +16,8 @@ jdk:
 - openjdk8
 script:
 - |
+  curl -g https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o ./terraform.zip && unzip terraform.zip -d ./terraform
+  PATH=$PATH:$(pwd)/terraform
   cd tf-build-tools
   echo "*** Downloading the help plugin and getting the project version ***"
   ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version

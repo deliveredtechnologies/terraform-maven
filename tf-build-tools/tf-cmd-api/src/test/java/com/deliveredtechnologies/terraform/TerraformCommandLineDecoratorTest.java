@@ -66,24 +66,14 @@ public class TerraformCommandLineDecoratorTest {
   @Test
   public void loggerPassedToTerraformCommandLineDecoratorIsUsedInCommandLineObject() throws IOException, InterruptedException {
     Logger logger = Mockito.mock(Logger.class);
-    try {
-      TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, logger);
-      terraformCommandLineDecorator.execute("");
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw e;
-    }
+    TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, logger);
+    terraformCommandLineDecorator.execute("");
 
     Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
 
     logger = Mockito.mock(Logger.class);
-    try {
-      TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, new CommandLine(TerraformUtils.getDefaultTerraformRootModuleDir()), logger);
-      terraformCommandLineDecorator.execute("");
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw e;
-    }
+    terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, new CommandLine(TerraformUtils.getDefaultTerraformRootModuleDir()), logger);
+    terraformCommandLineDecorator.execute("");
 
     Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
   }
