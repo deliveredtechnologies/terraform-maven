@@ -83,6 +83,7 @@ public class TerraformCommandLineDecorator implements Executable {
   @Override
   public void setLogger(Logger logger) {
     this.logger = Optional.ofNullable(logger);
+    this.commandLine.setLogger(logger);
   }
 
   public Executable getCommandLine() {

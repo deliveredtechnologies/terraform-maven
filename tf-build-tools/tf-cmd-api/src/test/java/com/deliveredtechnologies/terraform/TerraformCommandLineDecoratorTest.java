@@ -76,6 +76,12 @@ public class TerraformCommandLineDecoratorTest {
     terraformCommandLineDecorator.execute("");
 
     Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
+
+    Executable executable = Mockito.mock(Executable.class);
+    terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, executable);
+    terraformCommandLineDecorator.setLogger(logger);
+
+    Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
   }
 
   @Test
