@@ -42,7 +42,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
 * [How Commands Are Delegated to Terraform](#how-commands-are-delegated-to-terraform)
-  * [*nix-based Operating Systems](#nix-based-systems)
+  * [*nix-based Operating Systems](#nix-based-operating-systems)
   * [Windows Operating Systems](#windows-operating-systems)
 * [Getting Started](https://github.com/deliveredtechnologies/terraform-maven/wiki/Getting-Started)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
