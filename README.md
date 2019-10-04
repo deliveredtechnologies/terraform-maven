@@ -1,14 +1,14 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.6/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.6/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.6/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.7.1/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.7.1/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.7.1/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.6-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.6-green.svg
-[tf-maven-plugin-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.7.1-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.7-green.svg
+[tf-maven-plugin-synk-badge]:https://img.shields.io/badge/vulnerabilities-1-yellow.svg
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
-[tf-cmd-api-synk-badge]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven/badge.svg?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml
+[tf-cmd-api-synk-badge]:https://img.shields.io/badge/vulnerabilities-0-green.svg
 [tf-cmd-api-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml
 
 ![terraform-maven](.docs/MavenTerraform.png)
@@ -41,6 +41,9 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:package](#tfpackage)
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
+* [How Commands Are Delegated to Terraform](#how-commands-are-delegated-to-terraform)
+  * [*nix-based Operating Systems](#nix-based-operating-systems)
+  * [Windows Operating Systems](#windows-operating-systems)
 * [Getting Started](https://github.com/deliveredtechnologies/terraform-maven/wiki/Getting-Started)
 * [Setting Up a Terraform Maven Project](#setting-up-a-terraform-maven-project)
 * [Setting Up a Terraform Maven Project Using an ArcheType](#setting-up-a-terraform-maven-project-using-an-archetype)
@@ -250,6 +253,24 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
 
+### How Commands Are Delegated to Terraform
+
+Terraform commands are executed in a forked shell that is joined to the Maven process. This has important implications
+based on the operating system being used.
+
+#### *nix-based Operating Systems
+
+Terraform commands executed on *nix-based systems are forked into a bash shell that is joined to the Maven process.
+
+#### Windows Operating Systems
+
+Terraform commands executed on Windows operating systems by default use the Windows default command line (cmd.exe),
+which is not strictly compatible with Terraform as of Terraform v0.12 (e.g. -var parameters fail).
+
+However, Git Bash can be used in place of the default Windows command line to improve compatibility with Terraform 
+commands. To enable Git Bash, either set a Java system property `shellPath` or an environment variable `SHELL_PATH` to 
+the absolute path of the Git Bash executable.    
+
 ### Setting Up a Terraform Maven Project
 
 1. Create a generic Maven project. [see Maven Getting Started Guide](https://maven.apache.org/guides/getting-started/index.html)
@@ -258,7 +279,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 
 ```xml
 <properties>
-  <tf-maven-version>0.6</tf-maven-version>
+  <tf-maven-version>0.7.1</tf-maven-version>
 </properties>
 ```
 
@@ -369,7 +390,7 @@ Instead of doing all the above steps you can simply build the module/project by 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.6 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.1 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -377,7 +398,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.6
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.1
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.

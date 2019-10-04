@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
+import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -22,7 +23,7 @@ public class Plan extends TerraformMojo<String> {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
-      execute(new TerraformPlan(tfRootDir), System.getProperties());
+      execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }

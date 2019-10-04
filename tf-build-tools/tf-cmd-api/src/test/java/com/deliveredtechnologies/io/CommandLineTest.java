@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,7 +18,7 @@ public class CommandLineTest {
   private Path directory;
 
   @Before
-  public void setup() throws URISyntaxException {
+  public void setup() {
     directory = Paths.get(".");
   }
 
@@ -39,14 +38,15 @@ public class CommandLineTest {
     boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
     Path path = Paths.get("src", "main", "tf", "root");
     FileUtils.forceMkdir(path.toFile());
-    Executable commandLine = new CommandLine(path, false, LoggerFactory.getLogger(CommandLine.class));;
+    Executable commandLine = new CommandLine(path, false, LoggerFactory.getLogger(CommandLine.class));
     if (isWindows) {
       String output = commandLine.execute("cd");
       Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
-    } else {
-      String output = commandLine.execute("pwd");
-      Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
     }
+    System.setProperty("shellPath", System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH") + "\\AppData\\Local\\Programs\\Git\\bin\\bash.exe"); //set default Git Bash executable path
+    String output = commandLine.execute("pwd");
+    Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
+
     FileUtils.forceDelete(path.getParent().toFile());
   }
 
@@ -54,6 +54,6 @@ public class CommandLineTest {
   public void executeThatErrorsOnItsCommandThrowsTheErrorOutput() throws IOException, InterruptedException {
     String errorCommand = "exit 1";
     Executable commandLine = new CommandLine(directory, false, LoggerFactory.getLogger(CommandLine.class));
-    String output = commandLine.execute(errorCommand);
+    commandLine.execute(errorCommand);
   }
 }
