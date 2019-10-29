@@ -27,10 +27,10 @@ public class CommandLineTest {
     String echoString = "Hello World!";
     Executable commandLine = new CommandLine(directory, false, LoggerFactory.getLogger(CommandLine.class));
     String output = commandLine.execute(String.format("echo %1$s", echoString));
-    Assert.assertEquals(String.format("%1$s%n", echoString), output);
+    Assert.assertEquals(echoString.trim(), output.trim());
 
     output = commandLine.execute(String.format("echo %1$s", echoString), 1000);
-    Assert.assertEquals(String.format("%1$s%n", echoString), output);
+    Assert.assertEquals(echoString, output.trim());
   }
 
   @Test
@@ -40,12 +40,15 @@ public class CommandLineTest {
     FileUtils.forceMkdir(path.toFile());
     Executable commandLine = new CommandLine(path, false, LoggerFactory.getLogger(CommandLine.class));
     if (isWindows) {
-      String output = commandLine.execute("cd");
-      Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
+      if (!System.getProperties().containsKey("shellPath") && System.getenv("SHELL_PATH") == null) {
+        String output = commandLine.execute("cd");
+        Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
+        return;
+      }
     }
-    System.setProperty("shellPath", System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH") + "\\AppData\\Local\\Programs\\Git\\bin\\bash.exe"); //set default Git Bash executable path
+
     String output = commandLine.execute("pwd");
-    Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString()), output);
+    Assert.assertEquals(String.format("%1$s%n", path.toAbsolutePath().toString().replace("C:", "/c").replace('\\', '/')), String.format("%1$s%n", output.trim()));
 
     FileUtils.forceDelete(path.getParent().toFile());
   }

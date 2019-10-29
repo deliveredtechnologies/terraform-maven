@@ -5,6 +5,7 @@ import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +39,8 @@ public class TerraformClean implements TerraformOperation<String> {
 
   @Override
   public String execute(Properties properties) throws TerraformException {
+    boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+
     try {
       if (!this.tfRootModulePath.toFile().exists()) {
         throw new IOException(this.tfRootModulePath.toString() + " does not exist!");
@@ -52,14 +55,27 @@ public class TerraformClean implements TerraformOperation<String> {
 
       //delete terraform files in terraform root module
       List<Path> terraformFiles = Files.walk(this.tfRootModulePath.getParent())
-          .filter(path -> path.getFileName().toString().contains(".terraform") || path.getFileName().toString().contains(".tfstate"))
+          .filter(path -> path.getParent().getFileName().toString().contains(".terraform") || path.getFileName().toString().contains(".tfstate"))
           .collect(Collectors.toList());
       for (Path file : terraformFiles) {
         if (file.toFile().exists()) {
           response.append(file.toString()).append('\n');
-          FileUtils.forceDelete(file.toFile());
+
+          //if it's Windows, remove the hard link to the local Terraform module
+          if (isWindows && file.getParent().endsWith(String.format(".terraform%1$smodules", File.separator))) {
+            file.toFile().delete();
+          }
+          //delete the file; but check that it still exists in case the previous delete already removed it
+          if (file.toFile().exists()) FileUtils.forceDelete(file.toFile());
         }
       }
+      //delete .terraform directory
+      Files.walk(this.tfRootModulePath).filter(path -> path.endsWith(".terraform"))
+          .map(Path::toFile)
+          .forEach(file -> {
+            response.append(file.toString()).append('\n');
+            file.delete();
+          });
       return response.toString();
     } catch (IOException e) {
       throw new TerraformException(e);
