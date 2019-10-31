@@ -49,10 +49,12 @@ public class TerraformDeployTest {
     String filename = "file1.txt";
     String pom = "mypom.xml";
     String url = "http://someurl.com";
+    String repositoryId = "myrepositoryid";
 
     properties.put(TerraformDeployParam.url.toString(), url);
     properties.put(TerraformDeployParam.file.toString(), filename);
     properties.put(TerraformDeployParam.pomFile.toString(), pom);
+    properties.put(TerraformDeployParam.repositoryId.toString(), repositoryId);
 
     Properties deployFileProps = terraformDeploy.deployFileToMavenRepo(invoker, request, properties);
 

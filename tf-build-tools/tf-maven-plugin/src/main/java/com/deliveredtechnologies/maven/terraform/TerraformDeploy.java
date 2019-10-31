@@ -26,7 +26,7 @@ public class TerraformDeploy implements TerraformOperation<String> {
   private MavenProject project;
 
   enum TerraformDeployParam {
-    file, pomFile, url, packaging, generatePom, artifactId, groupId, version;
+    file, pomFile, url, packaging, generatePom, artifactId, groupId, version, repositoryId;
   }
 
   public TerraformDeploy(Log log, MavenProject project) {
@@ -82,6 +82,10 @@ public class TerraformDeploy implements TerraformOperation<String> {
         deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.getProperty(TerraformDeployParam.pomFile.toString()));
       }
       log.info(String.format("Using POM: %1$s", deployFileProps.getProperty(TerraformDeployParam.pomFile.toString())));
+    }
+
+    if (properties.containsKey(TerraformDeployParam.repositoryId.toString())) {
+      deployFileProps.put(TerraformDeployParam.repositoryId.toString(), properties.getProperty(TerraformDeployParam.repositoryId.toString()));
     }
 
     request.setGoals(Arrays.asList("deploy:deploy-file"));
