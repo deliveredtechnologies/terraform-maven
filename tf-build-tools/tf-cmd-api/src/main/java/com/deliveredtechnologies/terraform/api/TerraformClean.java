@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 /**
  * API for cleaning up 'terraform' files.
@@ -54,31 +55,65 @@ public class TerraformClean implements TerraformOperation<String> {
       }
 
       //delete terraform files in terraform root module
-      List<Path> terraformFiles = Files.walk(this.tfRootModulePath.getParent())
-          .filter(path -> path.getParent().getFileName().toString().contains(".terraform") || path.getFileName().toString().contains(".tfstate"))
-          .collect(Collectors.toList());
-      for (Path file : terraformFiles) {
+      List<Path> terraformModuleFiles = recursivelyWalk(this.tfRootModulePath.getParent(), path -> path.getParent().toAbsolutePath().toString().endsWith(String.format(".terraform%1$smodules", File.separator)) || path.getFileName().toString().contains(".tfstate"));
+
+      for (Path file : terraformModuleFiles) {
+
+        //if it's Windows, remove the hard link to the local Terraform module
+        if (isWindows && file.getParent().endsWith(String.format(".terraform%1$smodules", File.separator))) {
+          try {
+            response.append(file.toString()).append('\n');
+            file.toFile().delete();
+          } catch (Exception e) {
+            response.append("**failed to delete ").append(file.toString()).append('\n');
+          }
+        }
+
+        //if it's not running on Windows or if it is and the file/dir is still there, force delete
         if (file.toFile().exists()) {
           response.append(file.toString()).append('\n');
-
-          //if it's Windows, remove the hard link to the local Terraform module
-          if (isWindows && file.getParent().endsWith(String.format(".terraform%1$smodules", File.separator))) {
-            file.toFile().delete();
-          }
-          //delete the file; but check that it still exists in case the previous delete already removed it
-          if (file.toFile().exists()) FileUtils.forceDelete(file.toFile());
+          FileUtils.forceDelete(file.toFile());
         }
       }
-      //delete .terraform directory
-      Files.walk(this.tfRootModulePath).filter(path -> path.endsWith(".terraform"))
+
+      //delete .terraform directories
+      Files.walk(this.tfRootModulePath.getParent()).filter(path -> path.toString().endsWith(".terraform"))
           .map(Path::toFile)
           .forEach(file -> {
             response.append(file.toString()).append('\n');
-            file.delete();
+            try {
+              FileUtils.forceDelete(file);
+            } catch (Exception ex) {
+              response.append("**failed to delete ").append(file.toString()).append('\n');
+            }
           });
       return response.toString();
     } catch (IOException e) {
       throw new TerraformException(e);
     }
   }
+
+  /**
+   * Recursive implmentation of Files.walk because Windows throws errors on junction files, which Terraform uses to reference modules with relative paths
+   * @param path      the root path
+   * @param condition the condition, when if true, adds the child path to the collection returned
+   * @return          the collection of Paths in the directory tree matching the condition specified
+   */
+  private List<Path> recursivelyWalk(Path path, Predicate<Path> condition) {
+    List<Path> pathCollection = new ArrayList<>();
+    try {
+      for (File file : path.toFile().listFiles()) {
+        pathCollection.addAll(recursivelyWalk(file.toPath(), condition));
+      }
+    } catch (Exception ex) {
+      //throw the exception away; this will happen when io and nio is out of synch (i.e. Windows junction files)
+    }
+
+    if (condition.test(path)) {
+      pathCollection.add(path);
+    }
+
+    return pathCollection;
+  }
 }
+
