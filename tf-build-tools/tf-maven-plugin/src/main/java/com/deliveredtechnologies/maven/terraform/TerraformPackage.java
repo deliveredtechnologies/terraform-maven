@@ -144,7 +144,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile())))) {
         try (BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.resolveSibling(file.getFileName().toString() + ".working").toFile())))) {
           while (fileReader.ready()) {
-            fileWriter.write(fileReader.readLine().replace(tfRootToModulesRelativePath, tfModulesPath.getFileName().toString()));
+            fileWriter.write(fileReader.readLine().replace(tfRootToModulesRelativePath.replace('\\', '/'), tfModulesPath.getFileName().toString()));
             fileWriter.newLine();
           }
         }
