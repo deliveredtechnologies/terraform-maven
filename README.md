@@ -1,11 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.7.2/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.7.2/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.7.2/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.7.3/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.7.3/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.7.3/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.7.2-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.7-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.7.3-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.7.3-green.svg
 [tf-maven-plugin-synk-badge]:https://img.shields.io/badge/vulnerabilities-1-yellow.svg
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-cmd-api-synk-badge]:https://img.shields.io/badge/vulnerabilities-0-green.svg
@@ -230,15 +230,16 @@ Description:
 
 Deploys a packaged Terraform zip artifact ([see tf:package](#tfpackage)) with a POM to the specified Maven repo.
 
-| Name        | Type   | Description                                                                                                       |
-| ----------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
-| file        | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip                       |
-| url         | String | The url of the Maven repo to which the zip file artifact will be deployed; defaults to {HOME}/.m2/repository      |
-| pomFile     | String | The path to the pom.xml file to attach to the artifact; defaults to .flattened-pom.xml in the root of the project |
-| generatePom | String | If set to "true" then a POM will be generated and attached to the deployment                                      |
-| groupId     | String | The groupId for the generated POM (only used if generatePom=true                                                  |
-| artifactId  | String | The artifactId for the generated POM (only used if generatePom=true                                               |
-| version     | String | The version for the generated POM (only used if generatePom=true                                                  |
+| Name         | Type   | Description                                                                                                       |
+| ------------ | ------ | ----------------------------------------------------------------------------------------------------------------- |
+| file         | String | The name of the Terraform zip file to deploy; defaults to target/{artifactId}-{version}.zip                       |
+| url          | String | The url of the Maven repo to which the zip file artifact will be deployed; defaults to {HOME}/.m2/repository      |
+| pomFile      | String | The path to the pom.xml file to attach to the artifact; defaults to .flattened-pom.xml in the root of the project |
+| generatePom  | String | If set to "true" then a POM will be generated and attached to the deployment                                      |
+| groupId      | String | The groupId for the generated POM (only used if generatePom=true                                                  |
+| artifactId   | String | The artifactId for the generated POM (only used if generatePom=true                                               |
+| version      | String | The version for the generated POM (only used if generatePom=true                                                  |
+| repositoryId | String | The server id to map on the <id> under <server> section of settings.xml; typically for authentication             |
 
 ---
 
@@ -279,7 +280,7 @@ the absolute path of the Git Bash executable.
 
 ```xml
 <properties>
-  <tf-maven-version>0.7.2</tf-maven-version>
+  <tf-maven-version>0.7.3</tf-maven-version>
 </properties>
 ```
 
@@ -390,7 +391,7 @@ Instead of doing all the above steps you can simply build the module/project by 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.2 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.3 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -398,7 +399,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.2
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.3
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
