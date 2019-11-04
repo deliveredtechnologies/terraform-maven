@@ -27,8 +27,6 @@ script:
   if [ $TRAVIS_PULL_REQUEST = "false" ] && echo $VERSION | grep -q SNAPSHOT; then
     echo "*** Validating the build and deploying to Sonatype's SNAPSHOT repo ***"
     cp ../.mvn.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
-    echo "*** Deploying the tf-s3-archetype to Sonatype's SNAPSHOT repo ***"
-    cd ../tf-s3-archetype && ./mvnw clean deploy
   else
     echo "*** Validating the build ***"
     ./mvnw clean test coveralls:report
