@@ -15,9 +15,7 @@ import org.apache.maven.shared.invoker.MavenInvocationException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 
@@ -32,6 +30,12 @@ public class MavenRepoExecutableOp implements TerraformOperation<String> {
   private TerraformOperation<String> terraformOperation;
   private Log log;
 
+  /**
+   * Constructor.
+   * @param artifact  artifact specified in the form groupId:artifact:version
+   * @param tfRootDir the relative path to the tf root module from the root of the artifact
+   * @param log       maven log
+   */
   public MavenRepoExecutableOp(String artifact, String tfRootDir, Log log) {
     this.log = log;
     this.artifact = artifact;

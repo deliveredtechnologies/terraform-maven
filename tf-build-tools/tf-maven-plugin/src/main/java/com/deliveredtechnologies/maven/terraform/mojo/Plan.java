@@ -2,7 +2,6 @@ package com.deliveredtechnologies.maven.terraform.mojo;
 
 import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.MavenRepoExecutableOp;
-import com.deliveredtechnologies.maven.terraform.TerraformGet;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +11,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Mojo terraform plan goal.
