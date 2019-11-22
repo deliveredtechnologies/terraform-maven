@@ -69,6 +69,7 @@ public class MavenRepoExecutableOp implements TerraformOperation<String> {
 
     Path tfWorkingPath = Paths.get(this.workingDir, ".tf");
 
+    String artifactZip = String.format("%1$s:zip", this.artifact);
     Properties properties = new Properties();
     properties.setProperty("artifact", String.format("%1$s:zip", this.artifact));
     properties.setProperty("outputDirectory", tfWorkingPath.toAbsolutePath().toString());
@@ -79,12 +80,20 @@ public class MavenRepoExecutableOp implements TerraformOperation<String> {
       if (!tfWorkingPath.toFile().exists()) {
         FileUtils.forceMkdir(tfWorkingPath.toFile());
       }
-      invoker.execute(request);
+      if (!Paths.get(workingDir, artifactZip).toFile().exists()) {
+        invoker.execute(request);
+      }
     } catch (MavenInvocationException | IOException e) {
       throw new TerraformException("Unable to copy dependencies from Maven repo", e);
     }
   }
 
+  /**
+   * Extracts files from a maven compressed artifact in the working directory path; defaults to '{working dir}/.tf'.
+   * The name of the artifact is 'artifactId-version.zip'.
+   * @return The path of the expanded root directory
+   * @throws TerraformException
+   */
   final Path expandMavenArtifacts() throws TerraformException {
     String artifactZip = artifact.substring(artifact.indexOf(':') + 1).replace(":", "-");
     Path artifactZipPath = Paths.get(workingDir, artifactZip);
