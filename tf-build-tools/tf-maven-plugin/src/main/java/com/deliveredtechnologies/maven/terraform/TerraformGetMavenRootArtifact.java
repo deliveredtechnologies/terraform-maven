@@ -22,13 +22,21 @@ import java.util.Properties;
 /**
  * Fetches a Terraform artifact from Nexus and expands it into a .mvnproject directory
  */
-public class MavenRepoExecutableOp implements TerraformOperation<String> {
+public class TerraformGetMavenRootArtifact implements TerraformOperation<String> {
 
-  private String workingDir = System.getProperty("user.dir");
+  private Path workingDir = Paths.get(System.getProperty("user.dir"), ".tf");
   private String tfRootDir;
   private String artifact;
-  private TerraformOperation<String> terraformOperation;
   private Log log;
+
+  /**
+   * Constructor.
+   * @param artifact  artifact specified in the form groupId:artifact:version
+   * @param log       maven log
+   */
+  public TerraformGetMavenRootArtifact(String artifact, Log log) {
+    this(artifact, null, log);
+  }
 
   /**
    * Constructor.
@@ -36,7 +44,7 @@ public class MavenRepoExecutableOp implements TerraformOperation<String> {
    * @param tfRootDir the relative path to the tf root module from the root of the artifact
    * @param log       maven log
    */
-  public MavenRepoExecutableOp(String artifact, String tfRootDir, Log log) {
+  public TerraformGetMavenRootArtifact(String artifact, String tfRootDir, Log log) {
     this.log = log;
     this.artifact = artifact;
     this.tfRootDir = tfRootDir;
@@ -67,20 +75,18 @@ public class MavenRepoExecutableOp implements TerraformOperation<String> {
   final void getArtifactFromMavenRepo(Invoker invoker, InvocationRequest request) throws TerraformException {
     log.info("Getting artifact dependencies from Maven");
 
-    Path tfWorkingPath = Paths.get(this.workingDir, ".tf");
-
-    String artifactZip = String.format("%1$s:zip", this.artifact);
+    String artifactZip = getArtifactZip(this.artifact);
     Properties properties = new Properties();
     properties.setProperty("artifact", String.format("%1$s:zip", this.artifact));
-    properties.setProperty("outputDirectory", tfWorkingPath.toAbsolutePath().toString());
+    properties.setProperty("outputDirectory", workingDir.toAbsolutePath().toString());
 
     request.setGoals(Arrays.asList("dependency:copy"));
     request.setProperties(properties);
     try {
-      if (!tfWorkingPath.toFile().exists()) {
-        FileUtils.forceMkdir(tfWorkingPath.toFile());
+      if (!workingDir.toFile().exists()) {
+        FileUtils.forceMkdir(workingDir.toFile());
       }
-      if (!Paths.get(workingDir, artifactZip).toFile().exists()) {
+      if (!workingDir.resolve(artifactZip).toFile().exists()) {
         invoker.execute(request);
       }
     } catch (MavenInvocationException | IOException e) {
@@ -95,12 +101,17 @@ public class MavenRepoExecutableOp implements TerraformOperation<String> {
    * @throws TerraformException
    */
   final Path expandMavenArtifacts() throws TerraformException {
-    String artifactZip = artifact.substring(artifact.indexOf(':') + 1).replace(":", "-");
-    Path artifactZipPath = Paths.get(workingDir, artifactZip);
+    String artifactZip = getArtifactZip(this.artifact);
+    Path artifactZipPath = workingDir.resolve(artifactZip);
 
     log.info("Expanding artifacts from " + artifactZipPath.toAbsolutePath());
 
     return (new ExpandableZippedArtifact(artifactZipPath, log)).expand()
       .orElseThrow(() -> new TerraformException("unable to extract " + artifactZipPath.getFileName()));
+  }
+
+  static String getArtifactZip(String artifact) {
+    String artifactZip = artifact.indexOf(':') > 0 ? artifact.substring(artifact.indexOf(':') + 1).replace(":", "-") : artifact;
+    return artifactZip.endsWith(".zip") ? artifactZip : String.format("%1$s.zip", artifactZip);
   }
 }

@@ -1,7 +1,7 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
 import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
-import com.deliveredtechnologies.maven.terraform.MavenRepoExecutableOp;
+import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformApply;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ public class Apply extends TerraformMojo<String> {
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
       if (!StringUtils.isEmpty(artifact)) {
-        MavenRepoExecutableOp mavenRepoExecutableOp = new MavenRepoExecutableOp(artifact, tfRootDir, getLog());
+        TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(System.getProperties());
       }
       execute(new TerraformApply(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
