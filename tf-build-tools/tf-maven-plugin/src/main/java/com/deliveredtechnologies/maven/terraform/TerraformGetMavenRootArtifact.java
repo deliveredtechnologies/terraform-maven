@@ -13,9 +13,11 @@ import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 
 
@@ -55,8 +57,13 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
     getArtifactFromMavenRepo(new DefaultInvoker(), new DefaultInvocationRequest());
     Path expandedArtifactPath = expandMavenArtifacts();
     try {
-      TerraformGet terraformGet = new TerraformGet(log, expandedArtifactPath.getParent().getParent().resolve(".tfmodules").toAbsolutePath().toString());
-      terraformGet.execute(System.getProperties());
+      String userDir = System.getProperty("user.dir");
+      synchronized (this.getClass()) { //
+        System.setProperty("user.dir", expandedArtifactPath.getParent().toAbsolutePath().toString());
+        TerraformGet terraformGet = new TerraformGet(log, expandedArtifactPath.getParent().getParent().resolve(".tfmodules").toAbsolutePath().toString());
+        terraformGet.execute(properties);
+        System.setProperty("user.dir", userDir);
+      }
     } catch (IOException e) {
       throw new TerraformException(e);
     }
@@ -67,7 +74,7 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
   }
 
   /**
-   * Gets the zip artifact from Maven and puts them in the current directory.
+   * Gets the zip artifact and the pom from Maven and puts them in the .tf directory.
    * @param invoker
    * @param request
    * @throws TerraformException
@@ -88,6 +95,15 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
       }
       if (!workingDir.resolve(artifactZip).toFile().exists()) {
         invoker.execute(request);
+        request.getProperties().setProperty("artifact", String.format("%1$s:pom", this.artifact));
+        request.setProperties(properties);
+        invoker.execute(request);
+        Optional<Path> pomFile = Files.walk(workingDir)
+          .filter(path -> path.getFileName().toString().endsWith(".pom"))
+          .findFirst();
+        if (pomFile.isPresent()) {
+          FileUtils.moveFile(pomFile.get().toFile(), workingDir.resolve("pom.xml").toFile());
+        }
       }
     } catch (MavenInvocationException | IOException e) {
       throw new TerraformException("Unable to copy dependencies from Maven repo", e);
