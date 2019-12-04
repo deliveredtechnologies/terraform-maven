@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Testsm for TerraformGetMavenRootArtifact.
+ */
 public class TerraformGetMavenRootArtifactTest {
 
   private static String workingDir = System.getProperty("user.dir");

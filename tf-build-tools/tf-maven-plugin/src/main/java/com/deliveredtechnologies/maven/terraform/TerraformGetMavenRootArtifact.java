@@ -22,7 +22,7 @@ import java.util.Properties;
 
 
 /**
- * Fetches a Terraform artifact from Nexus and expands it into a .mvnproject directory
+ * Fetches a Terraform artifact from Nexus and expands it into a .tf directory
  */
 public class TerraformGetMavenRootArtifact implements TerraformOperation<String> {
 

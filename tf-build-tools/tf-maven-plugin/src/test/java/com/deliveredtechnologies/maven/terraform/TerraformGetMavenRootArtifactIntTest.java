@@ -13,6 +13,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+/**
+ * Integration tests for TerraformGetMavenRootArtifact.
+ */
 @Category(com.deliveredtechnologies.test.categories.Integration.class)
 public class TerraformGetMavenRootArtifactIntTest {
 
