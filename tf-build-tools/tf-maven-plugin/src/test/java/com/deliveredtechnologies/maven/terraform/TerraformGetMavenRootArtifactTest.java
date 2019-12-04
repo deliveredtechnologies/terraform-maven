@@ -10,7 +10,6 @@ import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +40,15 @@ public class TerraformGetMavenRootArtifactTest {
       TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
       terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
 
+      Mockito.verify(invoker, Mockito.times(2)).execute(invocationRequest);
+
       //create the zip artifact
       FileUtils.touch(tfWorkingPath.resolve("artifactId-0.1.zip").toFile());
       terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
 
-      Mockito.verify(invoker, Mockito.times(1)).execute(invocationRequest);
+      Mockito.verify(invoker, Mockito.times(4)).execute(invocationRequest);
       Mockito.verify(log, Mockito.times(2)).info("Getting artifact dependencies from Maven");
-      Assert.assertEquals(invocationRequest.getProperties().getProperty("artifact"), String.format("%1$s:zip", artifact));
+      Assert.assertEquals(invocationRequest.getProperties().getProperty("artifact"), String.format("%1$s:pom", artifact));
       Assert.assertEquals(invocationRequest.getProperties().getProperty("outputDirectory"), tfWorkingPath.toAbsolutePath().toString());
       Assert.assertEquals(invocationRequest.getGoals().size(), 1);
       Assert.assertEquals(invocationRequest.getGoals().get(0), "dependency:copy");

@@ -93,14 +93,14 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
       if (!workingDir.toFile().exists()) {
         FileUtils.forceMkdir(workingDir.toFile());
       }
-      if (!workingDir.resolve(artifactZip).toFile().exists()) {
+      if (!workingDir.resolve(artifactZip.replace(".zip", ".pom")).toFile().exists()) {
         invoker.execute(request);
         request.getProperties().setProperty("artifact", String.format("%1$s:pom", this.artifact));
         request.setProperties(properties);
         invoker.execute(request);
         Optional<Path> pomFile = Files.walk(workingDir)
-          .filter(path -> path.getFileName().toString().endsWith(".pom"))
-          .findFirst();
+            .filter(path -> path.getFileName().toString().endsWith(".pom"))
+            .findFirst();
         if (pomFile.isPresent()) {
           FileUtils.moveFile(pomFile.get().toFile(), workingDir.resolve("pom.xml").toFile());
         }
