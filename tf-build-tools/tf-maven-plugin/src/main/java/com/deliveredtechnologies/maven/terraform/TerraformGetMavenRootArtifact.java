@@ -99,8 +99,8 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
         request.setProperties(properties);
         invoker.execute(request);
         Optional<Path> pomFile = Files.walk(workingDir)
-            .filter(path -> path.getFileName().toString().endsWith(".pom"))
-            .findFirst();
+           .filter(path -> path.getFileName().toString().endsWith(".pom"))
+           .findFirst();
         if (pomFile.isPresent()) {
           FileUtils.moveFile(pomFile.get().toFile(), workingDir.resolve("pom.xml").toFile());
         }
