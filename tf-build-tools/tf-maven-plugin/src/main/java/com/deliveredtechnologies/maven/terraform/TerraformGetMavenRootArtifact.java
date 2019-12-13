@@ -60,7 +60,7 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
     Path expandedArtifactPath = expandMavenArtifacts();
     try {
       String userDir = System.getProperty("user.dir");
-      synchronized (this.getClass()) { //
+      synchronized (this.getClass()) { //synchronized to lock adverse effects from changing user.dir; unlikely, but possible
         System.setProperty("user.dir", workingPath.toAbsolutePath().toString());
         TerraformGet terraformGet = new TerraformGet(log, mainTfPath.getParent().resolve(".tfmodules").toAbsolutePath().toString());
         terraformGet.execute(properties);
