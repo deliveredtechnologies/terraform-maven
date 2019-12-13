@@ -20,12 +20,11 @@ import java.nio.file.Paths;
  */
 public class TerraformGetMavenRootArtifactTest {
 
-  private static String workingDir = System.getProperty("user.dir");
+  Path tfWorkingPath = Paths.get(System.getProperty("user.dir"), ".tfproject");
 
   @Test
   public void getArtifactFromMavenRepoCreatesTfDirAndInvokesDependencyCopy() throws TerraformException, MavenInvocationException, IOException {
     String artifact = "groupId:artifactId:0.1";
-    Path tfWorkingPath = Paths.get(this.workingDir, ".tf");
 
     Invoker invoker = Mockito.mock(Invoker.class);
     InvocationRequest invocationRequest = Mockito.spy(new DefaultInvocationRequest());
@@ -70,18 +69,18 @@ public class TerraformGetMavenRootArtifactTest {
   @Test
   public void expandMavenArtifactsExpandsTheMavenZipArtifactInTheWorkingDir() throws IOException, TerraformException {
     String artifact = "groupId:artifactId:0.1";
-    Path tfWorkingPath = Paths.get(workingDir, ".tf");
+    Path mainTfPath = tfWorkingPath.resolve("src").resolve("main").resolve("tf");
 
     Log log = Mockito.mock(Log.class);
 
-    if (!tfWorkingPath.toFile().exists()) FileUtils.forceMkdir(tfWorkingPath.toFile());
-    FileUtils.copyURLToFile(this.getClass().getResource("/zips/tf-module-my-module1-0.12-rc.zip"), tfWorkingPath.resolve("artifactId-0.1.zip").toFile());
+    if (!mainTfPath.toFile().exists()) FileUtils.forceMkdir(mainTfPath.toFile());
+    FileUtils.copyURLToFile(this.getClass().getResource("/zips/tf-module-my-module1-0.12-rc.zip"), mainTfPath.resolve("artifactId-0.1.zip").toFile());
 
     try {
       TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
       terraformGetMavenRootArtifact.expandMavenArtifacts();
-      Assert.assertTrue(tfWorkingPath.resolve("artifactId").toFile().exists());
-      Assert.assertEquals(tfWorkingPath.resolve("artifactId").toFile().listFiles().length, 2);
+      Assert.assertTrue(mainTfPath.resolve("artifactId").toFile().exists());
+      Assert.assertEquals(mainTfPath.resolve("artifactId").toFile().listFiles().length, 2);
     } finally {
       FileUtils.deleteDirectory(tfWorkingPath.toFile());
     }

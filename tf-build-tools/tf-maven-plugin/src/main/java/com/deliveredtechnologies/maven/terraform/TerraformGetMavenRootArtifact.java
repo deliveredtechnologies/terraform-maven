@@ -26,7 +26,8 @@ import java.util.Properties;
  */
 public class TerraformGetMavenRootArtifact implements TerraformOperation<String> {
 
-  private Path workingDir = Paths.get(System.getProperty("user.dir"), ".tf");
+  private Path workingPath = Paths.get(System.getProperty("user.dir"), ".tfproject");
+  private Path mainTfPath;
   private String tfRootDir;
   private String artifact;
   private Log log;
@@ -50,6 +51,7 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
     this.log = log;
     this.artifact = artifact;
     this.tfRootDir = tfRootDir;
+    this.mainTfPath = workingPath.resolve("src").resolve("main").resolve("tf");
   }
 
   @Override
@@ -59,8 +61,8 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
     try {
       String userDir = System.getProperty("user.dir");
       synchronized (this.getClass()) { //
-        System.setProperty("user.dir", expandedArtifactPath.getParent().toAbsolutePath().toString());
-        TerraformGet terraformGet = new TerraformGet(log, expandedArtifactPath.getParent().getParent().resolve(".tfmodules").toAbsolutePath().toString());
+        System.setProperty("user.dir", workingPath.toAbsolutePath().toString());
+        TerraformGet terraformGet = new TerraformGet(log, mainTfPath.getParent().resolve(".tfmodules").toAbsolutePath().toString());
         terraformGet.execute(properties);
         System.setProperty("user.dir", userDir);
       }
@@ -74,7 +76,7 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
   }
 
   /**
-   * Gets the zip artifact and the pom from Maven and puts them in the .tf directory.
+   * Gets the zip artifact and the pom from Maven and puts them in the .tfproject/src/main and .tfproject directories, respectively.
    * @param invoker
    * @param request
    * @throws TerraformException
@@ -85,40 +87,41 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
     String artifactZip = getArtifactZip(this.artifact);
     Properties properties = new Properties();
     properties.setProperty("artifact", String.format("%1$s:zip", this.artifact));
-    properties.setProperty("outputDirectory", workingDir.toAbsolutePath().toString());
+    properties.setProperty("outputDirectory", mainTfPath.toAbsolutePath().toString());
 
     request.setGoals(Arrays.asList("dependency:copy"));
     request.setProperties(properties);
     try {
-      if (!workingDir.toFile().exists()) {
-        FileUtils.forceMkdir(workingDir.toFile());
+      if (!mainTfPath.toFile().exists()) {
+        FileUtils.forceMkdir(mainTfPath.toFile());
       }
-      if (!workingDir.resolve(artifactZip.replace(".zip", ".pom")).toFile().exists()) {
-        invoker.execute(request);
-        request.getProperties().setProperty("artifact", String.format("%1$s:pom", this.artifact));
-        request.setProperties(properties);
-        invoker.execute(request);
-        Optional<Path> pomFile = Files.walk(workingDir)
-            .filter(path -> path.getFileName().toString().endsWith(".pom"))
-            .findFirst();
-        if (pomFile.isPresent()) {
-          FileUtils.moveFile(pomFile.get().toFile(), workingDir.resolve("pom.xml").toFile());
-        }
+
+      invoker.execute(request);
+      request.getProperties().setProperty("artifact", String.format("%1$s:pom", this.artifact));
+      request.getProperties().setProperty("outputDirectory", workingPath.toAbsolutePath().toString());
+      request.setProperties(properties);
+      invoker.execute(request);
+      Optional<Path> pomFile = Files.walk(workingPath)
+          .filter(path -> path.getFileName().toString().endsWith(".pom"))
+          .findFirst();
+      if (pomFile.isPresent()) {
+        FileUtils.moveFile(pomFile.get().toFile(), workingPath.resolve("pom.xml").toFile());
       }
+
     } catch (MavenInvocationException | IOException e) {
       throw new TerraformException("Unable to copy dependencies from Maven repo", e);
     }
   }
 
   /**
-   * Extracts files from a maven compressed artifact in the working directory path; defaults to '{working dir}/.tf'.
+   * Extracts files from a maven compressed artifact in the working directory path; defaults to '{working dir}/tf'.
    * The name of the artifact is 'artifactId-version.zip'.
    * @return The path of the expanded root directory
    * @throws TerraformException
    */
   final Path expandMavenArtifacts() throws TerraformException {
     String artifactZip = getArtifactZip(this.artifact);
-    Path artifactZipPath = workingDir.resolve(artifactZip);
+    Path artifactZipPath = mainTfPath.resolve(artifactZip);
 
     log.info("Expanding artifacts from " + artifactZipPath.toAbsolutePath());
 

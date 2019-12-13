@@ -24,17 +24,17 @@ public class TerraformGetMavenRootArtifactIntTest {
   @Test
   public void executeInvokesGetsTheArtifactFromMavenAndExpandsItUnderTheTfWorkingDir() throws TerraformException, IOException {
     String artifact = "com.deliveredtechnologies.example.maven.tf:tf-s3-consumer:1.0";
-    Path tfWorkingPath = Paths.get(this.workingDir, ".tf");
+    Path tfWorkingPath = Paths.get(this.workingDir, ".tfproject");
+    Path tfModulesPath = Paths.get(this.workingDir, ".tfproject", "src", "main", ".tfmodules");
 
     try {
       TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, new Slf4jMavenAdapter(LoggerFactory.getLogger(this.getClass())));
       terraformGetMavenRootArtifact.execute(new Properties());
-      Assert.assertTrue(tfWorkingPath.resolve("s3-consumer").toFile().exists());
-      Assert.assertTrue(tfWorkingPath.getParent().resolve(".tfmodules").resolve("s3").resolve("s3_replicated_src").toFile().exists());
-      Assert.assertTrue(tfWorkingPath.getParent().resolve(".tfmodules").resolve("s3").resolve("s3").toFile().exists());
+      Assert.assertTrue(tfWorkingPath.resolve("src").resolve("main").resolve("tf").resolve("s3-consumer").resolve("main.tf").toFile().exists());
+      Assert.assertTrue(tfModulesPath.resolve("s3").resolve("s3_replicated_src").resolve("main.tf").toFile().exists());
+      Assert.assertTrue(tfModulesPath.resolve("s3").resolve("s3").resolve("main.tf").toFile().exists());
     } finally {
       FileUtils.deleteDirectory(tfWorkingPath.toFile());
-      FileUtils.deleteDirectory(tfWorkingPath.getParent().resolve(".tfmodules").toFile());
     }
   }
 }
