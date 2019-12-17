@@ -1,5 +1,12 @@
 package com.deliveredtechnologies.maven.terraform;
 
+import static org.apache.commons.io.FileUtils.copyURLToFile;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.apache.commons.io.FileUtils.forceMkdir;
+import static org.apache.commons.io.FileUtils.touch;
+
+
+
 import com.deliveredtechnologies.terraform.TerraformException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -16,11 +23,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.apache.commons.io.FileUtils.touch;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.apache.commons.io.FileUtils.forceMkdir;
-import static org.apache.commons.io.FileUtils.copyURLToFile;
-
 /**
  * Testsm for TerraformGetMavenRootArtifact.
  */
@@ -28,6 +30,10 @@ public class TerraformGetMavenRootArtifactTest {
 
   Path tfWorkingPath = Paths.get(System.getProperty("user.dir"), ".tfproject");
 
+  /**
+   * Cleans up .tfproject directory.
+   * @throws IOException  this shouldn't happen.
+   */
   @After
   public void tearDown() throws IOException {
     File tfWorkingDir = tfWorkingPath.toFile();
@@ -101,9 +107,9 @@ public class TerraformGetMavenRootArtifactTest {
     if (!mainTfPath.toFile().exists()) forceMkdir(mainTfPath.toFile());
     copyURLToFile(this.getClass().getResource("/zips/tf-module-my-module1-0.12-rc.zip"), mainTfPath.resolve("artifactId-0.1.zip").toFile());
 
-      TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
-      terraformGetMavenRootArtifact.expandMavenArtifacts();
-      Assert.assertTrue(mainTfPath.resolve("artifactId").toFile().exists());
-      Assert.assertEquals(mainTfPath.resolve("artifactId").toFile().listFiles().length, 2);
+    TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
+    terraformGetMavenRootArtifact.expandMavenArtifacts();
+    Assert.assertTrue(mainTfPath.resolve("artifactId").toFile().exists());
+    Assert.assertEquals(mainTfPath.resolve("artifactId").toFile().listFiles().length, 2);
   }
 }
