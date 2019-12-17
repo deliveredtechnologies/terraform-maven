@@ -6,6 +6,7 @@ import com.deliveredtechnologies.maven.logs.Slf4jMavenAdapter;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,12 +42,12 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
    * @param tfModules the common modules directory; if null, it's defaulted to src/main/.tfmodules
    */
   public TerraformGet(Log log, String tfModules) throws IOException {
-    this(log, TerraformUtils.getDefaultTfModulesDir());
+    this(log, StringUtils.isEmpty(tfModules) ? null : Paths.get(tfModules));
   }
 
   protected TerraformGet(Log log, Path tfModules) throws IOException {
     this.log = log;
-    this.tfModules = tfModules;
+    this.tfModules = tfModules == null ? TerraformUtils.getDefaultTfModulesDir() : tfModules;
     if (!this.tfModules.toFile().exists()) FileUtils.forceMkdir(this.tfModules.toFile());
   }
 
