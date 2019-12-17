@@ -30,6 +30,7 @@ public class TerraformGetMavenRootArtifactIntTest {
     try {
       TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, new Slf4jMavenAdapter(LoggerFactory.getLogger(this.getClass())));
       terraformGetMavenRootArtifact.execute(new Properties());
+      Assert.assertTrue(tfWorkingPath.resolve("pom.xml").toFile().exists());
       Assert.assertTrue(tfWorkingPath.resolve("src").resolve("main").resolve("tf").resolve("s3-consumer").resolve("main.tf").toFile().exists());
       Assert.assertTrue(tfModulesPath.resolve("s3").resolve("s3_replicated_src").resolve("main.tf").toFile().exists());
       Assert.assertTrue(tfModulesPath.resolve("s3").resolve("s3").resolve("main.tf").toFile().exists());

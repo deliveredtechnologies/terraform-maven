@@ -42,7 +42,7 @@ public class TerraformGetMavenRootArtifactTest {
       Mockito.verify(invoker, Mockito.times(2)).execute(invocationRequest);
 
       //create the zip artifact
-      FileUtils.touch(tfWorkingPath.resolve("artifactId-0.1.zip").toFile());
+      FileUtils.touch(tfWorkingPath.resolve("artifactId-0.1.pom").toFile());
       terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
 
       Mockito.verify(invoker, Mockito.times(4)).execute(invocationRequest);
