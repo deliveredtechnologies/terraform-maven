@@ -1,19 +1,25 @@
 package com.deliveredtechnologies.maven.terraform;
 
 import com.deliveredtechnologies.terraform.TerraformException;
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static org.apache.commons.io.FileUtils.touch;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.apache.commons.io.FileUtils.forceMkdir;
+import static org.apache.commons.io.FileUtils.copyURLToFile;
 
 /**
  * Testsm for TerraformGetMavenRootArtifact.
@@ -21,6 +27,14 @@ import java.nio.file.Paths;
 public class TerraformGetMavenRootArtifactTest {
 
   Path tfWorkingPath = Paths.get(System.getProperty("user.dir"), ".tfproject");
+
+  @After
+  public void tearDown() throws IOException {
+    File tfWorkingDir = tfWorkingPath.toFile();
+    if (tfWorkingDir.exists() && tfWorkingDir.isDirectory()) {
+      deleteDirectory(tfWorkingDir);
+    }
+  }
 
   @Test
   public void getArtifactFromMavenRepoCreatesTfDirAndInvokesDependencyCopy() throws TerraformException, MavenInvocationException, IOException {
@@ -35,27 +49,38 @@ public class TerraformGetMavenRootArtifactTest {
     Mockito.when(invocationRequest.setGoals(Mockito.any())).thenCallRealMethod();
     Mockito.when(invocationRequest.getGoals()).thenCallRealMethod();
 
-    try {
-      TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
-      terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
+    TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
+    terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
 
-      Mockito.verify(invoker, Mockito.times(2)).execute(invocationRequest);
+    Mockito.verify(invoker, Mockito.times(2)).execute(invocationRequest);
 
-      //create the zip artifact
-      FileUtils.touch(tfWorkingPath.resolve("artifactId-0.1.pom").toFile());
-      terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
+    //create the zip artifact
+    touch(tfWorkingPath.resolve("artifactId-0.1.pom").toFile());
+    terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
 
-      Mockito.verify(invoker, Mockito.times(4)).execute(invocationRequest);
-      Mockito.verify(log, Mockito.times(2)).info("Getting artifact dependencies from Maven");
-      Assert.assertEquals(invocationRequest.getProperties().getProperty("artifact"), String.format("%1$s:pom", artifact));
-      Assert.assertEquals(invocationRequest.getProperties().getProperty("outputDirectory"), tfWorkingPath.toAbsolutePath().toString());
-      Assert.assertEquals(invocationRequest.getGoals().size(), 1);
-      Assert.assertEquals(invocationRequest.getGoals().get(0), "dependency:copy");
-      Assert.assertTrue(tfWorkingPath.toFile().exists() && tfWorkingPath.toFile().isDirectory());
+    Mockito.verify(invoker, Mockito.times(4)).execute(invocationRequest);
+    Mockito.verify(log, Mockito.times(2)).info("Getting artifact dependencies from Maven");
+    Assert.assertEquals(invocationRequest.getProperties().getProperty("artifact"), String.format("%1$s:pom", artifact));
+    Assert.assertEquals(invocationRequest.getProperties().getProperty("outputDirectory"), tfWorkingPath.toAbsolutePath().toString());
+    Assert.assertEquals(invocationRequest.getGoals().size(), 1);
+    Assert.assertEquals(invocationRequest.getGoals().get(0), "dependency:copy");
+    Assert.assertTrue(tfWorkingPath.toFile().exists() && tfWorkingPath.toFile().isDirectory());
+  }
 
-    } finally {
-      FileUtils.deleteDirectory(tfWorkingPath.toFile());
-    }
+  @Test(expected = TerraformException.class)
+  public void getArtifactFromMavenRepoThrowsTerraformException() throws TerraformException, MavenInvocationException {
+    String artifact = "groupId:artifactId:0.1";
+
+    Invoker invoker = Mockito.mock(Invoker.class);
+    InvocationRequest invocationRequest = Mockito.spy(new DefaultInvocationRequest());
+    Log log = Mockito.mock(Log.class);
+
+    Mockito.when(invoker.execute(invocationRequest)).thenThrow(MavenInvocationException.class);
+
+
+    TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
+    terraformGetMavenRootArtifact.getArtifactFromMavenRepo(invoker, invocationRequest);
+
   }
 
   @Test
@@ -73,16 +98,12 @@ public class TerraformGetMavenRootArtifactTest {
 
     Log log = Mockito.mock(Log.class);
 
-    if (!mainTfPath.toFile().exists()) FileUtils.forceMkdir(mainTfPath.toFile());
-    FileUtils.copyURLToFile(this.getClass().getResource("/zips/tf-module-my-module1-0.12-rc.zip"), mainTfPath.resolve("artifactId-0.1.zip").toFile());
+    if (!mainTfPath.toFile().exists()) forceMkdir(mainTfPath.toFile());
+    copyURLToFile(this.getClass().getResource("/zips/tf-module-my-module1-0.12-rc.zip"), mainTfPath.resolve("artifactId-0.1.zip").toFile());
 
-    try {
       TerraformGetMavenRootArtifact terraformGetMavenRootArtifact = new TerraformGetMavenRootArtifact(artifact, log);
       terraformGetMavenRootArtifact.expandMavenArtifacts();
       Assert.assertTrue(mainTfPath.resolve("artifactId").toFile().exists());
       Assert.assertEquals(mainTfPath.resolve("artifactId").toFile().listFiles().length, 2);
-    } finally {
-      FileUtils.deleteDirectory(tfWorkingPath.toFile());
-    }
   }
 }
