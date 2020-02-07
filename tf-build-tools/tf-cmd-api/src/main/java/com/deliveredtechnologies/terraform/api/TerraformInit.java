@@ -24,7 +24,8 @@ public class TerraformInit implements TerraformOperation<String> {
     pluginDir("plugin-dir"),
     verifyPlugins("verify-plugins"),
     getPlugins("get-plugins"),
-    backendConfig("backend-config");
+    backendConfig("backend-config"),
+    withBackend("backend");
 
     Optional<String> name = Optional.empty();
     String property;
@@ -81,6 +82,7 @@ public class TerraformInit implements TerraformOperation<String> {
   public String execute(Properties properties) throws TerraformException {
     try {
       StringBuilder options = new StringBuilder();
+      System.out.print(properties);
 
       for (TerraformInitParam param : TerraformInitParam.values()) {
         if (properties.containsKey(param.property)) {
@@ -94,6 +96,7 @@ public class TerraformInit implements TerraformOperation<String> {
           switch (param) {
             case pluginDir:
             case getPlugins:
+            case withBackend:
             case verifyPlugins:
               options.append(String.format("-%1$s=%2$s ", param.toString(), properties.getProperty(param.property)));
               break;

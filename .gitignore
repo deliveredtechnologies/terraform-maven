@@ -8,3 +8,6 @@ target
 .terraform
 .gpg
 .flattened-pom.xml
+.DS_Store
+.project
+.classpath
