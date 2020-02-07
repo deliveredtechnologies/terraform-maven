@@ -82,7 +82,6 @@ public class TerraformInit implements TerraformOperation<String> {
   public String execute(Properties properties) throws TerraformException {
     try {
       StringBuilder options = new StringBuilder();
-      System.out.print(properties);
 
       for (TerraformInitParam param : TerraformInitParam.values()) {
         if (properties.containsKey(param.property)) {
