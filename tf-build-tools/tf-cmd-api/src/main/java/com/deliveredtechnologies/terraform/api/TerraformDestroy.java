@@ -21,6 +21,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
     lockTimeout("lock-timeout"),
     target("target"),
     tfVars("var"),
+    tfVarFiles("var-file"),
     noColor("no-color"),
     timeout("timeout");
 
@@ -83,6 +84,12 @@ public class TerraformDestroy implements TerraformOperation<String> {
     for (TerraformDestroyParam param : TerraformDestroyParam.values()) {
       if (!properties.containsKey(param.property)) continue;
 
+      if (param == TerraformDestroy.TerraformDestroyParam.tfVarFiles) {
+        for (String file : (properties.getProperty(param.property)).split(",")) {
+          options.append(String.format("-%1$s=%2$s ", param, file.trim()));
+        }
+        continue;
+      }
       if (param == TerraformDestroyParam.tfVars) {
         for (String var : ((String)properties.get(param.property)).split(",")) {
           options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
