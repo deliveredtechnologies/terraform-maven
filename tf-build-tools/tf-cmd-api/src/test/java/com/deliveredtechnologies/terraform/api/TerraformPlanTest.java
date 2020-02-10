@@ -44,12 +44,12 @@ public class TerraformPlanTest {
     Path tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath();
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform plan -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy ",
+      "terraform plan -var 'key1=value1' -var 'key2=value2' -var-file=test1.txt -var-file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy ",
       1111))
       .thenReturn("Success!");
     TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
 
-    this.properties.put(TerraformPlan.TerraformPlanParam.varFiles.property, "test1.txt, test2.txt");
+    this.properties.put(TerraformPlan.TerraformPlanParam.tfVarFiles.property, "test1.txt, test2.txt");
     this.properties.put(TerraformPlan.TerraformPlanParam.tfVars.property, "key1=value1, key2=value2");
     this.properties.put(TerraformPlan.TerraformPlanParam.lockTimeout.property, "1000");
     this.properties.put(TerraformPlan.TerraformPlanParam.target.property, "module1.module2");

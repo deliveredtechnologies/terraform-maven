@@ -42,12 +42,12 @@ public class TerraformApplyTest {
   public void terraformApplyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform apply -var 'key1=value1' -var 'key2=value2' -var_file=test1.txt -var_file=test2.txt -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve someplan.tfplan",
+      "terraform apply -var 'key1=value1' -var 'key2=value2' -var-file=test1.txt -var-file=test2.txt -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve someplan.tfplan",
       1111))
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
-    this.properties.put(TerraformApplyParam.varFiles.property, "test1.txt, test2.txt");
+    this.properties.put(TerraformApplyParam.tfVarFiles.property, "test1.txt, test2.txt");
     this.properties.put(TerraformApplyParam.tfVars.property, "key1=value1, key2=value2");
     this.properties.put(TerraformApplyParam.lockTimeout.property, "1000");
     this.properties.put(TerraformApplyParam.target.property, "module1.module2");

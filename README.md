@@ -5,7 +5,7 @@
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.7.3-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.7.3-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.8-green.svg
 [tf-maven-plugin-synk-badge]:https://img.shields.io/badge/vulnerabilities-1-yellow.svg
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
 [tf-cmd-api-synk-badge]:https://img.shields.io/badge/vulnerabilities-0-green.svg
@@ -198,7 +198,8 @@ Optional Parameters:
 | Name        | Type   | Description                                                                                    |
 | ----------- | ------ | ---------------------------------------------------------------------------------------------- |
 | lockTimeout | Number | Duration to retry a state lock                                                                 |
-| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                |
+| tfVarFiles  | String | A comma delimited string of tfvars files (e.g. -var-file=foo)                                  |
+| tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                    |
 | target      | Number | A resource address to target                                                                   |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                             |
 | tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
