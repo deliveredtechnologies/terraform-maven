@@ -6,7 +6,7 @@
   <groupId>com.deliveredtechnologies</groupId>
   <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.7.3</version>
+  <version>0.8</version>
   <description>Terraform Build Tools: The parent POM project for Java and Terraform Tools</description>
   <modules>
     <module>tf-cmd-api</module>
@@ -60,6 +60,15 @@
       <id>s1234a6i</id>
       <name>Sai Chaitanya</name>
       <url>https://github.com/s1234a6i</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+    </developer>
+    <developer>
+      <id>sjonnada</id>
+      <name>Sandeep Jonnada</name>
+      <url>https://github.com/sjonnada</url>
       <roles>
         <role>developer</role>
       </roles>

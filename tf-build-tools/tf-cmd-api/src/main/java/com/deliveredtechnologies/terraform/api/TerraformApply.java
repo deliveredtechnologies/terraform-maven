@@ -18,7 +18,7 @@ public class TerraformApply implements TerraformOperation<String> {
 
   enum TerraformApplyParam {
     tfVars("var"),
-    varFiles("var_file"),
+    tfVarFiles("var-file"),
     lockTimeout("lock-timeout"),
     target("target"),
     plan("plan"),
@@ -87,7 +87,7 @@ public class TerraformApply implements TerraformOperation<String> {
 
     for (TerraformApplyParam param : TerraformApplyParam.values()) {
       if (properties.containsKey(param.property)) {
-        if (param == TerraformApplyParam.varFiles) {
+        if (param == TerraformApplyParam.tfVarFiles) {
           for (String file : (properties.getProperty(param.property)).split(",")) {
             options.append(String.format("-%1$s=%2$s ", param, file.trim()));
           }

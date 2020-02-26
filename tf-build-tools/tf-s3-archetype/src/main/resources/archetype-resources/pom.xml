@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
-    <tf-maven-version>0.7.3</tf-maven-version>
+    <tf-maven-version>0.8</tf-maven-version>
   </properties>
   <artifactId>${artifactId}</artifactId>
   <groupId>${groupId}</groupId>
@@ -140,6 +140,13 @@
             <phase>clean</phase>
             <goals>
               <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-get</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>get</goal>
             </goals>
           </execution>
         </executions>

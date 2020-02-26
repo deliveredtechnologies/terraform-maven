@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
-    <version>0.7.3</version>
+    <version>0.8</version>
   </parent>
   <artifactId>tf-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
@@ -15,6 +15,7 @@
     <maven.install.skip>false</maven.install.skip>
     <gpg.skip>false</gpg.skip>
     <skipNexusStagingDeployMojo>false</skipNexusStagingDeployMojo>
+    <excludedGroups>com.deliveredtechnologies.test.categories.Integration</excludedGroups>
   </properties>
   <build>
     <plugins>
