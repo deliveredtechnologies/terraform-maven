@@ -17,7 +17,7 @@ import java.io.IOException;
  * <br>
  * Runs 'terraform destroy'
  */
-@Mojo(name = "destroy")
+@Mojo(name = "destroy", requiresProject = false)
 public class Destroy extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
   String tfRootDir;
