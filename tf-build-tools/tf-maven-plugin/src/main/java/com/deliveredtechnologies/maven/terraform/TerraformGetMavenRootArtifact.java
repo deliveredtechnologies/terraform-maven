@@ -12,6 +12,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -104,8 +105,11 @@ public class TerraformGetMavenRootArtifact implements TerraformOperation<String>
       Optional<Path> pomFile = Files.walk(workingPath)
           .filter(path -> path.getFileName().toString().endsWith(".pom"))
           .findFirst();
+
       if (pomFile.isPresent()) {
-        FileUtils.moveFile(pomFile.get().toFile(), workingPath.resolve("pom.xml").toFile());
+        File workingFile = workingPath.resolve("pom.xml").toFile();
+        if (workingFile.exists()) workingFile.delete();
+        FileUtils.moveFile(pomFile.get().toFile(), workingFile);
       }
 
     } catch (MavenInvocationException | IOException e) {

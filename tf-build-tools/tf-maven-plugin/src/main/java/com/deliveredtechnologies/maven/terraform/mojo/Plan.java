@@ -17,7 +17,7 @@ import java.io.IOException;
  * <br>
  * Runs 'terraform plan'
  */
-@Mojo(name = "plan")
+@Mojo(name = "plan", requiresProject = false)
 public class Plan extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
   String tfRootDir;
