@@ -32,7 +32,7 @@ class S3Spec extends Specification {
             init.execute(tfProperties)
             apply.execute(tfProperties)
             def jsonOutput = getTerraformOutput(stackName)
-            String bucketName = jsonOutput.bucket_arn.value[(jsonOutput.bucket_arn.value.lastIndexOf(":") + 1)..-1]
+            String bucketName = jsonOutput?.bucket?.value?.bucket
 
         then:
             s3.doesBucketExistV2 bucketName
@@ -56,7 +56,6 @@ class S3Spec extends Specification {
             String s3ObjectName = 'test.txt'
 
             TerraformInit initDest = new TerraformInit(destStackName)
-            TerraformPlan planDest = new TerraformPlan(destStackName)
             TerraformApply applyDest = new TerraformApply(destStackName)
             TerraformInit initSrc = new TerraformInit(srcStackName)
             TerraformApply applySrc = new TerraformApply(srcStackName)
@@ -71,19 +70,17 @@ class S3Spec extends Specification {
             initDest.execute(tfDestProperties)
             applyDest.execute(tfDestProperties)
             def destJsonOutput = getTerraformOutput(destStackName)
-            String destBucketArn = destJsonOutput.bucket_arn.value
-            String destKmsKeyArn = destJsonOutput.kms_key_arn.value
-            String destBucketName = destBucketArn[(destBucketArn.lastIndexOf(":") + 1)..-1]
+            String destBucketName = destJsonOutput?.bucket?.value?.bucket
+            String destBucketArn = destJsonOutput?.bucket?.value?.arn
 
             //provision source bucket with replication to destination bucket
-            tfSrcProperties.put('tfVars', "region=${srcRegion},environment=${environment},destination_bucket_arn=${destBucketArn},destination_kms_key_arn=${destKmsKeyArn}".toString())
+            tfSrcProperties.put('tfVars', "region=${srcRegion},environment=${environment},destination_bucket_arn=${destBucketArn}".toString())
 
             initSrc.execute(tfSrcProperties)
             applySrc.execute(tfSrcProperties)
 
             def srcJsonOutput = getTerraformOutput(destStackName)
-            String srcBucketArn = srcJsonOutput.bucket_arn.value
-            String srcBucketName = srcBucketArn[(srcBucketArn.lastIndexOf(":") + 1)..-1]
+            String srcBucketName = srcJsonOutput?.bucket?.value?.bucket
 
             //upload a file to the source region
             sourceS3.putObject(srcBucketName, s3ObjectName, "This is a test!")
@@ -96,7 +93,7 @@ class S3Spec extends Specification {
             destS3.getBucketTaggingConfiguration(destBucketName).getTagSet().getTag('environment') == environment
             destS3.doesObjectExist(destBucketName, s3ObjectName)
 
-        cleanup:
+            cleanup:
             TerraformDestroy destroySrc = new TerraformDestroy(srcStackName)
             TerraformDestroy destroyDest = new TerraformDestroy(destStackName)
 
@@ -108,6 +105,7 @@ class S3Spec extends Specification {
         TerraformOutput output = new TerraformOutput(stackName)
         String tfOutput = output.execute(new Properties())
         JsonSlurper slurper = new JsonSlurper()
+        println tfOutput
         slurper.parseText(tfOutput)
     }
 }
