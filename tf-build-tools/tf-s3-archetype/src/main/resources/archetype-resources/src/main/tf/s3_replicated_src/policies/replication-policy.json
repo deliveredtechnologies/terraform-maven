@@ -46,20 +46,6 @@
       ],
       "Effect": "Allow",
       "Resource": "${destination_bucket_arn}/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "kms:Encrypt",
-        "kms:Decrypt",
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:DescribeKey"
-      ],
-      "Resource": [
-        "${source_kms_key_arn}",
-        "${destination_kms_key_arn}"
-      ]
     }
   ]
 }
