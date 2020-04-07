@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# this is a comment to prove the file was copied over
 args="$@"
 cur_loc='pwd'
 target_cd="$cur_loc/.tf"
@@ -44,19 +43,9 @@ do
   esac
 done < "$propFile"
 
-#echo "releaseDir $releaseDir"
-#echo "releaseName $releaseName"
-#echo "releaseVer $releaseVer"
-#echo "releaseOS $releaseOS"
-#echo "releaseSuffix $releaseSuffix"
-
 terraformZip="${targetDir}${releaseName}_${releaseVer}_${releaseOS}_${releaseSuffix}"
 terraformBinary="${targetDir}terraform.exe"
 releaseSource="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseOS}_${releaseSuffix}"
-
-#echo $terraformZip
-#echo $terraformBinary
-#echo $releaseSource
 
 if [ -f $terraformBinary ]
 then
@@ -67,7 +56,7 @@ then
 
     if [[ $installedVerion == $releaseVer ]]
     then
-        echo "Same version, continuing"
+        echo ""
     else
         echo "Different version, downloading"
         curl -o $terraformZip $releaseSource
@@ -87,15 +76,6 @@ else
 fi
 
 maven_java_exe="${JAVA_HOME}/bin/java.exe"
-#echo "$maven_java_exe"
-#exit
-#wrapper_jar="${targetDir}/wrapper/terraform-maven.jar"
-#wrapper_launcher = "com.deliveredtechnologis.io.Executable"
-#$wrapper_launcher = "org.apache.terraform.maven.TerraformMavenMain"
-#$wrapper_launcher = "com.deliveredtechnologis.terraform.api.TerraformCommand"
 
 $terraformBinary "$args"
-#%MAVEN_JAVA_EXE% %JVM_CONFIG_MAVEN_PROPS% %MAVEN_OPTS% %MAVEN_DEBUG_OPTS% -classpath %WRAPPER_JAR% "-Dmaven.multiModuleProjectDirectory=%MAVEN_PROJECTBASEDIR%" %WRAPPER_LAUNCHER% %MAVEN_CONFIG% %*
-#if ERRORLEVEL 1 goto error
-#goto end
 exit
