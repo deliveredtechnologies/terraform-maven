@@ -51,6 +51,7 @@ public class Wrapper extends TerraformMojo<String> {
     File dest3 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.ps1");
     File dest4 = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
 
+
     //getLog().info("Jeffs terraform wrapper");
     //**************************************************************
     // Here we create the .tf directory if it doesn't already exist
