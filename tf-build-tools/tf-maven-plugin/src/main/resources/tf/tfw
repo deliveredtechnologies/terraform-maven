@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# this is a comment to prove the file was copied over
+args="$@"
+cur_loc='pwd'
+target_cd="$cur_loc/.tf"
+projectBaseDir=""
+
+while [[ $projectBaseDir == "" ]]
+do
+    if [ -d "$target_cd" ]
+    then
+        projectBaseDir="$cur_loc"
+    else
+        cd ..
+        cur_loc=`pwd`
+        target_cd="$cur_loc/.tf"
+    fi
+done
+targetDir="$projectBaseDir/.tf/"
+propFile="${targetDir}terraform-maven.properties"
+search="="
+
+while IFS= read -r line
+do
+  case $line in
+  *"distributionSite"*)
+    distributionSite=${line#*$search}
+    ;;
+  *"releaseDir"*)
+    releaseDir=${line#*$search}
+    ;;
+  *"releaseName"*)
+    releaseName=${line#*$search}
+    ;;
+  *"releaseVer"*)
+    releaseVer=${line#*$search}
+    ;;
+  *"releaseOS"*)
+    releaseOS=${line#*$search}
+    ;;
+  *"releaseSuffix"*)
+    releaseSuffix=${line#*$search}
+    ;;
+  esac
+done < "$propFile"
+
+#echo "releaseDir $releaseDir"
+#echo "releaseName $releaseName"
+#echo "releaseVer $releaseVer"
+#echo "releaseOS $releaseOS"
+#echo "releaseSuffix $releaseSuffix"
+
+terraformZip="${targetDir}${releaseName}_${releaseVer}_${releaseOS}_${releaseSuffix}"
+terraformBinary="${targetDir}terraform.exe"
+releaseSource="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseOS}_${releaseSuffix}"
+
+#echo $terraformZip
+#echo $terraformBinary
+#echo $releaseSource
+
+if [ -f $terraformBinary ]
+then
+    versionString=`$terraformBinary -version`
+    search="Terraform v"
+    rest=${versionString#*$search}
+    installedVerion=`echo $rest|cut -d ' ' -f 1`
+
+    if [[ $installedVerion == $releaseVer ]]
+    then
+        echo "Same version, continuing"
+    else
+        echo "Different version, downloading"
+        curl -o $terraformZip $releaseSource
+        rm $terraformBinary
+        unzip -d $targetDir $terraformZip
+        rm $terraformZip
+    fi
+else
+    echo "Terraform not found, installing"
+    curl -o $terraformZip $releaseSource
+    if [ -f $terraformBinary ]
+    then
+        rm $terraformBinary
+    fi
+    unzip -d $targetDir $terraformZip
+    rm $terraformZip
+fi
+
+maven_java_exe="${JAVA_HOME}/bin/java.exe"
+#echo "$maven_java_exe"
+#exit
+#wrapper_jar="${targetDir}/wrapper/terraform-maven.jar"
+#wrapper_launcher = "com.deliveredtechnologis.io.Executable"
+#$wrapper_launcher = "org.apache.terraform.maven.TerraformMavenMain"
+#$wrapper_launcher = "com.deliveredtechnologis.terraform.api.TerraformCommand"
+
+$terraformBinary "$args"
+#%MAVEN_JAVA_EXE% %JVM_CONFIG_MAVEN_PROPS% %MAVEN_OPTS% %MAVEN_DEBUG_OPTS% -classpath %WRAPPER_JAR% "-Dmaven.multiModuleProjectDirectory=%MAVEN_PROJECTBASEDIR%" %WRAPPER_LAUNCHER% %MAVEN_CONFIG% %*
+#if ERRORLEVEL 1 goto error
+#goto end
+exit
