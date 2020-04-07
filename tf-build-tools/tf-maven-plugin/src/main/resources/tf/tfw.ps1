@@ -4,7 +4,6 @@ $arg_list       = $args
 if ($arg_list -eq "") {
     $arg_list   = " "
 }
-#Write-Host "$arg_list"
 $cur_dir        = Get-Location
 $target_curdir  = "$cur_dir" + "\.tf"
 $projectBaseDir = ""
@@ -83,7 +82,7 @@ if ( [System.IO.File]::Exists($terraformBinary) ) {
     $installedVerion     = $installedVerionFull.substring(1,$len-1)
 
     if ($installedVerion -eq $releaseVer) {
-        Write-Host "Same version, continuing"
+        Write-Host ""
     } else {
         Write-Host "Different version, downloading"
         try {
@@ -122,18 +121,10 @@ if ( [System.IO.File]::Exists($terraformBinary) ) {
     }
     & del $terraformZip
 }
-$maven_java_exe   = "$env:JAVA_HOME\bin\java.exe"
-#exit
-$wrapper_jar      = "$projectBaseDir\.tf\wrapper\terraform-maven.jar"
-$wrapper_launcher = "com.deliveredtechnologis.io.Executable"
-#$wrapper_launcher = "org.apache.terraform.maven.TerraformMavenMain"
-#$wrapper_launcher = "com.deliveredtechnologis.terraform.api.TerraformCommand"
-
 try {
         Invoke-Expression "$terraformBinary $arg_list"
 }
 catch {
     "An error occurred invoking terraform.exe."
 }
-
 exit
