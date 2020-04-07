@@ -7,6 +7,7 @@ import com.deliveredtechnologies.terraform.api.TerraformApply;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
  * <br>
  * Runs 'terraform apply'
  */
-@Mojo(name = "apply", requiresProject = false)
+@Mojo(name = "apply", requiresProject = false, defaultPhase = LifecyclePhase.INSTALL)
 public class Apply extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
   String tfRootDir;

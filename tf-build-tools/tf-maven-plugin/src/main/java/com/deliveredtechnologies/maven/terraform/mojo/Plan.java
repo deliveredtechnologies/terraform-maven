@@ -7,6 +7,7 @@ import com.deliveredtechnologies.terraform.api.TerraformPlan;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
  * <br>
  * Runs 'terraform plan'
  */
-@Mojo(name = "plan", requiresProject = false)
+@Mojo(name = "plan", requiresProject = false, defaultPhase = LifecyclePhase.VALIDATE)
 public class Plan extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
   String tfRootDir;

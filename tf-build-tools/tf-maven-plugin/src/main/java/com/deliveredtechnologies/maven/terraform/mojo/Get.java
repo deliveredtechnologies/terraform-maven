@@ -2,6 +2,7 @@ package com.deliveredtechnologies.maven.terraform.mojo;
 
 import com.deliveredtechnologies.maven.terraform.TerraformGet;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * <br>
  * Gets Terraform Maven dependencies and extracts into a tfModules dir.
  */
-@Mojo(name = "get")
+@Mojo(name = "get", defaultPhase = LifecyclePhase.VALIDATE)
 public class Get extends TerraformMojo<List<Path>> {
   @Parameter(property = "tfModulesDir")
   private String tfModulesDir;

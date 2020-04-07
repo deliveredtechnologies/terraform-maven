@@ -3,6 +3,7 @@ package com.deliveredtechnologies.maven.terraform.mojo;
 import com.deliveredtechnologies.maven.terraform.TerraformDeploy;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -12,7 +13,7 @@ import org.apache.maven.project.MavenProject;
  *<br>
  * Deploys an artifact to a Maven repo.
  */
-@Mojo(name = "deploy")
+@Mojo(name = "deploy", defaultPhase = LifecyclePhase.DEPLOY)
 public class Deploy extends TerraformMojo<String> {
 
   @Parameter(defaultValue = "${project}", readonly = true, required = true)
