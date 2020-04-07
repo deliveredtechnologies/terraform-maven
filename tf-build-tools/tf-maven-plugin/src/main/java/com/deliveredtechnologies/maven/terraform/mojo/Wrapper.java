@@ -1,22 +1,43 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
+
 import java.io.*;
 import java.net.URL;
-import java.util.Scanner;
+import java.util.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 @Mojo(name = "wrapper")
 public class Wrapper extends TerraformMojo<String> {
+
+  @Parameter( property = "distributionSite")
+  private String in_distributionSite;
+  @Parameter( property = "releaseDir")
+  private String in_releaseDir;
+  @Parameter( property = "releaseName")
+  private String in_releaseName;
+  @Parameter( property = "releaseVer")
+  private String in_releaseVer;
+  @Parameter( property = "releaseOS")
+  private String in_releaseOS;
+  @Parameter( property = "releaseSuffix")
+  private String in_releaseSuffix;
+
+
+  @Parameter(defaultValue = "${session}")
+  protected MavenSession session;
+
+  @Parameter(defaultValue = "${mojoExecution}")
+  protected MojoExecution mojoExecution;
+
+
   @Override
+
   public void execute() throws MojoExecutionException, MojoFailureException {
-    String in_distributionSite = "";
-    String in_releaseDir       = "";
-    String in_releaseName      = "";
-    String in_releaseVer       = "0.12.20";
-    String in_releaseOS        = "";
-    String in_releaseSuffix    = "";
     String fileName1           = "tf/tfw";
     String fileName2           = "tf/tfw.cmd";
     String fileName3           = "tf/tfw.ps1";
@@ -29,13 +50,11 @@ public class Wrapper extends TerraformMojo<String> {
     File dest2 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.cmd");
     File dest3 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.ps1");
     File dest4 = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
-    boolean newPropExists = dest4.exists();
 
-    getLog().info("Jeffs terraform wrapper");
-
-    //***********************************
-    // Here we create the .tf directory
-    //***********************************
+    //getLog().info("Jeffs terraform wrapper");
+    //**************************************************************
+    // Here we create the .tf directory if it doesn't already exist
+    //**************************************************************
     File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
     if (!tf_dir.exists()) {
       if (tf_dir.mkdir()) {
@@ -46,8 +65,10 @@ public class Wrapper extends TerraformMojo<String> {
     }
 
     //********************************************************************************
-    // Here we copy the scripts and prop file from the jar file to the .tf directory
+    // Here we copy the scripts and properties file (if it doesn't already exist)
+    // from the jar file to the .tf directory
     //********************************************************************************
+    boolean newPropExists = dest4.exists();
     try {
       FileUtils.copyURLToFile(f1,dest1);
       FileUtils.copyURLToFile(f2,dest2);
@@ -59,11 +80,12 @@ public class Wrapper extends TerraformMojo<String> {
     }
 
     //**********************************************************************************
-    // Here we check for command line arguments and update the properties file if any
+    // Here we check for command line arguments (if any) and update the properties file
     //**********************************************************************************
     File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
     File newPropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties2");
     boolean propExists = propFile.exists();
+
     if (propExists) {
       try {
         Scanner sc = new Scanner(propFile);
@@ -74,8 +96,6 @@ public class Wrapper extends TerraformMojo<String> {
         //***********************************
         while (sc.hasNextLine()) {
           String curLine = sc.nextLine();
-          //String curLine  = tempLine;
-          //String curLine  = tempLine.replaceAll("\r\n", "\n");
           int distributionSiteIndex    = curLine.indexOf("distributionSite");
           int releaseDirIndex          = curLine.indexOf("releaseDir"      );
           int releaseNameIndex         = curLine.indexOf("releaseName"     );
@@ -83,48 +103,50 @@ public class Wrapper extends TerraformMojo<String> {
           int releaseOSIndex           = curLine.indexOf("releaseOS"       );
           int releaseSuffixIndex       = curLine.indexOf("releaseSuffix"   );
 
-          //******************************************************
-          // Here we match each line to possibly update if input
-          //******************************************************
+          //********************************************************************
+          // Here we match each line to possibly update if input has been given
+          // We write all the output to a temp output file
+          //********************************************************************
+
           if (distributionSiteIndex != -1)
-            if (!in_distributionSite.equals(""))
+            if (in_distributionSite != null)
               propOut.write("distributionSite=" + in_distributionSite + "\n");
             else
               propOut.write(curLine + "\n");
           if (releaseDirIndex != -1)
-            if (!in_releaseDir.equals(""))
+            if (in_releaseDir != null)
               propOut.write("releaseDir=" + in_releaseDir + "\n");
             else
               propOut.write(curLine + "\n");
           if (releaseNameIndex != -1)
-            if (!in_releaseName.equals(""))
+            if (in_releaseName != null)
               propOut.write("releaseName=" + in_releaseName + "\n");
             else
               propOut.write(curLine + "\n");
           if (releaseVerIndex != -1)
-            if (!in_releaseVer.equals(""))
+            if (in_releaseVer != null)
               propOut.write("releaseVer=" + in_releaseVer + "\n");
             else
               propOut.write(curLine + "\n");
           if (releaseOSIndex != -1)
-            if (!in_releaseOS.equals(""))
+            if (in_releaseOS != null)
               propOut.write("releaseOS=" + in_releaseOS + "\n");
             else
               propOut.write(curLine + "\n");
           if (releaseSuffixIndex != -1)
-            if (!in_releaseSuffix.equals(""))
+            if (in_releaseSuffix != null)
               propOut.write("releaseSuffix=" + in_releaseSuffix + "\n");
             else
               propOut.write(curLine + "\n");
         }
-        //**********************************
-        // flush and close the output file
-        //**********************************
+        //**************************************
+        // flush and close the temp output file
+        //**************************************
         propOut.flush();
         propOut.close();
-        //***********************************************
-        // copy the new prop file into the existing one
-        //***********************************************
+        //*******************************************************
+        // copy the temp output file into the existing prop file
+        //*******************************************************
         FileUtils.copyFile(newPropFile,propFile);
         //******************************
         // delete the temp output file
@@ -134,7 +156,6 @@ public class Wrapper extends TerraformMojo<String> {
         e.printStackTrace();
       }
     }
-
   }
 }
 
