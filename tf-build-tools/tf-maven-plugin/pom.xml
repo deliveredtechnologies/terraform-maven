@@ -20,19 +20,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.deliveredtechnologies</groupId>
-        <artifactId>tf-build-tools</artifactId>
-        <version>0.9-SNAPSHOT</version>
-        <configuration>
-          <distributionSite>https://releases.hashicorp.com</distributionSite>
-          <releaseDir>terraform</releaseDir>
-          <releaseName>terraform</releaseName>
-          <releaseVer>0.12.24</releaseVer>
-          <releaseOS>windows</releaseOS>
-          <releaseSuffix>amd64.zip</releaseSuffix>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
         <version>3.5</version>
