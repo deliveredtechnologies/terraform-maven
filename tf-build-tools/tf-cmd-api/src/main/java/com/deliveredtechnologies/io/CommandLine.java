@@ -73,7 +73,7 @@ public class CommandLine implements Executable {
         command
       };
       processBuilder = new ProcessBuilder(cmd);
-      processBuilder.directory(directory.toFile());
+      processBuilder.directory(directory.toAbsolutePath().toFile());
     }
     logger.debug(String.format("*** directory: %1$s ***", getDirectory().toAbsolutePath()));
     logger.debug(String.format("*** command: %1$s ***", command));
