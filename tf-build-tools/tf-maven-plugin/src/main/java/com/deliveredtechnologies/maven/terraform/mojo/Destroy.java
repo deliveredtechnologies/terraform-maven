@@ -25,6 +25,24 @@ public class Destroy extends TerraformMojo<String> {
   @Parameter(property = "artifact")
   String artifact;
 
+  @Parameter(property = "lockTimeout")
+  String lockTimeout;
+
+  @Parameter(property = "tfVarFiles")
+  String tfVarFiles;
+
+  @Parameter(property = "tfVars")
+  String tfVars;
+
+  @Parameter(property = "target")
+  String target;
+
+  @Parameter(property = "noColor")
+  String noColor;
+
+  @Parameter(property = "timeout")
+  String timeout;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {

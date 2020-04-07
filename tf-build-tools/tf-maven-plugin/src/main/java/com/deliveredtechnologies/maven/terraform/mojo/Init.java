@@ -26,6 +26,21 @@ public class Init extends TerraformMojo<String> {
   @Parameter(property = "artifact")
   String artifact;
 
+  @Parameter(property = "pluginDir")
+  String pluginDir;
+
+  @Parameter(property = "getPlugins")
+  String getPlugins;
+
+  @Parameter(property = "backendConfig")
+  String backendConfig;
+
+  @Parameter(property = "verifyPlugins")
+  String verifyPlugins;
+
+  @Parameter(property = "skipTfGet")
+  String skipTfGet;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {

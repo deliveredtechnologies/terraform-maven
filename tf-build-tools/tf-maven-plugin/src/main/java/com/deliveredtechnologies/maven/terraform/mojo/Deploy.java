@@ -18,8 +18,32 @@ public class Deploy extends TerraformMojo<String> {
   @Parameter(defaultValue = "${project}", readonly = true, required = true)
   MavenProject project;
 
+  @Parameter(property = "file")
+  String file;
+
+  @Parameter(property = "url")
+  String url;
+
+  @Parameter(property = "pomFile")
+  String pomFile;
+
+  @Parameter(property = "generatePom")
+  String generatePom;
+
+  @Parameter(property = "groupId")
+  String groupId;
+
+  @Parameter(property = "artifactId")
+  String artifactId;
+
+  @Parameter(property = "version")
+  String version;
+
+  @Parameter(property = "repositoryId")
+  String repositoryId;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    execute(new TerraformDeploy(getLog(), project), System.getProperties());
+    execute(new TerraformDeploy(getLog(), project));
   }
 }

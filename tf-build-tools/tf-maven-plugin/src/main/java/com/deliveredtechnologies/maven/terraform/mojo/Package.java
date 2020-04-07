@@ -17,8 +17,17 @@ public class Package extends TerraformMojo<String> {
   @Parameter(defaultValue = "${project}", readonly = true, required = true)
   MavenProject project;
 
+  @Parameter(property = "tfRootDir")
+  String tfRootDir;
+
+  @Parameter(property = "tfModulesDir")
+  String tfModulesDir;
+
+  @Parameter(property = "fatTar")
+  String fatTar;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    execute(new TerraformPackage(project, getLog()), System.getProperties());
+    execute(new TerraformPackage(project, getLog()));
   }
 }

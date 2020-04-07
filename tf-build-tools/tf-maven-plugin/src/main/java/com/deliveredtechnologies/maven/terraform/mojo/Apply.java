@@ -25,6 +25,24 @@ public class Apply extends TerraformMojo<String> {
   @Parameter(property = "artifact")
   String artifact;
 
+  @Parameter(property = "tfVars")
+  String tfVars;
+
+  @Parameter(property = "tfVarFile")
+  String tfVarFiles;
+
+  @Parameter(property = "lockTimeout")
+  String lockTimeout;
+
+  @Parameter(property = "target")
+  String target;
+
+  @Parameter(property = "noColor")
+  String noColor;
+
+  @Parameter(property = "timeout")
+  String timeout;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
