@@ -14,7 +14,7 @@ public class Wrapper extends TerraformMojo<String> {
     String in_distributionSite = "";
     String in_releaseDir       = "";
     String in_releaseName      = "";
-    String in_releaseVer       = "0.12.22";
+    String in_releaseVer       = "0.12.20";
     String in_releaseOS        = "";
     String in_releaseSuffix    = "";
     String fileName1           = "tf/tfw";
@@ -74,6 +74,8 @@ public class Wrapper extends TerraformMojo<String> {
         //***********************************
         while (sc.hasNextLine()) {
           String curLine = sc.nextLine();
+          //String curLine  = tempLine;
+          //String curLine  = tempLine.replaceAll("\r\n", "\n");
           int distributionSiteIndex    = curLine.indexOf("distributionSite");
           int releaseDirIndex          = curLine.indexOf("releaseDir"      );
           int releaseNameIndex         = curLine.indexOf("releaseName"     );
@@ -84,48 +86,36 @@ public class Wrapper extends TerraformMojo<String> {
           //******************************************************
           // Here we match each line to possibly update if input
           //******************************************************
-          if (distributionSiteIndex != -1) {
+          if (distributionSiteIndex != -1)
             if (!in_distributionSite.equals(""))
-              propOut.write("distributionSite=" + in_distributionSite);
+              propOut.write("distributionSite=" + in_distributionSite + "\n");
             else
-              propOut.write(curLine);
-            propOut.newLine();
-          }
-          if (releaseDirIndex != -1) {
+              propOut.write(curLine + "\n");
+          if (releaseDirIndex != -1)
             if (!in_releaseDir.equals(""))
-              propOut.write("releaseDir=" + in_releaseDir);
+              propOut.write("releaseDir=" + in_releaseDir + "\n");
             else
-              propOut.write(curLine);
-            propOut.newLine();
-          }
-          if (releaseNameIndex != -1) {
+              propOut.write(curLine + "\n");
+          if (releaseNameIndex != -1)
             if (!in_releaseName.equals(""))
-              propOut.write("releaseName=" + in_releaseName);
+              propOut.write("releaseName=" + in_releaseName + "\n");
             else
-              propOut.write(curLine);
-            propOut.newLine();
-          }
-          if (releaseVerIndex != -1) {
+              propOut.write(curLine + "\n");
+          if (releaseVerIndex != -1)
             if (!in_releaseVer.equals(""))
-              propOut.write("releaseVer=" + in_releaseVer);
+              propOut.write("releaseVer=" + in_releaseVer + "\n");
             else
-              propOut.write(curLine);
-            propOut.newLine();
-          }
-          if (releaseOSIndex != -1) {
+              propOut.write(curLine + "\n");
+          if (releaseOSIndex != -1)
             if (!in_releaseOS.equals(""))
-              propOut.write("releaseOS=" + in_releaseOS);
+              propOut.write("releaseOS=" + in_releaseOS + "\n");
             else
-              propOut.write(curLine);
-            propOut.newLine();
-          }
-          if (releaseSuffixIndex != -1) {
+              propOut.write(curLine + "\n");
+          if (releaseSuffixIndex != -1)
             if (!in_releaseSuffix.equals(""))
-              propOut.write("releaseSuffix=" + in_releaseSuffix);
+              propOut.write("releaseSuffix=" + in_releaseSuffix + "\n");
             else
-              propOut.write(curLine);
-            propOut.newLine();
-          }
+              propOut.write(curLine + "\n");
         }
         //**********************************
         // flush and close the output file
