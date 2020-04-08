@@ -26,10 +26,8 @@ public class Wrapper extends TerraformMojo<String> {
   @Parameter( property = "releaseSuffix"   )
   private String in_releaseSuffix;
 
-
   @Parameter(defaultValue = "${session}")
   protected MavenSession session;
-
   @Parameter(defaultValue = "${mojoExecution}")
   protected MojoExecution mojoExecution;
 
@@ -37,23 +35,23 @@ public class Wrapper extends TerraformMojo<String> {
   @Override
 
   public void execute() throws MojoExecutionException, MojoFailureException {
-    String fileName1 = "tf/tfw";
-    String fileName2 = "tf/tfw.cmd";
-    String fileName3 = "tf/tfw.ps1";
-    String fileName4 = "tf/terraform-maven.properties";
-    URL f1 = (this.getClass().getClassLoader().getResource(fileName1));
-    URL f2 = (this.getClass().getClassLoader().getResource(fileName2));
-    URL f3 = (this.getClass().getClassLoader().getResource(fileName3));
-    URL f4 = (this.getClass().getClassLoader().getResource(fileName4));
-    File dest1 = new File(System.getProperty("user.dir") + "\\.tf\\tfw");
-    File dest2 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.cmd");
-    File dest3 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.ps1");
-    File dest4 = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
+    final String fileName1 = "tf/tfw";
+    final String fileName2 = "tf/tfw.cmd";
+    final String fileName3 = "tf/tfw.ps1";
+    final String fileName4 = "tf/terraform-maven.properties";
+    final URL f1 = (this.getClass().getClassLoader().getResource(fileName1));
+    final URL f2 = (this.getClass().getClassLoader().getResource(fileName2));
+    final URL f3 = (this.getClass().getClassLoader().getResource(fileName3));
+    final URL f4 = (this.getClass().getClassLoader().getResource(fileName4));
+    final File dest1 = new File(System.getProperty("user.dir") + "\\.tf\\tfw");
+    final File dest2 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.cmd");
+    final File dest3 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.ps1");
+    final File dest4 = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
 
     //**************************************************************
     // Here we create the .tf directory if it doesn't already exist
     //**************************************************************
-    File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
+    final File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
     if (!tf_dir.exists())
       if (tf_dir.mkdir())
         getLog().info("Directory .tf is created");
@@ -64,7 +62,7 @@ public class Wrapper extends TerraformMojo<String> {
     // Here we copy the scripts and properties file (if it doesn't already exist)
     // from the jar file to the .tf directory
     //********************************************************************************
-    boolean newPropExists = dest4.exists();
+    final boolean newPropExists = dest4.exists();
     try {
       FileUtils.copyURLToFile(f1,dest1);
       FileUtils.copyURLToFile(f2,dest2);
@@ -78,9 +76,9 @@ public class Wrapper extends TerraformMojo<String> {
     //**********************************************************************************
     // Here we check for command line arguments (if any) and update the properties file
     //**********************************************************************************
-    File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
-    File newPropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties2");
-    boolean propExists = propFile.exists();
+    final File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
+    final File newPropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties2");
+    final boolean propExists = propFile.exists();
 
     if (propExists) {
       try {
