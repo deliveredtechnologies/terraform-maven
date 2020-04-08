@@ -12,7 +12,10 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 @Mojo(name = "wrapper")
 public class Wrapper extends TerraformMojo<String> {
-
+  //**********************************************************************
+  // These are all the possible input parameters the user can supply with
+  // the -D switch
+  //**********************************************************************
   @Parameter( property = "distributionSite")
   private String in_distributionSite;
   @Parameter( property = "releaseDir"      )
@@ -35,6 +38,10 @@ public class Wrapper extends TerraformMojo<String> {
   @Override
 
   public void execute() throws MojoExecutionException, MojoFailureException {
+    //************************************************************************
+    // Here we declare all the final constants which represent the files to be
+    // copied from the jar file to the users project
+    //************************************************************************
     final String fileName1 = "tf/tfw";
     final String fileName2 = "tf/tfw.cmd";
     final String fileName3 = "tf/tfw.ps1";
@@ -101,7 +108,6 @@ public class Wrapper extends TerraformMojo<String> {
           // Here we match each line to possibly update if input has been given
           // We write all the output to a temp output file
           //********************************************************************
-
           if (distributionSiteIndex != -1)
             if (in_distributionSite != null)
               propOut.write("distributionSite=" + in_distributionSite + "\n");
