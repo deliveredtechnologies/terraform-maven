@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 args="$@"
+##############################################################
+# try to figure out where the root directory of the project is
+##############################################################
 cur_loc='pwd'
 target_cd="$cur_loc/.tf"
 projectBaseDir=""
@@ -19,6 +22,9 @@ targetDir="$projectBaseDir/.tf/"
 propFile="${targetDir}terraform-maven.properties"
 search="="
 
+################################################################
+# read all lines from the properties file and store in variables
+################################################################
 while IFS= read -r line
 do
   case $line in
@@ -43,10 +49,16 @@ do
   esac
 done < "$propFile"
 
+#################################################################################
+# Construct the full zip file name, full binary file name, and URL of the package
+#################################################################################
 terraformZip="${targetDir}${releaseName}_${releaseVer}_${releaseOS}_${releaseSuffix}"
 terraformBinary="${targetDir}terraform.exe"
 releaseSource="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseOS}_${releaseSuffix}"
 
+##########################################################################
+# if the terraform binary is already there, figure out what version it is
+##########################################################################
 if [ -f $terraformBinary ]
 then
     versionString=`$terraformBinary -version`
@@ -54,6 +66,11 @@ then
     rest=${versionString#*$search}
     installedVerion=`echo $rest|cut -d ' ' -f 1`
 
+###############################################################
+# if the terraform binary is already there, check if it is the
+# same version as the properties file indicates
+# if not, download and install the desired version
+###############################################################
     if [[ $installedVerion == $releaseVer ]]
     then
         echo ""
@@ -65,6 +82,10 @@ then
         rm $terraformZip
     fi
 else
+############################################
+# if the terraform binary is not there,
+# download and install the desired version
+############################################
     echo "Terraform not found, installing"
     curl -o $terraformZip $releaseSource
     if [ -f $terraformBinary ]
@@ -76,6 +97,8 @@ else
 fi
 
 maven_java_exe="${JAVA_HOME}/bin/java.exe"
-
+###################################################
+# Run terraform with the supplied arguments if any
+###################################################
 $terraformBinary "$args"
 exit
