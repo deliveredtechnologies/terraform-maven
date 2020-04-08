@@ -1,5 +1,8 @@
 #Set-PSDebug -Trace 1
 
+##############################################################
+# try to figure out where the root directory of the project is
+##############################################################
 $arg_list       = $args
 if ($arg_list -eq "") {
     $arg_list   = " "
@@ -21,6 +24,9 @@ While ( $projectBaseDir -eq ""){
 $targetDir = "$projectBaseDir" + "\.tf\"
 $propFile  = "$targetDir"      + "terraform-maven.properties"
 
+################################################################
+# read all lines from the properties file and store in variables
+################################################################
 Get-Content $propFile | ForEach-Object {
     if($_ -match "distributionSite"){
         $pos              = $_.IndexOf("=")
@@ -48,6 +54,9 @@ Get-Content $propFile | ForEach-Object {
     }
 }
 
+#################################################################################
+# Construct the full zip file name, full binary file name, and URL of the package
+#################################################################################
 $terraformZip = "$targetDir" +
               "$releaseName" +
               "_"            +
@@ -74,6 +83,9 @@ $releaseSource = "$distributionSite" +
         "_"                          +
         "$releaseSuffix"
 
+##########################################################################
+# if the terraform binary is already there, figure out what version it is
+##########################################################################
 if ( [System.IO.File]::Exists($terraformBinary) ) {
     $versionString       = & $terraformBinary -version
     $arr                 = $versionString.split(" ")
@@ -81,6 +93,11 @@ if ( [System.IO.File]::Exists($terraformBinary) ) {
     $len                 = $installedVerionFull.Length
     $installedVerion     = $installedVerionFull.substring(1,$len-1)
 
+    ###############################################################
+    # if the terraform binary is already there, check if it is the
+    # same version as the properties file indicates
+    # if not, download and install the desired version
+    ###############################################################
     if ($installedVerion -eq $releaseVer) {
         Write-Host ""
     } else {
@@ -102,6 +119,10 @@ if ( [System.IO.File]::Exists($terraformBinary) ) {
         & del $terraformZip
     }
 } else {
+    ############################################
+    # if the terraform binary is not there,
+    # download and install the desired version
+    ############################################
     Write-Host "Terraform not found, installing"
     try {
         $WebClient = New-Object System.Net.WebClient;
@@ -121,6 +142,9 @@ if ( [System.IO.File]::Exists($terraformBinary) ) {
     }
     & del $terraformZip
 }
+###################################################
+# Run terraform with the supplied arguments if any
+###################################################
 try {
         Invoke-Expression "$terraformBinary $arg_list"
 }
