@@ -9,6 +9,23 @@
   <artifactId>tf-s3</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
   <version>1.0</version>
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <tfVarFiles>tfvars/dev.tfvars</tfVarFiles>
+      </properties>
+    </profile>
+    <profile>
+      <id>test</id>
+      <properties>
+        <tfVarFiles>tfvars/test.tfvars</tfVarFiles>
+      </properties>
+  </profile>
+  </profiles>
   <pluginRepositories>
     <pluginRepository>
       <id>sonatype</id>
@@ -81,14 +98,25 @@
             <id>terraform-clean</id>
             <phase>clean</phase>
             <goals>
+              <goal>init</goal>
+              <goal>destroy</goal>
               <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-plan</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>init</goal>
+              <goal>plan</goal>
             </goals>
           </execution>
           <execution>
             <id>terraform-install</id>
             <phase>install</phase>
             <goals>
-              <goal>deploy</goal>
+              <goal>init</goal>
+              <goal>apply</goal>
             </goals>
           </execution>
           <execution>

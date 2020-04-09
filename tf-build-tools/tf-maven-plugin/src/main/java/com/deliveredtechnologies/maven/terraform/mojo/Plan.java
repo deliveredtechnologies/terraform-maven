@@ -18,7 +18,7 @@ import java.io.IOException;
  * <br>
  * Runs 'terraform plan'
  */
-@Mojo(name = "plan", requiresProject = false, defaultPhase = LifecyclePhase.VALIDATE)
+@Mojo(name = "plan", requiresProject = false, defaultPhase = LifecyclePhase.VERIFY)
 public class Plan extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
   String tfRootDir;
@@ -29,7 +29,7 @@ public class Plan extends TerraformMojo<String> {
   @Parameter(property = "tfVars")
   String tfVars;
 
-  @Parameter(property = "tfVarFile")
+  @Parameter(property = "tfVarFiles")
   String tfVarFiles;
 
   @Parameter(property = "lockTimeout")
