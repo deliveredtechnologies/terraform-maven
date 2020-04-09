@@ -39,22 +39,22 @@ public class Plan extends TerraformMojo<String> {
   String target;
 
   @Parameter(property = "planInput")
-  String planInput;
+  boolean planInput = false;
 
   @Parameter(property = "refreshState")
-  String refreshState;
+  boolean refreshState = true;
 
   @Parameter(property = "tfState")
   String tfState;
 
   @Parameter(property = "noColor")
-  String noColor;
+  boolean noColor;
 
   @Parameter(property = "destroyPlan")
-  String destroyPlan;
+  boolean destroyPlan;
 
   @Parameter(property = "timeout")
-  String timeout;
+  long timeout;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {

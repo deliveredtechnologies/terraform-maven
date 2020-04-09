@@ -38,10 +38,10 @@ public class Destroy extends TerraformMojo<String> {
   String target;
 
   @Parameter(property = "noColor")
-  String noColor;
+  boolean noColor = true;
 
   @Parameter(property = "timeout")
-  String timeout;
+  long timeout;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {

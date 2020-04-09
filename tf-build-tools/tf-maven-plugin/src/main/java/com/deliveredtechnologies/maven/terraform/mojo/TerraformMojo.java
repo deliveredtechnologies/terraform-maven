@@ -58,14 +58,13 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
   protected final Properties getFieldsAsProperties() throws MojoExecutionException {
     Class clazz = this.getClass();
     List<Field> fieldList = Arrays.stream(clazz.getDeclaredFields())
-        .filter(field -> field.getType() == String.class)
         .collect(Collectors.toList());
     Properties properties = new Properties();
 
     for (Field field : fieldList) {
       try {
         field.setAccessible(true);
-        properties.put(field.getName(), field.get(this));
+        properties.put(field.getName(), String.valueOf(field.get(this)));
       } catch (NullPointerException npe) {
         //the field is null; just move along
       } catch (IllegalAccessException iae) {

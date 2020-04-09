@@ -25,7 +25,7 @@ public class Package extends TerraformMojo<String> {
   String tfModulesDir;
 
   @Parameter(property = "fatTar")
-  String fatTar;
+  boolean fatTar;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {

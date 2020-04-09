@@ -8,6 +8,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import java.io.File;
+import java.net.URL;
+
 /**
  * Mojo terraform:deploy goal.
  *<br>
@@ -20,16 +23,16 @@ public class Deploy extends TerraformMojo<String> {
   MavenProject project;
 
   @Parameter(property = "file")
-  String file;
+  File file;
 
   @Parameter(property = "url")
-  String url;
+  URL url;
 
   @Parameter(property = "pomFile")
-  String pomFile;
+  File pomFile;
 
   @Parameter(property = "generatePom")
-  String generatePom;
+  boolean generatePom;
 
   @Parameter(property = "groupId")
   String groupId;

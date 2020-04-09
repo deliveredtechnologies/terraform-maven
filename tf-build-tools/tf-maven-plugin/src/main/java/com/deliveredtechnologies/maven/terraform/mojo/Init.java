@@ -12,6 +12,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -28,19 +29,19 @@ public class Init extends TerraformMojo<String> {
   String artifact;
 
   @Parameter(property = "pluginDir")
-  String pluginDir;
+  File pluginDir;
 
   @Parameter(property = "getPlugins")
-  String getPlugins;
+  boolean getPlugins;
 
   @Parameter(property = "backendConfig")
   String backendConfig;
 
   @Parameter(property = "verifyPlugins")
-  String verifyPlugins;
+  boolean verifyPlugins;
 
   @Parameter(property = "skipTfGet")
-  String skipTfGet;
+  boolean skipTfGet = false;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
