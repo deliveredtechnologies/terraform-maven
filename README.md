@@ -285,7 +285,7 @@ the absolute path of the Git Bash executable.
 
 ```xml
 <properties>
-  <tf-maven-version>0.7.3</tf-maven-version>
+  <tf-maven-version>0.8.1</tf-maven-version>
 </properties>
 ```
 
