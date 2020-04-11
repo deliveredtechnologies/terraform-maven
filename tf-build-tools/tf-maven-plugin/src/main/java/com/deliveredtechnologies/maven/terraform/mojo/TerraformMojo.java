@@ -64,7 +64,13 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
     for (Field field : fieldList) {
       try {
         field.setAccessible(true);
-        properties.put(field.getName(), String.valueOf(field.get(this)));
+        Object fieldVal = field.get(this);
+        if (fieldVal == null
+            || fieldVal.equals(false)
+            || (Number.class.isAssignableFrom(fieldVal.getClass()) && ((Number)fieldVal).longValue() <= 0)) {
+          continue;
+        }
+        properties.put(field.getName(), field.get(this));
       } catch (NullPointerException npe) {
         //the field is null; just move along
       } catch (IllegalAccessException iae) {
