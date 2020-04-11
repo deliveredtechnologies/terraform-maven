@@ -89,7 +89,7 @@ public class TerraformMojoTest {
   }
 
   @Test
-  public void getFieldAsPropertiesGetsAllTheSetSubclassFieldsAsProperties() throws MojoExecutionException {
+  public void getFieldAsPropertiesGetsOnlyTheSetSubclassFieldsAsProperties() throws MojoExecutionException {
     TerraformMojoStub terraformMojoStub = new TerraformMojoStub();
     terraformMojoStub.boolProp = true;
     terraformMojoStub.intProp = 22;
@@ -102,6 +102,15 @@ public class TerraformMojoTest {
     Assert.assertEquals(properties.get("boolProp"), true);
     Assert.assertEquals(properties.get("intProp"), 22);
     Assert.assertEquals(properties.get("longProp"), 1000L);
+    Assert.assertEquals(properties.get("stringProp"), "Hello");
+
+    terraformMojoStub.boolProp = false;
+    terraformMojoStub.intProp = 0;
+    terraformMojoStub.longProp = 0;
+
+    properties = terraformMojoStub.getFieldsAsProperties();
+
+    Assert.assertEquals(properties.size(), 1);
     Assert.assertEquals(properties.get("stringProp"), "Hello");
   }
 }

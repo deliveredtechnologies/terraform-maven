@@ -6,6 +6,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * Stub for testing a TerraformMojo subclass.
+ */
 public class TerraformMojoStub extends TerraformMojo<String> {
 
   protected int intProp;
