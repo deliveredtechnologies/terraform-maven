@@ -426,8 +426,8 @@ If you used the above configuration, the following Terraform Maven goals are map
 
 | Maven Phase | Terraform Maven Goals |
 |-------------|-----------------------|
-| install     | deploy                |
-| clean       | clean                 |
+| install     | init, apply           |
+| clean       | init, destroy, clean  |
 | package     | package               |
 | deploy      | deploy                |
 
