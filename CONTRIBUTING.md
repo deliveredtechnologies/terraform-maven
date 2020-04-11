@@ -35,7 +35,7 @@
    Once your PR is free from merge conflicts and all of the automated checks pass (i.e. build validation + code coverage validation), one of the developers under the deliveredtechnologies project
    will review the PR and leave comments and/or merge the PR.
 
-5. Remediate 
+5. Remediation
     
    If any issues arise from the code review, please correct them. Once the PR has no more issues, it will be merged.
     
