@@ -11,7 +11,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 @Mojo(name = "wrapper")
-/*
+/**
  * These are all the possible input parameters the user can supply with
  * the -D switch
  *
@@ -46,7 +46,6 @@ public class Wrapper extends TerraformMojo<String> {
     //************************************************************************
     // Here we determine the OS in order to add that to the prop file
     //************************************************************************
-
     final String os_name = System.getProperty("os.name");
     int windows_index    = os_name.indexOf("indow");
     if (in_releaseOS == null)
@@ -54,7 +53,6 @@ public class Wrapper extends TerraformMojo<String> {
         in_releaseOS = "windows";
       else
         in_releaseOS = "linux";
-    //getLog().info(in_releaseOS);
 
     //************************************************************************
     // Here we declare all the final constants which represent the files to be
