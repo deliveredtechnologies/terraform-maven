@@ -10,6 +10,12 @@
   <packaging>maven-plugin</packaging>
   <name>tf-maven-plugin</name>
   <description>Terraform Maven Plugin :: Bringing build lifecycle management to Terraform!</description>
+  <contributors>
+    <contributor>
+      <name>Lance Arlaus</name>
+      <url>https://github.com/lancearlaus</url>
+    </contributor>
+  </contributors>
   <properties>
     <maven.deploy.skip>false</maven.deploy.skip>
     <maven.install.skip>false</maven.install.skip>
