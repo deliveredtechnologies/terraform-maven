@@ -28,7 +28,7 @@
 3. Submit a Pull Request
 
    Once you have completed the work to resolve the issue, then submit a Pull Request to the 'develop' branch of the terraform-maven repository.
-   The PR will trigger a validation of the build.
+   The PR will trigger a validation of the build. The TravisCI build logs for your PR can be found here: [https://travis-ci.org/github/deliveredtechnologies/terraform-maven/pull_requests](https://travis-ci.org/github/deliveredtechnologies/terraform-maven/pull_requests).
 
 4. Code Review
 

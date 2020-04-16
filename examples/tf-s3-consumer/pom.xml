@@ -127,21 +127,6 @@
             <id>terraform-install</id>
             <phase>install</phase>
             <goals>
-              <goal>init</goal>
-              <goal>apply</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>terraform-package</id>
-            <phase>package</phase>
-            <goals>
-              <goal>package</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>terraform-deploy</id>
-            <phase>deploy</phase>
-            <goals>
               <goal>deploy</goal>
             </goals>
           </execution>

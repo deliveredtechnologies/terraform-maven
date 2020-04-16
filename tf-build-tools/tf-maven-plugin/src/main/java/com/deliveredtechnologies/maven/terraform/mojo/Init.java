@@ -8,6 +8,7 @@ import com.deliveredtechnologies.terraform.api.TerraformInit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * <br>
  * Runs 'terraform init'
  */
+@Execute(goal = "get")
 @Mojo(name = "init", requiresProject = false, defaultPhase = LifecyclePhase.INITIALIZE)
 public class Init extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
@@ -48,9 +50,10 @@ public class Init extends TerraformMojo<String> {
     try {
       if (!StringUtils.isEmpty(artifact)) {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
-        tfRootDir = mavenRepoExecutableOp.execute(System.getProperties());
+        tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-      execute(new TerraformInit(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
+
+      execute(new TerraformInit(tfRootDir, new MavenSlf4jAdapter(getLog())), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }

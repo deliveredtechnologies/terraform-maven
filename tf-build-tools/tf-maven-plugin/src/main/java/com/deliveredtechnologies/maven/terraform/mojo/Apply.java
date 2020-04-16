@@ -48,9 +48,9 @@ public class Apply extends TerraformMojo<String> {
     try {
       if (!StringUtils.isEmpty(artifact)) {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
-        tfRootDir = mavenRepoExecutableOp.execute(System.getProperties());
+        tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-      execute(new TerraformApply(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
+      execute(new TerraformApply(tfRootDir, new MavenSlf4jAdapter(getLog())), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }

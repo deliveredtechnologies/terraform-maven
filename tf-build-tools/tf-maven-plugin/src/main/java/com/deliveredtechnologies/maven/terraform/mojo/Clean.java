@@ -27,7 +27,7 @@ public class Clean extends TerraformMojo<String> {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
-      execute(new TerraformClean(tfModulesDir, tfRootDir), System.getProperties());
+      execute(new TerraformClean(tfModulesDir, tfRootDir), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
