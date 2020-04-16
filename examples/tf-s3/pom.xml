@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
-    <tf-maven-version>0.8</tf-maven-version>
+    <tf-maven-version>0.9-SNAPSHOT</tf-maven-version>
   </properties>
   <artifactId>tf-s3</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
@@ -156,6 +156,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>

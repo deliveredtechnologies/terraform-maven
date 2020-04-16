@@ -15,9 +15,25 @@
 @REM ----------------------------------------------------------------------------
 
 @REM Begin all REM lines with '@' in case MAVEN_BATCH_ECHO is 'on'
-@REMecho off
+echo off
+setlocal EnableDelayedExpansion
+set DOWNLOAD_URL=
+set DOWNLOAD_SITE=
+set RELEASE_DIR=
+set RELEASE_NAME=
+set RELEASE_VER=
+set RELEASE_OS=
+set RELEASE_SUFFIX=
+set RELEASE_PATH=
+
 @REM set title of command window
 title %0
+@REM echo %1
+if NOT "%1" == "" (
+set DOWNLOAD_URL=%1
+)
+echo %DOWNLOAD_URL%
+
 @REM enable echoing by setting MAVEN_BATCH_ECHO to 'on'
 @if "%MAVEN_BATCH_ECHO%" == "on"  echo %MAVEN_BATCH_ECHO%
 
@@ -102,11 +118,71 @@ SET MAVEN_JAVA_EXE="%JAVA_HOME%\bin\java.exe"
 set WRAPPER_JAR="C:\temp\terraform_0.12.24_windows_amd64.zip"
 set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 
-set DOWNLOAD_URL="https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_windows_amd64.zip"
+@REM set DOWNLOAD_URL="https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_windows_amd64.zip"
 @REM set DOWNLOAD_URL="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
 
-FOR /F "tokens=1,2 delims==" %%A IN ("%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties") DO (
-    IF "%%A"=="wrapperUrl" SET DOWNLOAD_URL=%%B
+echo "before"
+
+@REM if not exist DOWNLOAD_URL (
+@REM if DOWNLOAD_URL == "" (
+if not defined DOWNLOAD_URL (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="distributionUrl" (SET DOWNLOAD_URL=%%B) )
+)
+if not defined DOWNLOAD_SITE (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="distributionSite" (SET DOWNLOAD_SITE=%%B) )
+)
+if not defined RELEASE_DIR (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="releaseDir" (SET RELEASE_DIR=%%B) )
+)
+if not defined RELEASE_NAME (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="releaseName" (SET RELEASE_NAME=%%B) )
+)
+if not defined RELEASE_VER (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="releaseVer" (SET RELEASE_VER=%%B) )
+)
+if not defined RELEASE_OS (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="releaseOS" (SET RELEASE_OS=%%B) )
+)
+if not defined RELEASE_SUFFIX (
+   FOR /F "tokens=1,2 delims==" %%A IN (%MAVEN_PROJECTBASEDIR%\terraform-maven.properties) DO (
+       IF "%%A"=="releaseSuffix" (SET RELEASE_SUFFIX=%%B) )
+)
+
+(set RELEASE_PATH=%DOWNLOAD_SITE%/%RELEASE_DIR%/%RELEASE_VER%/%RELEASE_NAME%_%RELEASE_VER%_%RELEASE_OS%_%RELEASE_SUFFIX%)
+@REM distributionUrl=https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_windows_amd64.zip
+(set FILE_NAME="\terraform-maven.properties")
+(set OVERALL_DIR="%MAVEN_PROJECTBASEDIR%%FILE_NAME%")
+
+@REM set %RELEASE_PATH%=%~1
+@REM set RELEASE_PATH=%RELEASE_PATH%:"=%
+set RELEASE_PATH=%RELEASE_PATH:"=%
+
+@REM releaseDir="terraform"
+@REM releaseName="terraform"
+@REM releaseVer="0.12.24"
+@REM releaseOS="windows"
+@REM releaseSuffix="amd64.zip"
+
+echo "after"
+echo %DOWNLOAD_URL%
+echo %DOWNLOAD_SITE%
+echo %RELEASE_DIR%
+echo %RELEASE_NAME%
+echo %RELEASE_VER%
+echo %RELEASE_OS%
+echo %RELEASE_SUFFIX%
+echo %RELEASE_PATH%
+@REM echo %OVERALL_DIR%
+
+@REM exit /b
+@REM FOR /F "tokens=1,2 delims==" %%A IN ("%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties") DO (
+@REM     IF "%%A"=="wrapperUrl" SET DOWNLOAD_URL=%%B
 )
 
 @REM Extension to allow automatically downloading the maven-wrapper.jar from Maven-central
@@ -121,12 +197,12 @@ if exist %WRAPPER_JAR% (
     )
     if "%MVNW_VERBOSE%" == "true" (
         echo Couldn't find %WRAPPER_JAR%, downloading it ...
-        echo Downloading from: %DOWNLOAD_URL%
+        echo Downloading from: %DOWNLOAD_SITE%
     )
 
     powershell -Command "&{"^
                "$WebClient = New-Object System.Net.WebClient;"^
-               "$webclient.DownloadFile('%DOWNLOAD_URL%', '%WRAPPER_JAR%')"^
+               "$webclient.DownloadFile('%RELEASE_PATH%', '%WRAPPER_JAR%')"^
 		"}"
 
     powershell -Command "&{"^
