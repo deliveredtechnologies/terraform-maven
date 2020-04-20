@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -31,7 +32,7 @@ public class TerraformMojoTest {
   }
 
   @Test
-  public void executeOnTerraformOperationWithStringReturnValueWritesToInfoLog() throws TerraformException, MojoFailureException, MojoExecutionException {
+  public void executeOnTerraformOperationWithStringReturnValueWritesToInfoLog() throws TerraformException, MojoFailureException, MojoExecutionException, IOException, InterruptedException {
     Mockito.when(terraformOperation.execute(Mockito.any())).thenReturn("Testing!");
     TerraformMojo<String> terraformMojo = new TerraformMojo<String>() {
       @Override
@@ -53,7 +54,7 @@ public class TerraformMojoTest {
   }
 
   @Test
-  public void executeOnTerraformOperationDelegatesToTerraformOperation() throws TerraformException, MojoFailureException, MojoExecutionException {
+  public void executeOnTerraformOperationDelegatesToTerraformOperation() throws TerraformException, MojoFailureException, MojoExecutionException, IOException, InterruptedException {
     Mockito.when(terraformOperation.execute(Mockito.any())).thenReturn(new Object());
     TerraformMojo terraformMojo = new TerraformMojo() {
       @Override
@@ -74,7 +75,7 @@ public class TerraformMojoTest {
   }
 
   @Test(expected = MojoExecutionException.class)
-  public void terraformExceptionIsThrownAsMojoExecutionException() throws TerraformException, MojoExecutionException, MojoFailureException {
+  public void terraformExceptionIsThrownAsMojoExecutionException() throws TerraformException, MojoExecutionException, MojoFailureException, IOException, InterruptedException {
     Mockito.when(terraformOperation.execute(Mockito.any())).thenThrow(new TerraformException("boom!"));
     TerraformMojo terraformMojo = new TerraformMojo() {
       @Override

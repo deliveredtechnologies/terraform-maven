@@ -5,6 +5,7 @@ import com.deliveredtechnologies.terraform.api.TerraformOperation;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -29,7 +30,7 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
           getLog().info((String) response);
         }
       }
-    } catch (TerraformException e) {
+    } catch (TerraformException | IOException | InterruptedException e) {
       throw new MojoExecutionException("Failed to execute terraform operation", e);
     }
   }
