@@ -13,15 +13,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 
-@Mojo(name = "wrapper")
-/*
- * These are all the possible input parameters the user can supply with
- * the -D switch
- *
+/**
+ * This is the wrapper class.
+ * This class will
+ * 1) Create the properties file including any -D command line modifications
+ * 2) Determine the OS and add that to the properties file
  */
+@Mojo(name = "wrapper")
 public class Wrapper extends TerraformMojo<String> {
   /*
    * These are all the possible input parameters the user can supply with
@@ -29,14 +32,19 @@ public class Wrapper extends TerraformMojo<String> {
    */
   @Parameter( property = "distributionSite")
   private String indistributionSite;
+
   @Parameter( property = "releaseDir"      )
   private String inreleaseDir;
+
   @Parameter( property = "releaseName"     )
   private String inreleaseName;
+
   @Parameter( property = "releaseVer"      )
   private String inreleaseVer;
+
   @Parameter( property = "releaseOS"       )
   private String inreleaseOS;
+
   @Parameter( property = "releaseSuffix"   )
   private String inreleaseSuffix;
 
@@ -63,26 +71,9 @@ public class Wrapper extends TerraformMojo<String> {
     }
 
     /*
-     * Here we declare all the final constants which represent the files to be
-     * copied from the jar file to the users project
-     */
-    final String fileName1 = "tf/tfw";
-    final String fileName2 = "tf/tfw.cmd";
-    final String fileName3 = "tf/tfw.ps1";
-    final String fileName4 = "tf/terraform-maven.properties";
-    final URL f1 = (this.getClass().getClassLoader().getResource(fileName1));
-    final URL f2 = (this.getClass().getClassLoader().getResource(fileName2));
-    final URL f3 = (this.getClass().getClassLoader().getResource(fileName3));
-    final URL f4 = (this.getClass().getClassLoader().getResource(fileName4));
-    final File dest1 = new File(System.getProperty("user.dir") + "\\.tf\\tfw");
-    final File dest2 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.cmd");
-    final File dest3 = new File(System.getProperty("user.dir") + "\\.tf\\tfw.ps1");
-    final File dest4 = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
-
-    /*
      * Here we create the .tf directory if it doesn't already exist
      */
-    final File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
+    File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
     if (!tf_dir.exists()) {
       if (tf_dir.mkdir()) {
         getLog().info("Directory .tf is created");
@@ -95,24 +86,25 @@ public class Wrapper extends TerraformMojo<String> {
      * Here we copy the scripts and properties file (if it doesn't already exist)
      * from the jar file to the .tf directory
      */
-    final boolean newPropExists = dest4.exists();
-    try {
-      FileUtils.copyURLToFile(f1,dest1);
-      FileUtils.copyURLToFile(f2,dest2);
-      FileUtils.copyURLToFile(f3,dest3);
-      if (!newPropExists) {
-        FileUtils.copyURLToFile(f4, dest4);
+    String[] tfwFileNames = {"tfw", "tfw.cmd", "tfw.ps1", "terraform-maven.properties"};
+    Path tfWrapperPath = Paths.get(".tf");
+    for (String tfwFileName : tfwFileNames) {
+      File tfwFile = tfWrapperPath.resolve(tfwFileName).toFile();
+      if (!(tfwFileName.endsWith(".properties") && tfwFile.exists())) {
+        try {
+          FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource("tf/" + tfwFileName), tfWrapperPath.resolve(tfwFileName).toFile());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
-    } catch (IOException e) {
-      e.printStackTrace();
     }
 
     /*
      * Here we check for command line arguments (if any) and update the properties file
      */
-    final File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
-    final File newPropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties2");
-    final boolean propExists = propFile.exists();
+    File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
+    File newPropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties2");
+    boolean propExists = propFile.exists();
 
     if (propExists) {
       try {
