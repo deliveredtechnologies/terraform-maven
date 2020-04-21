@@ -2,6 +2,7 @@ package com.deliveredtechnologies.maven.terraform;
 
 
 import com.deliveredtechnologies.io.CommandLine;
+import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformOperation;
@@ -17,6 +18,7 @@ import java.util.Properties;
  * upload plan files to s3 after tf:plan.
  */
 public class TerraformUpload implements TerraformOperation<String> {
+  private Executable executable;
 
   private String tfRootDir;
   private Logger logger;
@@ -27,9 +29,13 @@ public class TerraformUpload implements TerraformOperation<String> {
     kmsKeyId;
   }
 
-  public TerraformUpload(String tfRootDir, Logger logger) {
+  public TerraformUpload(String tfRootDir, Logger logger) throws IOException {
+    this(new CommandLine(tfRootDir == null  ? TerraformUtils.getDefaultTerraformRootModuleDir() : Paths.get(tfRootDir), logger), logger);
+  }
+
+  public TerraformUpload(Executable executable, Logger logger) {
+    this.executable = executable;
     this.logger = logger;
-    this.tfRootDir = tfRootDir;
   }
 
 
@@ -54,13 +60,12 @@ public class TerraformUpload implements TerraformOperation<String> {
     String planFileName = planOutputFile.startsWith("s3") ? planOutputFile.split("/")[planOutputFile.split("/").length - 1] : properties.getProperty(TerraformUploadParams.planOutputFile.toString());
     String sse = properties.getProperty(TerraformUploadParams.sse.toString()) == null ? "AES:256" : properties.getProperty(TerraformUploadParams.sse.toString());
     String kmsKeyId = properties.getProperty(TerraformUploadParams.kmsKeyId.toString());
-    terraformUploadCli(tfRootPath, planFileName, planOutputFile, sse, kmsKeyId, false);
+    terraformUploadCli(planFileName, planOutputFile, sse, kmsKeyId, false);
     return planFileName;
   }
 
   /**
    * Uploads objects to s3.
-   * @param tfRootPath path to the working directory
    * @param body body of the content that need to be uploaded
    * @param key fully qualified path for the s3 object to store or destination location of the file
    * @param sse Server side encryption mechanism either of AES:256 or aws:kms; defaults to AES:256
@@ -68,17 +73,17 @@ public class TerraformUpload implements TerraformOperation<String> {
    * @param recursive extends s3 cp command with recursive--true if sets to true
    *
    */
-  public void terraformUploadCli(Path tfRootPath, String body, String key, String sse, String kmsKeyId, boolean recursive ) throws IOException {
-    CommandLine cli = new CommandLine(tfRootPath, logger);
+  protected void terraformUploadCli(String body, String key, String sse, String kmsKeyId, boolean recursive ) throws IOException {
+
     try {
       String recCmd = recursive ? "--recursive" : "";
       if (key.startsWith("s3")) {
         if (sse.equals("AES:256")) {
           logger.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
-          cli.execute(String.format("aws s3 cp %1$s %2$s %3$s", body, key, recCmd));
+          executable.execute(String.format("aws s3 cp %1$s %2$s %3$s", body, key, recCmd));
         } else {
           logger.debug("uploading plan files to Amazon S3 with kms encryption");
-          cli.execute(String.format("aws s3 cp %1$s %2$s --sse %3$s --sse-kms-key-id %4$s %5$s", body, key, sse, kmsKeyId, recCmd));
+          executable.execute(String.format("aws s3 cp %1$s %2$s --sse %3$s --sse-kms-key-id %4$s %5$s", body, key, sse, kmsKeyId, recCmd));
         }
       } else {
         logger.debug("pass -DplanOutputFile value as s3://<bucket_name>/<key_prefix>/<key_name>  to store plan files in s3");
