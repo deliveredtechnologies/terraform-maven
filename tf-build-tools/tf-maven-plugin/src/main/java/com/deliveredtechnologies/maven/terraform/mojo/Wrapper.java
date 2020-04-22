@@ -8,15 +8,15 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
-
+import java.util.Properties;
 
 /**
  * This is the wrapper class.
@@ -50,6 +50,7 @@ public class Wrapper extends TerraformMojo<String> {
 
   @Parameter(defaultValue = "${session}")
   protected MavenSession session;
+
   @Parameter(defaultValue = "${mojoExecution}")
   protected MojoExecution mojoExecution;
 
@@ -73,7 +74,7 @@ public class Wrapper extends TerraformMojo<String> {
     /*
      * Here we create the .tf directory if it doesn't already exist
      */
-    File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
+    final File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
     if (!tf_dir.exists()) {
       if (tf_dir.mkdir()) {
         getLog().info("Directory .tf is created");
@@ -103,89 +104,41 @@ public class Wrapper extends TerraformMojo<String> {
      * Here we check for command line arguments (if any) and update the properties file
      */
     File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
-    File newPropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties2");
-    boolean propExists = propFile.exists();
 
-    if (propExists) {
-      try {
-        Scanner sc             = new Scanner(propFile);
-        BufferedWriter propOut = new BufferedWriter(new FileWriter(newPropFile));
+    // Read from properties file
+    Properties prop = new Properties();
+    prop.setProperty("releaseDir", (System.getProperty("user.dir") + "\\.tf"));
+    try  {
+      InputStream fis = new FileInputStream(propFile);
+      prop.load(fis);
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    }
 
-        /*
-         * Here we read the properties file
-         */
-        while (sc.hasNextLine()) {
-          String curLine = sc.nextLine();
-          int distributionSiteIndex    = curLine.indexOf("distributionSite");
-          int releaseDirIndex          = curLine.indexOf("releaseDir"      );
-          int releaseNameIndex         = curLine.indexOf("releaseName"     );
-          int releaseVerIndex          = curLine.indexOf("releaseVer"      );
-          int releaseOSIndex           = curLine.indexOf("releaseOS"       );
-          int releaseSuffixIndex       = curLine.indexOf("releaseSuffix"   );
-
-          /*
-           * Here we match each line to possibly update if input has been given
-           * We write all the output to a temp output file
-           */
-          if (distributionSiteIndex != -1) {
-            if (indistributionSite != null) {
-              propOut.write("distributionSite=" + indistributionSite + "\n");
-            } else {
-              propOut.write(curLine + "\n");
-            }
-          }
-          if (releaseDirIndex != -1) {
-            if (inreleaseDir != null) {
-              propOut.write("releaseDir=" + inreleaseDir + "\n");
-            } else {
-              propOut.write(curLine + "\n");
-            }
-          }
-          if (releaseNameIndex != -1) {
-            if (inreleaseName != null) {
-              propOut.write("releaseName=" + inreleaseName + "\n");
-            } else {
-              propOut.write(curLine + "\n");
-            }
-          }
-          if (releaseVerIndex != -1) {
-            if (inreleaseVer != null) {
-              propOut.write("releaseVer=" + inreleaseVer + "\n");
-            } else {
-              propOut.write(curLine + "\n");
-            }
-          }
-          if (releaseOSIndex != -1) {
-            if (inreleaseOS != null) {
-              propOut.write("releaseOS=" + inreleaseOS + "\n");
-            } else {
-              propOut.write(curLine + "\n");
-            }
-          }
-          if (releaseSuffixIndex != -1) {
-            if (inreleaseSuffix != null) {
-              propOut.write("releaseSuffix=" + inreleaseSuffix + "\n");
-            } else {
-              propOut.write(curLine + "\n");
-            }
-          }
-        }
-        /*
-         * flush and close the temp output file
-         */
-        propOut.flush();
-        propOut.close();
-        /*
-         * copy the temp output file into the existing prop file
-         */
-        FileUtils.copyFile(newPropFile,propFile);
-        /*
-         * delete the temp output file
-         */
-        newPropFile.delete();
-      } catch (IOException e) {
-        e.printStackTrace();
+    // Write to properties file
+    try {
+      OutputStream fos = new FileOutputStream(propFile);
+      if (indistributionSite != null) {
+        prop.setProperty("distributionSite", indistributionSite);
       }
+      if (inreleaseDir != null) {
+        prop.setProperty("releaseDir", inreleaseDir);
+      }
+      if (inreleaseName != null) {
+        prop.setProperty("releaseName", inreleaseName);
+      }
+      if (inreleaseVer != null) {
+        prop.setProperty("releaseVer", inreleaseVer);
+      }
+      if (inreleaseOS != null) {
+        prop.setProperty("releaseOS", inreleaseOS);
+      }
+      if (inreleaseSuffix != null) {
+        prop.setProperty("releaseSuffix", inreleaseSuffix);
+      }
+      prop.store(fos, "Terraform Wrapper Properties");
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
     }
   }
 }
