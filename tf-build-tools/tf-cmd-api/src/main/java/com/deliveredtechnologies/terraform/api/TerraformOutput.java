@@ -50,7 +50,7 @@ public class TerraformOutput implements TerraformOperation<String> {
       String options = "-json";
 
       if (properties.containsKey("timeout")) {
-        return terraform.execute(options, Integer.parseInt(properties.getProperty("timeout")));
+        return terraform.execute(options, Integer.parseInt(properties.get("timeout").toString()));
       } else {
         return terraform.execute(options);
       }
