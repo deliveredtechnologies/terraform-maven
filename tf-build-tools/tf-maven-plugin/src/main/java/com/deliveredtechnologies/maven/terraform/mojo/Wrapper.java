@@ -10,10 +10,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -74,7 +73,7 @@ public class Wrapper extends TerraformMojo<String> {
     /*
      * Here we create the .tf directory if it doesn't already exist
      */
-    final File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
+    final File tf_dir = new File(".tf");
     if (!tf_dir.exists()) {
       if (tf_dir.mkdir()) {
         getLog().info("Directory .tf is created");
@@ -103,40 +102,40 @@ public class Wrapper extends TerraformMojo<String> {
     /*
      * Here we check for command line arguments (if any) and update the properties file
      */
-    File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
+    File propFile    = new File(".tf" + File.separator + "terraform-maven.properties");
 
     // Read from properties file
     Properties prop = new Properties();
-    prop.setProperty("releaseDir", (System.getProperty("user.dir") + "\\.tf"));
-    try  {
-      InputStream fis = new FileInputStream(propFile);
+    prop.setProperty("releaseDir", (".tf"));
+    try  (InputStream fis = new FileInputStream(propFile)) {
       prop.load(fis);
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
 
-    // Write to properties file
-    try {
-      OutputStream fos = new FileOutputStream(propFile);
-      if (indistributionSite != null) {
-        prop.setProperty("distributionSite", indistributionSite);
+
+    if (indistributionSite != null) {
+      prop.put("distributionSite", indistributionSite);
+    }
+    if (inreleaseDir != null) {
+      prop.put("releaseDir", inreleaseDir);
+    }
+    if (inreleaseName != null) {
+      prop.put("releaseName", inreleaseName);
+    }
+    if (inreleaseVer != null) {
+      prop.put("releaseVer", inreleaseVer);
+    }
+    if (inreleaseOS != null) {
+      prop.put("releaseOS", inreleaseOS);
+    }
+    if (inreleaseSuffix != null) {
+      prop.put("releaseSuffix", inreleaseSuffix);
+    }
+    try (FileWriter file = new FileWriter(propFile)) {
+      for (String key : prop.stringPropertyNames()) {
+        file.write(key + "=" + prop.get(key)  + "\n");
       }
-      if (inreleaseDir != null) {
-        prop.setProperty("releaseDir", inreleaseDir);
-      }
-      if (inreleaseName != null) {
-        prop.setProperty("releaseName", inreleaseName);
-      }
-      if (inreleaseVer != null) {
-        prop.setProperty("releaseVer", inreleaseVer);
-      }
-      if (inreleaseOS != null) {
-        prop.setProperty("releaseOS", inreleaseOS);
-      }
-      if (inreleaseSuffix != null) {
-        prop.setProperty("releaseSuffix", inreleaseSuffix);
-      }
-      prop.store(fos, "Terraform Wrapper Properties");
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
