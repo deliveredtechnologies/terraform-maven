@@ -94,7 +94,7 @@ public class TerraformApply implements TerraformOperation<String> {
           continue;
         }
         if (param == TerraformApplyParam.tfVars) {
-          for (String var : ((String)properties.get(param.property)).split(",")) {
+          for (String var : (properties.get(param.property)).toString().split(",")) {
             options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
           }
           continue;
@@ -107,7 +107,7 @@ public class TerraformApply implements TerraformOperation<String> {
           case plan:
             break;
           default:
-            options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
+            options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
         }
       }
     }
@@ -120,7 +120,7 @@ public class TerraformApply implements TerraformOperation<String> {
       }
 
       if (properties.containsKey("timeout")) {
-        return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty("timeout")));
+        return terraform.execute(options.toString(), Integer.parseInt(properties.get("timeout").toString()));
       } else {
         return terraform.execute(options.toString());
       }
