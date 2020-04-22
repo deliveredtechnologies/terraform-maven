@@ -1,10 +1,10 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.8.1/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.8.1/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.8.1/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.8.2/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.8.2/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.8.2/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.8.1-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.8.2-green.svg
 [maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.9-green.svg
 [tf-maven-plugin-synk-badge]:https://img.shields.io/badge/vulnerabilities-1-yellow.svg
 [tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
@@ -125,8 +125,6 @@ Optional Parameters:
 Description:
 
 Executes the `terraform init` command. See [https://www.terraform.io/docs/commands/init.html](https://www.terraform.io/docs/commands/init.html).
-
-_Note: tf:init depends on tf:get; so tf:get is always executed when tf:init is specified._
 
 Optional Parameters:
 
@@ -279,135 +277,12 @@ the absolute path of the Git Bash executable.
 
 ### Setting Up a Terraform Maven Project
 
-1. Create a generic Maven project. [see Maven Getting Started Guide](https://maven.apache.org/guides/getting-started/index.html)
-2. Add a _src/main/tf_ directory, under which one or more Terraform root module will reside.
-3. Add a paramater to the POM that specifies the version of the Terraform Maven Plugin
-
-```xml
-<properties>
-  <tf-maven-version>0.8.1</tf-maven-version>
-</properties>
-```
-
-4. Configure the build plugins for the Terraform Maven Plugin (see the [tf-s3 example](examples/tf-s3) for reference).
-
-```xml
-  <build>
-    <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>default-install</id>
-              <phase>never</phase>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <!-- disables default jar packaging: https://stackoverflow.com/questions/2188746/what-is-the-best-way-to-avoid-maven-jar -->
-          <artifactId>maven-jar-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>default-jar</id>
-              <phase>never</phase>
-              <configuration>
-                <finalName>unwanted</finalName>
-                <classifier>unwanted</classifier>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-           <groupId>com.deliveredtechnologies</groupId>
-           <artifactId>tf-maven-plugin</artifactId>
-           <version>${tf-maven-version}</version>
-           <executions>
-              <execution>
-                <id>terraform-clean</id>
-                <phase>clean</phase>
-                <goals>
-                  <goal>init</goal>
-                  <goal>destroy</goal>
-                  <goal>clean</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>terraform-plan</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>init</goal>
-                  <goal>plan</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>terraform-install</id>
-                <phase>install</phase>
-                <goals>
-                  <goal>init</goal>
-                  <goal>apply</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>terraform-package</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>package</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>terraform-deploy</id>
-                <phase>deploy</phase>
-                <goals>
-                  <goal>deploy</goal>
-                </goals>
-              </execution>
-        </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <configuration>
-            <skip>true</skip>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>flatten-maven-plugin</artifactId>
-          <version>1.1.0</version>
-          <configuration>
-          </configuration>
-          <executions>
-            <!-- enable flattening -->
-            <execution>
-              <id>flatten</id>
-              <phase>process-resources</phase>
-              <goals>
-                <goal>flatten</goal>
-              </goals>
-            </execution>
-            <!-- ensure proper cleanup -->
-            <execution>
-              <id>flatten.clean</id>
-              <phase>clean</phase>
-              <goals>
-                <goal>clean</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-    </plugins>
-  </build>
-```
-
-### Setting Up a Terraform Maven Project Using an ArcheType
-
 Instead of doing all the above steps you can simply build the module/project by running the [Maven Archetype Plugin](https://maven.apache.org/guides/mini/guide-creating-archetypes.html) which creates project from an archetype.
 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.3 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.8.2 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -415,7 +290,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.7.3
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.8.2
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
@@ -426,10 +301,13 @@ If you used the above configuration, the following Terraform Maven goals are map
 
 | Maven Phase | Terraform Maven Goals |
 |-------------|-----------------------|
-| install     | init, apply           |
+| install     | deploy                |
+| validate    | get
 | clean       | init, destroy, clean  |
 | package     | package               |
 | deploy      | deploy                |
+
+Use the plugin or update the plugin configuration in the POM to call terraform specific commands (e.g. _mvn tf:init tf:apply_).
 
 ### Articles
 
