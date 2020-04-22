@@ -22,7 +22,7 @@ import java.io.IOException;
  * Runs 'terraform init'
  */
 @Execute(goal = "get")
-@Mojo(name = "init", requiresProject = false, defaultPhase = LifecyclePhase.INITIALIZE)
+@Mojo(name = "init", requiresProject = false)
 public class Init extends TerraformMojo<String> {
   @Parameter(property = "tfRootDir")
   String tfRootDir;

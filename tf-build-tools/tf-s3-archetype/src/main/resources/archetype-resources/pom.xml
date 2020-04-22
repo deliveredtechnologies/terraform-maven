@@ -86,7 +86,24 @@
             <id>terraform-clean</id>
             <phase>clean</phase>
             <goals>
+              <goal>init</goal>
+              <goal>destroy</goal>
               <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-plan</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>init</goal>
+              <goal>plan</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-pacakge</id>
+            <phase>package</phase>
+            <goals>
+              <goal>package</goal>
             </goals>
           </execution>
           <execution>
@@ -94,13 +111,6 @@
             <phase>install</phase>
             <goals>
               <goal>deploy</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>terraform-package</id>
-            <phase>package</phase>
-            <goals>
-              <goal>package</goal>
             </goals>
           </execution>
           <execution>
@@ -112,7 +122,7 @@
           </execution>
           <execution>
             <id>terraform-get</id>
-            <phase>test-compile</phase>
+            <phase>validate</phase>
             <goals>
               <goal>get</goal>
             </goals>

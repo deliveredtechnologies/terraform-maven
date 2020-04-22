@@ -112,10 +112,31 @@
             </goals>
           </execution>
           <execution>
+            <id>terraform-pacakge</id>
+            <phase>package</phase>
+            <goals>
+              <goal>package</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>terraform-install</id>
             <phase>install</phase>
             <goals>
               <goal>deploy</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-deploy</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-get</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>get</goal>
             </goals>
           </execution>
         </executions>
