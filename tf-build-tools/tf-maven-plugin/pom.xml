@@ -4,12 +4,18 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
-    <version>0.8.1</version>
+    <version>0.8.2</version>
   </parent>
   <artifactId>tf-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>tf-maven-plugin</name>
   <description>Terraform Maven Plugin :: Bringing build lifecycle management to Terraform!</description>
+  <contributors>
+    <contributor>
+      <name>Lance Arlaus</name>
+      <url>https://github.com/lancearlaus</url>
+    </contributor>
+  </contributors>
   <properties>
     <maven.deploy.skip>false</maven.deploy.skip>
     <maven.install.skip>false</maven.install.skip>

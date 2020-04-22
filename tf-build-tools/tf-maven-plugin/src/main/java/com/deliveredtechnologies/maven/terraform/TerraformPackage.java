@@ -83,7 +83,9 @@ public class TerraformPackage implements TerraformOperation<String> {
       Path targetTfRootPath = targetPath.resolve(targetTfRootDir);
       String tfModulesDir = properties.getProperty(TerraformPackageParams.tfModulesDir.toString());
       String tfRootDir = properties.getProperty(TerraformPackageParams.tfRootDir.toString());
-      boolean isFatTar = Boolean.valueOf(properties.getProperty(TerraformPackageParams.fatTar.toString(), "false"));
+
+      Object isFatTarObj = properties.getOrDefault(TerraformPackageParams.fatTar.toString(), false);
+      boolean isFatTar = isFatTarObj instanceof Boolean ? (Boolean)isFatTarObj : Boolean.valueOf(isFatTarObj.toString());
 
       Path tfModulesPath = !StringUtils.isEmpty(tfModulesDir)
           ? Paths.get(tfModulesDir)

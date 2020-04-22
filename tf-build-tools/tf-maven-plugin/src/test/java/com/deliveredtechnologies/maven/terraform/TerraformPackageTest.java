@@ -55,7 +55,7 @@ public class TerraformPackageTest {
 
   @Test
   public void packageWithFatTarPackagesTfModulesInsideTfRootInTheTargetDir() throws IOException, TerraformException {
-    properties.put(TerraformPackageParams.fatTar.toString(), "true");
+    properties.put(TerraformPackageParams.fatTar.toString(), true);
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
