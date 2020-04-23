@@ -66,6 +66,20 @@ public class TerraformPlanTest {
   }
 
   @Test
+  public void terraformPlanExecutesWhenPlanOutputFileReferencesS3Path() throws IOException, InterruptedException, TerraformException {
+    Path tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath();
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
+    Mockito.when(this.executable.execute(
+      "terraform plan -out=destroy.plan -input=false ")).thenReturn("Success!");
+    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
+
+    this.properties.put(TerraformPlan.TerraformPlanParam.planOutputFile.property, "s3://plan-files-bucket/planfiles/destroy.plan");
+
+    Assert.assertEquals("Success!", terraformPlan.execute(properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
+  }
+
+  @Test
   public void terraformPlanExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
     Mockito.when(this.executable.execute("terraform plan -input=false ")).thenReturn("Success!");

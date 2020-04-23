@@ -107,6 +107,13 @@ public class TerraformPlan implements TerraformOperation<String> {
           continue;
         }
         switch (param) {
+          case planOutputFile:
+            if (properties.getProperty(param.property).startsWith("s3")) {
+              options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property).split("/")[properties.getProperty(param.property).split("/").length - 1]));
+            } else {
+              options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
+            }
+            break;
           case destroyPlan:
           case noColor:
             options.append(String.format("-%1$s ", param));
