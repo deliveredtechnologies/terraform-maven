@@ -8,15 +8,16 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * This is the wrapper class.
@@ -62,7 +63,7 @@ public class Wrapper extends TerraformMojo<String> {
      * Here we determine the OS in order to add that to the prop file
      */
     final String os_name = System.getProperty("os.name");
-    int windowsIndex    = os_name.indexOf("indow");
+    int windowsIndex = os_name.indexOf("indow");
     if (inreleaseOS == null) {
       if (windowsIndex != -1) {
         inreleaseOS = "windows";
@@ -103,40 +104,44 @@ public class Wrapper extends TerraformMojo<String> {
     /*
      * Here we check for command line arguments (if any) and update the properties file
      */
-    File propFile    = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
 
     // Read from properties file
+    File propFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
     Properties prop = new Properties();
     prop.setProperty("releaseDir", (System.getProperty("user.dir") + "\\.tf"));
-    try  {
-      InputStream fis = new FileInputStream(propFile);
+    try (InputStream fis = new FileInputStream(propFile)) {
       prop.load(fis);
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
+    // Update properties from command line args if supplied
+    if (indistributionSite != null) {
+      prop.setProperty("distributionSite", indistributionSite);
+    }
+    if (inreleaseDir != null) {
+      prop.setProperty("releaseDir", inreleaseDir);
+    }
+    if (inreleaseName != null) {
+      prop.setProperty("releaseName", inreleaseName);
+    }
+    if (inreleaseVer != null) {
+      prop.setProperty("releaseVer", inreleaseVer);
+    }
+    if (inreleaseOS != null) {
+      prop.setProperty("releaseOS", inreleaseOS);
+    }
+    if (inreleaseSuffix != null) {
+      prop.setProperty("releaseSuffix", inreleaseSuffix);
+    }
 
     // Write to properties file
-    try {
-      OutputStream fos = new FileOutputStream(propFile);
-      if (indistributionSite != null) {
-        prop.setProperty("distributionSite", indistributionSite);
+    final File PropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
+    try (BufferedWriter propOut = new BufferedWriter(new FileWriter(PropFile))) {
+      Set<String> keys = prop.stringPropertyNames();
+      for (String key : keys) {
+        propOut.write(key + "=" + prop.getProperty(key) + "\n");
       }
-      if (inreleaseDir != null) {
-        prop.setProperty("releaseDir", inreleaseDir);
-      }
-      if (inreleaseName != null) {
-        prop.setProperty("releaseName", inreleaseName);
-      }
-      if (inreleaseVer != null) {
-        prop.setProperty("releaseVer", inreleaseVer);
-      }
-      if (inreleaseOS != null) {
-        prop.setProperty("releaseOS", inreleaseOS);
-      }
-      if (inreleaseSuffix != null) {
-        prop.setProperty("releaseSuffix", inreleaseSuffix);
-      }
-      prop.store(fos, "Terraform Wrapper Properties");
+      propOut.flush();
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
