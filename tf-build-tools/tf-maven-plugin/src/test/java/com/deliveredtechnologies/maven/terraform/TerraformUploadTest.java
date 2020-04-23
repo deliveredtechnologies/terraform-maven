@@ -12,23 +12,23 @@ import java.util.Properties;
 
 public class TerraformUploadTest {
 
-  private Properties properties;
-
-  @Before
-  public void setup() {
-    this.properties = Mockito.spy(Properties.class);
-  }
+//  private Properties properties;
+//
+//  @Before
+//  public void setup() {
+//    this.properties = Mockito.spy(Properties.class);
+//  }
 
   @Test
   public void terraformUploadCliUploadsToS3WithKmsEncryption() throws IOException, InterruptedException {
 
-    String planOutputFile = "test.json";
-    String sse  = "sse";
-    String kmsKeyId = "1234";
-
-    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
-    properties.put(TerraformUploadParams.sse.toString(),sse);
-    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
+//    String planOutputFile = "test.json";
+//    String sse  = "sse";
+//    String kmsKeyId = "1234";
+//
+//    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
+//    properties.put(TerraformUploadParams.sse.toString(),sse);
+//    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
 
     Executable executable = Mockito.mock(Executable.class);
     Logger logger = Mockito.mock(Logger.class);
@@ -44,13 +44,13 @@ public class TerraformUploadTest {
   @Test
   public void terraformUploadCliUploadsToS3WithNoEncryption() throws IOException, InterruptedException {
 
-    String planOutputFile = "test.json";
-    String sse  = "AES:256";
-    String kmsKeyId = "1234";
-
-    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
-    properties.put(TerraformUploadParams.sse.toString(),sse);
-    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
+//    String planOutputFile = "test.json";
+//    String sse  = "AES:256";
+//    String kmsKeyId = "1234";
+//
+//    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
+//    properties.put(TerraformUploadParams.sse.toString(),sse);
+//    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
 
     Executable executable = Mockito.mock(Executable.class);
     Logger logger = Mockito.mock(Logger.class);
