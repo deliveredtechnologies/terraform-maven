@@ -56,13 +56,13 @@ public class TerraformDeploy implements TerraformOperation<String> {
   final Properties deployFileToMavenRepo(Invoker invoker, InvocationRequest request, Properties properties) throws TerraformException {
     Properties deployFileProps = new Properties();
 
-    deployFileProps.put(TerraformDeployParam.url.toString(), properties.getProperty(TerraformDeployParam.url.toString(), String.format("file://%1$s", Paths.get(System.getenv("HOME"), ".m2", "repository"))));
+    deployFileProps.put(TerraformDeployParam.url.toString(), properties.getOrDefault(TerraformDeployParam.url.toString(), String.format("file://%1$s", Paths.get(System.getenv("HOME"), ".m2", "repository"))).toString());
 
     if (!properties.containsKey(TerraformDeployParam.file.toString())) {
       Path targetPath = Paths.get("target").resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
       deployFileProps.setProperty(TerraformDeployParam.file.toString(), targetPath.toString());
     } else {
-      deployFileProps.setProperty(TerraformDeployParam.file.toString(), properties.getProperty(TerraformDeployParam.file.toString()));
+      deployFileProps.setProperty(TerraformDeployParam.file.toString(), properties.get(TerraformDeployParam.file.toString()).toString());
     }
     
     deployFileProps.put(TerraformDeployParam.packaging.toString(), PACKAGING);
@@ -79,7 +79,7 @@ public class TerraformDeploy implements TerraformOperation<String> {
         Path pomFile = Paths.get(".flattened-pom.xml");
         deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), pomFile.toAbsolutePath().toString());
       } else {
-        deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.getProperty(TerraformDeployParam.pomFile.toString()));
+        deployFileProps.setProperty(TerraformDeployParam.pomFile.toString(), properties.get(TerraformDeployParam.pomFile.toString()).toString());
       }
       log.info(String.format("Using POM: %1$s", deployFileProps.getProperty(TerraformDeployParam.pomFile.toString())));
     }

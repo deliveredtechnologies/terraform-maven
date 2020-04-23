@@ -91,7 +91,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
         continue;
       }
       if (param == TerraformDestroyParam.tfVars) {
-        for (String var : ((String)properties.get(param.property)).split(",")) {
+        for (String var : (properties.get(param.property)).toString().split(",")) {
           options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
         }
         continue;
@@ -103,7 +103,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
           options.append(String.format("-%1$s=%2$s ", param.toString(), properties.getProperty(param.property)));
           break;
         case noColor:
-          options.append(String.format("-%1$s ", param).toString());
+          options.append(String.format("-%1$s ", param));
           break;
         default:
           break;
@@ -113,7 +113,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
 
     try {
       if (properties.containsKey(TerraformDestroyParam.timeout.property)) {
-        return terraform.execute(options.toString(), Integer.parseInt(properties.getProperty(TerraformDestroyParam.timeout.property)));
+        return terraform.execute(options.toString(), Integer.parseInt(properties.get(TerraformDestroyParam.timeout.property).toString()));
       } else {
         return terraform.execute(options.toString());
       }
