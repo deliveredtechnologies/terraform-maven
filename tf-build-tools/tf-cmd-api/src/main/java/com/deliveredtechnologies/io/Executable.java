@@ -14,4 +14,3 @@ public interface Executable {
 
   public void setLogger(Logger logger);
 }
-
