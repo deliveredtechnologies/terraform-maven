@@ -1,7 +1,9 @@
 package com.deliveredtechnologies.maven.terraform;
 
-import com.deliveredtechnologies.maven.terraform.TerraformUpload.TerraformUploadParams;
 import com.deliveredtechnologies.io.Executable;
+import com.deliveredtechnologies.maven.terraform.TerraformUpload.TerraformUploadParams;
+import com.deliveredtechnologies.terraform.TerraformException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,54 +14,52 @@ import java.util.Properties;
 
 public class TerraformUploadTest {
 
-//  private Properties properties;
-//
-//  @Before
-//  public void setup() {
-//    this.properties = Mockito.spy(Properties.class);
-//  }
+  private Properties properties;
+  private Executable executable;
+  private Logger logger;
+
+  /**
+   * Sets up the properties, mock(s) and the default terraform directory.
+   */
+  @Before
+  public void setup() {
+    properties = new Properties();
+    executable = Mockito.mock(Executable.class);
+    logger = Mockito.mock(Logger.class);
+  }
 
   @Test
   public void terraformUploadCliUploadsToS3WithKmsEncryption() throws IOException, InterruptedException {
-
-//    String planOutputFile = "test.json";
-//    String sse  = "sse";
-//    String kmsKeyId = "1234";
-//
-//    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
-//    properties.put(TerraformUploadParams.sse.toString(),sse);
-//    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
-
-    Executable executable = Mockito.mock(Executable.class);
-    Logger logger = Mockito.mock(Logger.class);
-
-    TerraformUpload tfUpload = new TerraformUpload(executable, logger);
-
-    tfUpload.terraformUploadCli("body", "s3://key", "sse", "kmsId", false);
-
-    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp body s3://key --sse sse --sse-kms-key-id kmsId ");
-
+    TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
+    String planOutputFile = "test.json";
+    String sse  = "aws:kms";
+    String kmsKeyId = "4d6f7e4-b816-42f5-87b2-c5952285e53c";
+    String s3BucketKey = "s3://terraform-maven-state/planfiles";
+    terraformUpload.terraformUploadCli(planOutputFile, s3BucketKey, sse, kmsKeyId, false);
+    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles --sse aws:kms --sse-kms-key-id 4d6f7e4-b816-42f5-87b2-c5952285e53c ");
   }
 
   @Test
   public void terraformUploadCliUploadsToS3WithNoEncryption() throws IOException, InterruptedException {
+    TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
+    String planOutputFile = "test.json";
+    String sse  = "AES:256";
+    String s3BucketKey = "s3://terraform-maven-state/planfiles";
+    terraformUpload.terraformUploadCli(planOutputFile, s3BucketKey, sse, null, false);
+    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles ");
+  }
 
-//    String planOutputFile = "test.json";
-//    String sse  = "AES:256";
-//    String kmsKeyId = "1234";
-//
-//    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
-//    properties.put(TerraformUploadParams.sse.toString(),sse);
-//    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
-
-    Executable executable = Mockito.mock(Executable.class);
-    Logger logger = Mockito.mock(Logger.class);
-
-    TerraformUpload tfupload = new TerraformUpload(executable, logger);
-
-    tfupload.terraformUploadCli("body", "s3://key", "AES:256", "kmsId", false);
-
-    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp body s3://key ");
-
+  @Test
+  public void terraformUploadCliUploadsToS3ReturnsPlanFileName() throws IOException, TerraformException {
+    TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
+    String planOutputFile = "s3://terraform-maven-state/planfiles/test.json";
+    String sse  = "aws:kms";
+    String kmsKeyId = "4d6f7e4-b816-42f5-87b2-c5952285e53c";
+    String planFileName = "test.json";
+    properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
+    properties.put(TerraformUploadParams.sse.toString(),sse);
+    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
+    Assert.assertEquals(planFileName, terraformUpload.execute(properties));
+    Assert.assertEquals(3, properties.size());
   }
 }
