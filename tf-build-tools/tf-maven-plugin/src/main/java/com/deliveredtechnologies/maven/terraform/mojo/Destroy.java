@@ -25,14 +25,32 @@ public class Destroy extends TerraformMojo<String> {
   @Parameter(property = "artifact")
   String artifact;
 
+  @Parameter(property = "lockTimeout")
+  String lockTimeout;
+
+  @Parameter(property = "tfVarFiles")
+  String tfVarFiles;
+
+  @Parameter(property = "tfVars")
+  String tfVars;
+
+  @Parameter(property = "target")
+  String target;
+
+  @Parameter(property = "noColor")
+  boolean noColor = true;
+
+  @Parameter(property = "timeout")
+  long timeout;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
       if (!StringUtils.isEmpty(artifact)) {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
-        tfRootDir = mavenRepoExecutableOp.execute(System.getProperties());
+        tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-      execute(new TerraformDestroy(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
+      execute(new TerraformDestroy(tfRootDir, new MavenSlf4jAdapter(getLog())), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }

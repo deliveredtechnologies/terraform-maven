@@ -25,12 +25,42 @@ public class Plan extends TerraformMojo<String> {
   @Parameter(property = "artifact")
   String artifact;
 
+  @Parameter(property = "tfVars")
+  String tfVars;
+
+  @Parameter(property = "tfVarFiles")
+  String tfVarFiles;
+
+  @Parameter(property = "lockTimeout")
+  String lockTimeout;
+
+  @Parameter(property = "target")
+  String target;
+
+  @Parameter(property = "planInput")
+  boolean planInput = false;
+
+  @Parameter(property = "refreshState")
+  boolean refreshState = true;
+
+  @Parameter(property = "tfState")
+  String tfState;
+
+  @Parameter(property = "noColor")
+  boolean noColor;
+
+  @Parameter(property = "destroyPlan")
+  boolean destroyPlan;
+
+  @Parameter(property = "timeout")
+  long timeout;
+
   @Override
   public void execute() throws MojoExecutionException {
     try {
       if (!StringUtils.isEmpty(artifact)) {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
-        tfRootDir = mavenRepoExecutableOp.execute(System.getProperties());
+        tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
       execute(new TerraformUpload(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());

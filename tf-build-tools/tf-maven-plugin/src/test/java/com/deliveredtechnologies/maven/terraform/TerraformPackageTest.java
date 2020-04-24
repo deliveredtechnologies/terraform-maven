@@ -55,7 +55,7 @@ public class TerraformPackageTest {
 
   @Test
   public void packageWithFatTarPackagesTfModulesInsideTfRootInTheTargetDir() throws IOException, TerraformException {
-    properties.put(TerraformPackageParams.fatTar.toString(), "true");
+    properties.put(TerraformPackageParams.fatTar.toString(), true);
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
@@ -137,7 +137,7 @@ public class TerraformPackageTest {
     String response = this.terraformPackage.execute(properties);
 
     Assert.assertEquals(response, String.format("Created zip file '%1$s'", zipFilePath.toString()));
-    Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals(3, this.targetTfRootModule.toFile().listFiles().length);
     Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("root")));
     Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("other")));
 
@@ -149,7 +149,7 @@ public class TerraformPackageTest {
         zipEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(4, count);
+      Assert.assertEquals(6, count);
       Assert.assertTrue(zipEntryNames.contains("root/"));
       Assert.assertTrue(zipEntryNames.contains("other/"));
       Assert.assertTrue(zipEntryNames.contains("root/main.tf"));
