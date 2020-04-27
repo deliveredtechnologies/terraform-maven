@@ -9,7 +9,6 @@ import com.deliveredtechnologies.terraform.api.TerraformOperation;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
