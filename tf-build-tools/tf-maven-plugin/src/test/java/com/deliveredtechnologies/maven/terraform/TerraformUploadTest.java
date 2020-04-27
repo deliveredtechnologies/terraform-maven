@@ -59,16 +59,15 @@ public class TerraformUploadTest {
     properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
     properties.put(TerraformUploadParams.sse.toString(),sse);
     properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
-    Assert.assertEquals(tfRootPath, terraformUpload.execute(properties));
+    Assert.assertEquals(String.format("Plan saved to %1$s", planOutputFile), terraformUpload.execute(properties));
     Assert.assertEquals(3, properties.size());
   }
 
   @Test
   public void terraformUploadCliTestWithNoProperties() throws IOException, TerraformException {
-    String tfRootPath = "src/main/tf/root";
     TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
     terraformUpload.execute(properties);
-    Assert.assertEquals(tfRootPath, terraformUpload.execute(properties));
+    Assert.assertNull(terraformUpload.execute(properties));
   }
 
   @Test

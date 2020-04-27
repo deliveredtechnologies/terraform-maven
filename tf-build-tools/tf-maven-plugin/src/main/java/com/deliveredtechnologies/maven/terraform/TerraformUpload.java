@@ -20,7 +20,6 @@ import java.util.Properties;
 public class TerraformUpload implements TerraformOperation<String> {
   private Executable executable;
 
-  private String tfRootDir;
   private Logger logger;
 
   enum TerraformUploadParams {
@@ -54,9 +53,7 @@ public class TerraformUpload implements TerraformOperation<String> {
    */
   @Override
   public String execute(Properties properties) throws TerraformException, IOException {
-    Path tfRootPath = tfRootDir == null  ? TerraformUtils.getDefaultTerraformRootModuleDir() : Paths.get(tfRootDir);
-    logger.debug(String.format("tfRootPath is %1$s", tfRootPath.toAbsolutePath().toString()));
-
+    String response = null;
     if (properties.getProperty(TerraformUploadParams.planOutputFile.toString()) != null) {
       String planOutputFile = properties.getProperty(TerraformUploadParams.planOutputFile.toString()); //TODO for destroyPlan
       String planFileName = planOutputFile.startsWith("s3") ? planOutputFile.split("/")[planOutputFile.split("/").length - 1] : planOutputFile;
@@ -64,11 +61,12 @@ public class TerraformUpload implements TerraformOperation<String> {
       String sse = properties.getProperty(TerraformUploadParams.sse.toString()) == null ? "AES:256" : properties.getProperty(TerraformUploadParams.sse.toString());
       String kmsKeyId = properties.getProperty(TerraformUploadParams.kmsKeyId.toString());
       if (planOutputFile.startsWith("s3")) {
+        response = String.format("Plan saved to %1$s", planOutputFile);
         logger.debug("File Uploading to S3");
         terraformUploadCli(planFileName, planOutputFile, sse, kmsKeyId, false);
       }
     }
-    return tfRootPath.toString();
+    return response;
   }
 
   /**
