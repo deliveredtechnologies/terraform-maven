@@ -50,16 +50,34 @@ public class TerraformUploadTest {
   }
 
   @Test
-  public void terraformUploadCliUploadsToS3ReturnsPlanFileName() throws IOException, TerraformException {
+  public void terraformUploadCliUploadsToS3ReturnsTFRootDirectoryName() throws IOException, TerraformException {
     TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
     String planOutputFile = "s3://terraform-maven-state/planfiles/test.json";
     String sse  = "aws:kms";
     String kmsKeyId = "4d6f7e4-b816-42f5-87b2-c5952285e53c";
-    String planFileName = "test.json";
+    String tfRootPath = "src/main/tf/root";
     properties.put(TerraformUploadParams.kmsKeyId.toString(),kmsKeyId);
     properties.put(TerraformUploadParams.sse.toString(),sse);
     properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
-    Assert.assertEquals(planFileName, terraformUpload.execute(properties));
+    Assert.assertEquals(tfRootPath, terraformUpload.execute(properties));
     Assert.assertEquals(3, properties.size());
+  }
+
+  @Test
+  public void terraformUploadCliTestWithNoProperties() throws IOException, TerraformException {
+    String tfRootPath = "src/main/tf/root";
+    TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
+    terraformUpload.execute(properties);
+    Assert.assertEquals(tfRootPath, terraformUpload.execute(properties));
+  }
+
+  @Test
+  public void terraformUploadCliNotStartsWithS3() throws IOException, TerraformException {
+    TerraformUpload terraformUpload = new TerraformUpload(executable, logger);
+    String planOutputFile = "test.json";
+    String planFileName = "test.json";
+    terraformUpload.execute(properties);
+    properties.put(TerraformUploadParams.planOutputFile.toString(),planOutputFile);
+    Assert.assertEquals(planOutputFile,planFileName);
   }
 }

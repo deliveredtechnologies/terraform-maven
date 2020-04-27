@@ -56,12 +56,19 @@ public class TerraformUpload implements TerraformOperation<String> {
   public String execute(Properties properties) throws TerraformException, IOException {
     Path tfRootPath = tfRootDir == null  ? TerraformUtils.getDefaultTerraformRootModuleDir() : Paths.get(tfRootDir);
     logger.debug(String.format("tfRootPath is %1$s", tfRootPath.toAbsolutePath().toString()));
-    String planOutputFile = properties.getProperty(TerraformUploadParams.planOutputFile.toString()); //TODO for destroyPlan
-    String planFileName = planOutputFile.startsWith("s3") ? planOutputFile.split("/")[planOutputFile.split("/").length - 1] : properties.getProperty(TerraformUploadParams.planOutputFile.toString());
-    String sse = properties.getProperty(TerraformUploadParams.sse.toString()) == null ? "AES:256" : properties.getProperty(TerraformUploadParams.sse.toString());
-    String kmsKeyId = properties.getProperty(TerraformUploadParams.kmsKeyId.toString());
-    terraformUploadCli(planFileName, planOutputFile, sse, kmsKeyId, false);
-    return planFileName;
+
+    if (properties.getProperty(TerraformUploadParams.planOutputFile.toString()) != null) {
+      String planOutputFile = properties.getProperty(TerraformUploadParams.planOutputFile.toString()); //TODO for destroyPlan
+      String planFileName = planOutputFile.startsWith("s3") ? planOutputFile.split("/")[planOutputFile.split("/").length - 1] : planOutputFile;
+      logger.debug("checking for plan file " + planFileName);
+      String sse = properties.getProperty(TerraformUploadParams.sse.toString()) == null ? "AES:256" : properties.getProperty(TerraformUploadParams.sse.toString());
+      String kmsKeyId = properties.getProperty(TerraformUploadParams.kmsKeyId.toString());
+      if (planOutputFile.startsWith("s3")) {
+        logger.debug("File Uploading to S3");
+        terraformUploadCli(planFileName, planOutputFile, sse, kmsKeyId, false);
+      }
+    }
+    return tfRootPath.toString();
   }
 
   /**
@@ -74,19 +81,15 @@ public class TerraformUpload implements TerraformOperation<String> {
    *
    */
   protected void terraformUploadCli(String body, String key, String sse, String kmsKeyId, boolean recursive ) throws IOException {
-
     try {
       String recCmd = recursive ? "--recursive" : "";
-      if (key.startsWith("s3")) {
-        if (sse.equals("AES:256")) {
-          logger.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
-          executable.execute(String.format("aws s3 cp %1$s %2$s %3$s", body, key, recCmd));
-        } else {
-          logger.debug("uploading plan files to Amazon S3 with kms encryption");
-          executable.execute(String.format("aws s3 cp %1$s %2$s --sse %3$s --sse-kms-key-id %4$s %5$s", body, key, sse, kmsKeyId, recCmd));
-        }
+      if (sse.equals("AES:256")) {
+        logger.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
+        executable.execute(String.format("aws s3 cp %1$s %2$s %3$s", body, key, recCmd));
+
       } else {
-        logger.debug("pass -DplanOutputFile value as s3://<bucket_name>/<key_prefix>/<key_name>  to store plan files in s3");
+        logger.debug("uploading plan files to Amazon S3 with kms encryption");
+        executable.execute(String.format("aws s3 cp %1$s %2$s --sse %3$s --sse-kms-key-id %4$s %5$s", body, key, sse, kmsKeyId, recCmd));
       }
     } catch (InterruptedException e) {
       e.printStackTrace();
