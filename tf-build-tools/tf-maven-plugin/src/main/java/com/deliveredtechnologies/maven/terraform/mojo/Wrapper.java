@@ -75,7 +75,7 @@ public class Wrapper extends TerraformMojo<String> {
     /*
      * Here we create the .tf directory if it doesn't already exist
      */
-    final File tf_dir = new File(System.getProperty("user.dir") + "\\.tf");
+    final File tf_dir = new File(".tf");
     if (!tf_dir.exists()) {
       if (tf_dir.mkdir()) {
         getLog().info("Directory .tf is created");
@@ -95,8 +95,8 @@ public class Wrapper extends TerraformMojo<String> {
       if (!(tfwFileName.endsWith(".properties") && tfwFile.exists())) {
         try {
           FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource("tf/" + tfwFileName), tfWrapperPath.resolve(tfwFileName).toFile());
-        } catch (IOException e) {
-          e.printStackTrace();
+        } catch (IOException ioe) {
+          throw new MojoExecutionException(String.format("Unable to create %s!", tfwFileName), ioe);
         }
       }
     }
@@ -106,13 +106,13 @@ public class Wrapper extends TerraformMojo<String> {
      */
 
     // Read from properties file
-    File propFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
+    File propFile = new File(String.format(".tf%sterraform-maven.properties", File.separator));
     Properties prop = new Properties();
-    prop.setProperty("releaseDir", (System.getProperty("user.dir") + "\\.tf"));
+    prop.setProperty("releaseDir", ".tf");
     try (InputStream fis = new FileInputStream(propFile)) {
       prop.load(fis);
     } catch (IOException ioe) {
-      ioe.printStackTrace();
+      throw new MojoExecutionException(String.format("Unable to load properties from %s!", propFile.getName()), ioe);
     }
     // Update properties from command line args if supplied
     if (indistributionSite != null) {
@@ -135,15 +135,14 @@ public class Wrapper extends TerraformMojo<String> {
     }
 
     // Write to properties file
-    final File PropFile = new File(System.getProperty("user.dir") + "\\.tf\\terraform-maven.properties");
-    try (BufferedWriter propOut = new BufferedWriter(new FileWriter(PropFile))) {
+    try (BufferedWriter propOut = new BufferedWriter(new FileWriter(propFile))) {
       Set<String> keys = prop.stringPropertyNames();
       for (String key : keys) {
         propOut.write(key + "=" + prop.getProperty(key) + "\n");
       }
       propOut.flush();
     } catch (IOException ioe) {
-      ioe.printStackTrace();
+      throw new MojoExecutionException(String.format("Unable to write properties to %s!", propFile.getName()), ioe);
     }
   }
 }
