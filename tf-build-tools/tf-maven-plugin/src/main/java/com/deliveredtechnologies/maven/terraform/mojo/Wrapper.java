@@ -141,8 +141,8 @@ public class Wrapper extends TerraformMojo<String> {
         propOut.write(key + "=" + prop.getProperty(key) + "\n");
       }
       propOut.flush();
-    } catch (IOException ioe) {
-      throw new MojoExecutionException(String.format("Unable to write properties to %s!", propFile.getName()), ioe);
+    } catch (IOException e) {
+      throw new MojoExecutionException(String.format("Unable to write properties to %s!", propFile.getName()), e);
     }
   }
 }
