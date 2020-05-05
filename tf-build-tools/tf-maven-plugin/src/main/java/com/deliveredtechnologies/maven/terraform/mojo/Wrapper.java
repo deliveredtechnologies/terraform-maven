@@ -95,8 +95,8 @@ public class Wrapper extends TerraformMojo<String> {
       if (!(tfwFileName.endsWith(".properties") && tfwFile.exists())) {
         try {
           FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource("tf/" + tfwFileName), tfWrapperPath.resolve(tfwFileName).toFile());
-        } catch (IOException ioe) {
-          throw new MojoExecutionException(String.format("Unable to create %s!", tfwFileName), ioe);
+        } catch (IOException e) {
+          throw new MojoExecutionException(String.format("Unable to create %s!", tfwFileName), e);
         }
       }
     }
@@ -111,8 +111,8 @@ public class Wrapper extends TerraformMojo<String> {
     prop.setProperty("releaseDir", ".tf");
     try (InputStream fis = new FileInputStream(propFile)) {
       prop.load(fis);
-    } catch (IOException ioe) {
-      throw new MojoExecutionException(String.format("Unable to load properties from %s!", propFile.getName()), ioe);
+    } catch (IOException e) {
+      throw new MojoExecutionException(String.format("Unable to load properties from %s!", propFile.getName()), e);
     }
     // Update properties from command line args if supplied
     if (indistributionSite != null) {
