@@ -19,6 +19,7 @@ import java.io.IOException;
  */
 @Mojo(name = "apply", requiresProject = false)
 public class Apply extends TerraformMojo<String> {
+
   @Parameter(property = "tfRootDir")
   String tfRootDir;
 
@@ -37,11 +38,17 @@ public class Apply extends TerraformMojo<String> {
   @Parameter(property = "target")
   String target;
 
+  @Parameter(property = "plan")
+  String plan;
+
   @Parameter(property = "noColor")
   boolean noColor = true;
 
   @Parameter(property = "timeout")
   long timeout;
+
+  @Parameter(property = "refreshState")
+  boolean refreshState = true;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {

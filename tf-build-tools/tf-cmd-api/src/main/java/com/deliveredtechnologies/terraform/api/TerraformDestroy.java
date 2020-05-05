@@ -23,6 +23,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
     tfVars("var"),
     tfVarFiles("var-file"),
     noColor("no-color"),
+    refreshState("refresh"),
     timeout("timeout");
 
     Optional<String> name = Optional.empty();
@@ -72,6 +73,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
    *   target - resource target<br>
    *   autoApprove - approve without prompt<br>
    *   noColor - remove color encoding from output<br>
+   *   refreshState - if true then refresh the state prior to destroy<br>
    *   timeout - how long in milliseconds the terraform apply command can run<br>
    * </p>
    * @param properties  paramter options and properties for terraform apply

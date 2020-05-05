@@ -37,6 +37,9 @@ public class Plan extends TerraformMojo<String> {
   @Parameter(property = "target")
   String target;
 
+  @Parameter(property = "planOutputFile")
+  String planOutputFile;
+
   @Parameter(property = "planInput")
   boolean planInput = false;
 
