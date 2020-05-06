@@ -1,6 +1,6 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -84,13 +84,46 @@ public class WrapperTest {
       }
     }
 
+    wrapper.execute();
+
+    Assert.assertTrue(tfDir.exists());
+    for (String tfwFileName : tfwFileNames) {
+      Assert.assertTrue(tfPath.resolve(tfwFileName).toFile().exists());
+    }
+
+    Properties props = new Properties();
+    try (InputStream fis = new FileInputStream(tfPath.resolve(tfwFileNames[3]).toFile())) {
+      props.load(fis);
+      Assert.assertEquals(props.getProperty("distributionSite"), "https://releases.hashicorp.com");
+      Assert.assertEquals(props.getProperty("releaseDir"), "terraform");
+      Assert.assertEquals(props.getProperty("releaseName"), "terraform");
+      Assert.assertEquals(props.getProperty("releaseVer"), "0.12.24");
+      Assert.assertEquals(props.getProperty("releaseOS"), System.getProperty("os.name").contains("indow") ? "windows" : "linux");
+      Assert.assertEquals(props.getProperty("releaseSuffix"), "amd64.zip");
+    }
   }
 
-
-
   @Test
-  public void testSetup() {
-    String str = "Testing junit setup";
-    assertEquals("Testing junit setup",str);
+  public void setInputParamsAndCheckTheyGetSetCorrectly() throws MojoFailureException, MojoExecutionException, IOException {
+    Path tfPath = Paths.get(".tf");
+    String[] tfwFileNames = {"tfw", "tfw.cmd", "tfw.ps1", "terraform-maven.properties"};
+    File tfDir = tfPath.toFile();
+    wrapper.indistributionSite = "https://releases.hashicorp.comTest";
+    wrapper.inreleaseDir = "terraformTest";
+    wrapper.inreleaseName = "terraformTest";
+    wrapper.inreleaseVer = "0.12.24Test";
+    wrapper.inreleaseOS = "windowsTest";
+    wrapper.inreleaseSuffix = "amd64.zipTest";
+    wrapper.execute();
+    try (InputStream fis = new FileInputStream(tfPath.resolve(tfwFileNames[3]).toFile())) {
+      Properties props = new Properties();
+      props.load(fis);
+      Assert.assertEquals(props.getProperty("distributionSite"), "https://releases.hashicorp.comTest");
+      Assert.assertEquals(props.getProperty("releaseDir"), "terraformTest");
+      Assert.assertEquals(props.getProperty("releaseName"), "terraformTest");
+      Assert.assertEquals(props.getProperty("releaseVer"), "0.12.24Test");
+      Assert.assertEquals(props.getProperty("releaseOS"), "windowsTest");
+      Assert.assertEquals(props.getProperty("releaseSuffix"), "amd64.zipTest");
+    }
   }
 }
