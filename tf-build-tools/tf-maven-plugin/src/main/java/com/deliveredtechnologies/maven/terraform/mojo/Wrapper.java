@@ -32,22 +32,22 @@ public class Wrapper extends TerraformMojo<String> {
    * the -D switch
    */
   @Parameter( property = "distributionSite")
-  public String indistributionSite;
+  String indistributionSite;
 
   @Parameter( property = "releaseDir"      )
-  public String inreleaseDir;
+  String inreleaseDir;
 
   @Parameter( property = "releaseName"     )
-  public String inreleaseName;
+  String inreleaseName;
 
   @Parameter( property = "releaseVer"      )
-  public String inreleaseVer;
+  String inreleaseVer;
 
   @Parameter( property = "releaseOS"       )
-  public String inreleaseOS;
+  String inreleaseOS;
 
   @Parameter( property = "releaseSuffix"   )
-  public String inreleaseSuffix;
+  String inreleaseSuffix;
 
   @Parameter(defaultValue = "${session}")
   protected MavenSession session;
