@@ -183,7 +183,7 @@ Optional Parameters:
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                                 |
 | plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used                             |
 | tfRootDir   | String | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory         |
-| refreshState | Boolean | If set to "true" then Terraform will refresh the state before apply                                               |
+| refreshState | Boolean | If set to "true" then Terraform will refresh the state before apply                                              |
 | timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min                       |
 | artifact    | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module |
 
@@ -204,10 +204,8 @@ Optional Parameters:
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                                        |
 | target      | Number | A resource address to target                                                                                       |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                                 |
-| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                                             |
-| plan        | String | A terraform plan to destroy; if both plan and tfRootDir are specified, only plan is used                           |
+| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
 | timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; defaults to 10min                     |
-| refreshState | Boolean | If set to "true" then Terraform will refresh the state before destroy                                             |
 | artifact    | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module |
 
 ---

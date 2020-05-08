@@ -23,7 +23,6 @@ public class TerraformDestroy implements TerraformOperation<String> {
     tfVars("var"),
     tfVarFiles("var-file"),
     noColor("no-color"),
-    refreshState("refresh"),
     timeout("timeout");
 
     Optional<String> name = Optional.empty();
