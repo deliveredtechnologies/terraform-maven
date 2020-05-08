@@ -5,6 +5,7 @@ import com.deliveredtechnologies.terraform.api.TerraformOperation;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -85,5 +86,31 @@ public class TerraformMojoTest {
     };
 
     terraformMojo.execute();
+  }
+
+  @Test
+  public void getFieldAsPropertiesGetsOnlyTheSetSubclassFieldsAsProperties() throws MojoExecutionException {
+    TerraformMojoStub terraformMojoStub = new TerraformMojoStub();
+    terraformMojoStub.boolProp = true;
+    terraformMojoStub.intProp = 22;
+    terraformMojoStub.longProp = 1000;
+    terraformMojoStub.stringProp = "Hello";
+
+    properties = terraformMojoStub.getFieldsAsProperties();
+
+    Assert.assertEquals(properties.size(), 4);
+    Assert.assertEquals(properties.get("boolProp"), true);
+    Assert.assertEquals(properties.get("intProp"), 22);
+    Assert.assertEquals(properties.get("longProp"), 1000L);
+    Assert.assertEquals(properties.get("stringProp"), "Hello");
+
+    terraformMojoStub.boolProp = false;
+    terraformMojoStub.intProp = 0;
+    terraformMojoStub.longProp = 0;
+
+    properties = terraformMojoStub.getFieldsAsProperties();
+
+    Assert.assertEquals(properties.size(), 1);
+    Assert.assertEquals(properties.get("stringProp"), "Hello");
   }
 }

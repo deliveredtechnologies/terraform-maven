@@ -95,7 +95,7 @@ public class TerraformInit implements TerraformOperation<String> {
             case pluginDir:
             case getPlugins:
             case verifyPlugins:
-              options.append(String.format("-%1$s=%2$s ", param.toString(), properties.getProperty(param.property)));
+              options.append(String.format("-%1$s=%2$s ", param.toString(), properties.get(param.property).toString()));
               break;
             default:
               break;
