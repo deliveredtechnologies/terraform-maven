@@ -1,7 +1,5 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
-//import static org.junit.Assert.assertEquals;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -18,10 +16,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-
-
-//import static org.junit.Assert.assertEquals;
-//import static org.mockito.Mockito.*;
 
 /**
  * WrapperTest class.
