@@ -5,7 +5,10 @@ import com.deliveredtechnologies.io.Executable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -91,6 +94,19 @@ public class TerraformCommandLineDecorator implements Executable {
   }
 
   private String getTerraformCommand(String command) {
+    Path tfPath = Paths.get(".tf");
+    File tfDir = tfPath.toFile();
+    try {
+      if (tfDir.exists()) {
+        File tfScr = new File(String.format("%s%stf.cmd", tfDir, File.separator));
+        if (tfScr.exists()) {
+          return String.format("%s %1$s %2$s", tfScr, cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      //throw new MojoExecutionException(String.format("Unable to load properties from %s!", tfDir.getName()), e);
+    }
     return String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
   }
 }
