@@ -49,13 +49,6 @@ public class Wrapper extends TerraformMojo<String> {
   @Parameter( property = "releaseSuffix"   )
   String inreleaseSuffix;
 
-  @Parameter(defaultValue = "${session}")
-  protected MavenSession session;
-
-  @Parameter(defaultValue = "${mojoExecution}")
-  protected MojoExecution mojoExecution;
-
-
   @Override
 
   public void execute() throws MojoExecutionException, MojoFailureException {
