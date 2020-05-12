@@ -62,7 +62,7 @@ public class TerraformDestroyTest {
   @Test
   public void terraformDestroyExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
-    Mockito.when(this.executable.execute("terraform destroy -refresh=false -auto-approve ",1111)).thenReturn("Success!");
+    Mockito.when(this.executable.execute("terraform destroy -refresh=false -auto-approve ", 1111)).thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
 
     this.properties.put(TerraformDestroy.TerraformDestroyParam.refreshState.property, "false");

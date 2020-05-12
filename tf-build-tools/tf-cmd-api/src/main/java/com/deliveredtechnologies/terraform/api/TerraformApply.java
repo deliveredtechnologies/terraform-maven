@@ -121,8 +121,8 @@ public class TerraformApply implements TerraformOperation<String> {
         options.append(properties.getProperty(TerraformApplyParam.plan.property));
       }
 
-      if (properties.containsKey("timeout")) {
-        return terraform.execute(options.toString(), Integer.parseInt(properties.get("timeout").toString()));
+      if (properties.containsKey(TerraformApplyParam.timeout.property)) {
+        return terraform.execute(options.toString(), Integer.parseInt(properties.get(TerraformApplyParam.timeout.property).toString()));
       } else {
         return terraform.execute(options.toString());
       }

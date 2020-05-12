@@ -105,13 +105,13 @@ public class TerraformDestroy implements TerraformOperation<String> {
           case noColor:
             options.append(String.format("-%1$s ", param));
             break;
+          case timeout:
+            break;
           case lockTimeout:
           case target:
           case refreshState:
-            options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
-            break;
           default:
-            break;
+            options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
         }
       }
     }
