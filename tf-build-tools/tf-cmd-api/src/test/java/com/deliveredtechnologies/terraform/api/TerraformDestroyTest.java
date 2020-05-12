@@ -42,7 +42,7 @@ public class TerraformDestroyTest {
   public void terraformDestroyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform destroy -lock-timeout=1000 -target=module1.module2 -var 'var1=one' -var 'var2=two' -var-file=test1.txt -var-file=test2.txt -no-color -auto-approve ",
+      "terraform destroy -lock-timeout=1000 -target=module1.module2 -var 'var1=one' -var 'var2=two' -var-file=test1.txt -var-file=test2.txt -no-color -refresh=true -auto-approve ",
       1111))
       .thenReturn("Success!");
     TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
@@ -53,6 +53,20 @@ public class TerraformDestroyTest {
     this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
     this.properties.put(TerraformPlan.TerraformPlanParam.tfVarFiles.property, "test1.txt, test2.txt");
     this.properties.put(TerraformDestroy.TerraformDestroyParam.tfVars.property, "var1=one,var2=two");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.refreshState.property, "true");
+
+    Assert.assertEquals("Success!", terraformDestroy.execute(properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
+  public void terraformDestroyExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
+    Mockito.when(this.executable.execute("terraform destroy -refresh=false -auto-approve ",1111)).thenReturn("Success!");
+    TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
+
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.refreshState.property, "false");
+    this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
 
     Assert.assertEquals("Success!", terraformDestroy.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());

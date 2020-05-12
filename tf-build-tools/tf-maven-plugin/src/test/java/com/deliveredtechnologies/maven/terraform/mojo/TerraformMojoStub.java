@@ -23,6 +23,8 @@ public class TerraformMojoStub extends TerraformMojo<String> {
 
   protected String stringProp;
 
+  protected boolean refreshState;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     // do nothing

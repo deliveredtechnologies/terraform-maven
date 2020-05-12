@@ -66,6 +66,20 @@ public class TerraformPlanTest {
   }
 
   @Test
+  public void terraformPlanExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
+    Mockito.when(this.executable.execute("terraform plan -input=true -refresh=false ",1111)).thenReturn("Success!");
+    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
+
+    this.properties.put(TerraformPlan.TerraformPlanParam.planInput.property, "true");
+    this.properties.put(TerraformPlan.TerraformPlanParam.refreshState.property, "false");
+    this.properties.put(TerraformPlan.TerraformPlanParam.timeout.property, "1111");
+
+    Assert.assertEquals("Success!", terraformPlan.execute(properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
   public void terraformPlanExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
     Mockito.when(this.executable.execute("terraform plan -input=false ")).thenReturn("Success!");

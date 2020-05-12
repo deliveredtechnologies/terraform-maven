@@ -38,6 +38,9 @@ public class Destroy extends TerraformMojo<String> {
   @Parameter(property = "target")
   String target;
 
+  @Parameter(property = "refreshState")
+  boolean refreshState = true;
+
   @Parameter(property = "noColor")
   boolean noColor = true;
 

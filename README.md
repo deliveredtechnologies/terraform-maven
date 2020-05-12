@@ -205,6 +205,7 @@ Optional Parameters:
 | target      | Number | A resource address to target                                                                                       |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                                 |
 | tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
+| refreshState | Boolean | If set to "true" then Terraform will refresh the state before apply                                              |
 | timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; defaults to 10min                     |
 | artifact    | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module |
 

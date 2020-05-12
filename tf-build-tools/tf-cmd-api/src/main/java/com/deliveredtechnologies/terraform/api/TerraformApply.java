@@ -89,27 +89,23 @@ public class TerraformApply implements TerraformOperation<String> {
 
     for (TerraformApplyParam param : TerraformApplyParam.values()) {
       if (properties.containsKey(param.property)) {
-        if (!properties.containsKey(TerraformApplyParam.plan.property)) {
-          if (param == TerraformApplyParam.tfVarFiles) {
-            for (String file : (properties.getProperty(param.property)).split(",")) {
-              options.append(String.format("-%1$s=%2$s ", param, file.trim()));
-            }
-            continue;
+        if (param == TerraformApplyParam.tfVarFiles) {
+          for (String file : (properties.getProperty(param.property)).split(",")) {
+            options.append(String.format("-%1$s=%2$s ", param, file.trim()));
           }
-          if (param == TerraformApplyParam.tfVars) {
-            for (String var : (properties.get(param.property)).toString().split(",")) {
-              options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
-            }
-            continue;
+          continue;
+        }
+        if (param == TerraformApplyParam.tfVars) {
+          for (String var : (properties.get(param.property)).toString().split(",")) {
+            options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
           }
+          continue;
         }
         switch (param) {
           case noColor:
             options.append(String.format("-%1$s ", param));
             break;
           case timeout:
-          case tfVarFiles:
-          case tfVars:
           case plan:
             break;
           default:

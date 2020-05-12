@@ -66,7 +66,7 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
         field.setAccessible(true);
         Object fieldVal = field.get(this);
         if (fieldVal == null
-            || fieldVal.equals(false)
+            || (fieldVal.equals(false) && !field.getName().startsWith("refresh"))
             || (Number.class.isAssignableFrom(fieldVal.getClass()) && ((Number)fieldVal).longValue() <= 0)) {
           continue;
         }
