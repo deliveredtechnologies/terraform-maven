@@ -98,9 +98,9 @@ public class TerraformPlanFileUtils {
     if (action.equals("GET")) {
       executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName));
     } else if (action.equals("PUT")) {
-      if (properties.contains("kmsKeyId")) {
+      if (properties.containsKey("kmsKeyId")) {
         LOGGER.debug("uploading plan files to Amazon S3 with kms encryption");
-        executable.execute(String.format("aws s3 cp %1$s %2$s --sse aws:kms --sse-kms-key-id %3$s", fileName, s3Key, properties.containsKey("kmsKeyId")));
+        executable.execute(String.format("aws s3 cp %1$s %2$s --sse aws:kms --sse-kms-key-id %3$s", fileName, s3Key, properties.getProperty("kmsKeyId")));
       } else {
         LOGGER.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
         executable.execute(String.format("aws s3 cp %1$s %2$s", fileName, s3Key));
