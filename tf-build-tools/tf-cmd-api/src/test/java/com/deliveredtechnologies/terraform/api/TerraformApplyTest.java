@@ -60,6 +60,19 @@ public class TerraformApplyTest {
   }
 
   @Test
+  public void terraformApplyExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
+    Mockito.when(this.executable.execute("terraform apply -refresh=false -auto-approve ",1111)).thenReturn("Success!");
+    TerraformApply terraformApply = new TerraformApply(terraformDecorator);
+
+    this.properties.put(TerraformApply.TerraformApplyParam.refreshState.property, "false");
+    this.properties.put(TerraformApply.TerraformApplyParam.timeout.property, "1111");
+
+    Assert.assertEquals("Success!", terraformApply.execute(properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
   public void terraformApplyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
     Mockito.when(this.executable.execute("terraform apply -auto-approve ")).thenReturn("Success!");

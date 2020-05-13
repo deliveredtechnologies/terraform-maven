@@ -23,6 +23,7 @@ public class TerraformApply implements TerraformOperation<String> {
     target("target"),
     plan("plan"),
     noColor("no-color"),
+    refreshState("refresh"),
     timeout("timeout");
 
     Optional<String> name = Optional.empty();
@@ -75,6 +76,7 @@ public class TerraformApply implements TerraformOperation<String> {
    *   autoApprove - approve without prompt<br>
    *   plan - the plan file to run the apply against<br>
    *   noColor - remove color encoding from output<br>
+   *   refreshState - if true then refresh the state prior to apply<br>
    *   timeout - how long in milliseconds the terraform apply command can run<br>
    * </p>
    * @param properties  parameter options and properties for terraform apply
@@ -119,8 +121,8 @@ public class TerraformApply implements TerraformOperation<String> {
         options.append(properties.getProperty(TerraformApplyParam.plan.property));
       }
 
-      if (properties.containsKey("timeout")) {
-        return terraform.execute(options.toString(), Integer.parseInt(properties.get("timeout").toString()));
+      if (properties.containsKey(TerraformApplyParam.timeout.property)) {
+        return terraform.execute(options.toString(), Integer.parseInt(properties.get(TerraformApplyParam.timeout.property).toString()));
       } else {
         return terraform.execute(options.toString());
       }

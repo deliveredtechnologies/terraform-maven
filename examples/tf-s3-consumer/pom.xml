@@ -9,23 +9,6 @@
   <artifactId>tf-s3-consumer</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
   <version>1.0</version>
-  <profiles>
-    <profile>
-      <id>dev</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <tfVarFiles>tfvars/dev.tfvars</tfVarFiles>
-      </properties>
-    </profile>
-    <profile>
-      <id>test</id>
-      <properties>
-        <tfVarFiles>tfvars/test.tfvars</tfVarFiles>
-      </properties>
-    </profile>
-  </profiles>
   <repositories>
     <repository>
       <id>local</id>

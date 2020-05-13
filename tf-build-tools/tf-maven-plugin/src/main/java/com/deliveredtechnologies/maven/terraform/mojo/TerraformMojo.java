@@ -5,7 +5,6 @@ import com.deliveredtechnologies.terraform.api.TerraformOperation;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +34,7 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
           getLog().info((String) response);
         }
       }
-    } catch (TerraformException | IOException | InterruptedException e) {
+    } catch (TerraformException e) {
       throw new MojoExecutionException("Failed to execute terraform operation", e);
     }
   }
@@ -67,7 +66,7 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
         field.setAccessible(true);
         Object fieldVal = field.get(this);
         if (fieldVal == null
-            || fieldVal.equals(false)
+            || (fieldVal.equals(false) && !field.getName().startsWith("refresh"))
             || (Number.class.isAssignableFrom(fieldVal.getClass()) && ((Number)fieldVal).longValue() <= 0)) {
           continue;
         }

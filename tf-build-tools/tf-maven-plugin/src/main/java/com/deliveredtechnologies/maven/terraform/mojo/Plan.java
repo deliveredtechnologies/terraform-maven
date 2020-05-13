@@ -7,6 +7,7 @@ import com.deliveredtechnologies.terraform.TerraformPlanFileUtils;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -62,14 +63,14 @@ public class Plan extends TerraformMojo<String> {
   long timeout;
 
   @Override
-  public void execute() throws MojoExecutionException {
+  public void execute() throws MojoExecutionException, MojoFailureException {
     try {
       if (!StringUtils.isEmpty(artifact)) {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
+      execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
       TerraformPlanFileUtils planUtils = new TerraformPlanFileUtils(tfRootDir, new MavenSlf4jAdapter(getLog()));
-      execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
       planUtils.executePlanFileOperation(getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);

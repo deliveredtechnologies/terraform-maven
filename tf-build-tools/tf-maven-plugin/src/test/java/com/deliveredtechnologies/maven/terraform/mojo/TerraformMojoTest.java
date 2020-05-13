@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -33,7 +32,7 @@ public class TerraformMojoTest {
   }
 
   @Test
-  public void executeOnTerraformOperationWithStringReturnValueWritesToInfoLog() throws TerraformException, MojoFailureException, MojoExecutionException, IOException, InterruptedException {
+  public void executeOnTerraformOperationWithStringReturnValueWritesToInfoLog() throws TerraformException, MojoFailureException, MojoExecutionException {
     Mockito.when(terraformOperation.execute(Mockito.any())).thenReturn("Testing!");
     TerraformMojo<String> terraformMojo = new TerraformMojo<String>() {
       @Override
@@ -55,7 +54,7 @@ public class TerraformMojoTest {
   }
 
   @Test
-  public void executeOnTerraformOperationDelegatesToTerraformOperation() throws TerraformException, MojoFailureException, MojoExecutionException, IOException, InterruptedException {
+  public void executeOnTerraformOperationDelegatesToTerraformOperation() throws TerraformException, MojoFailureException, MojoExecutionException {
     Mockito.when(terraformOperation.execute(Mockito.any())).thenReturn(new Object());
     TerraformMojo terraformMojo = new TerraformMojo() {
       @Override
@@ -76,7 +75,7 @@ public class TerraformMojoTest {
   }
 
   @Test(expected = MojoExecutionException.class)
-  public void terraformExceptionIsThrownAsMojoExecutionException() throws TerraformException, MojoExecutionException, MojoFailureException, IOException, InterruptedException {
+  public void terraformExceptionIsThrownAsMojoExecutionException() throws TerraformException, MojoExecutionException, MojoFailureException {
     Mockito.when(terraformOperation.execute(Mockito.any())).thenThrow(new TerraformException("boom!"));
     TerraformMojo terraformMojo = new TerraformMojo() {
       @Override
@@ -99,7 +98,7 @@ public class TerraformMojoTest {
 
     properties = terraformMojoStub.getFieldsAsProperties();
 
-    Assert.assertEquals(properties.size(), 4);
+    Assert.assertEquals(properties.size(), 5);
     Assert.assertEquals(properties.get("boolProp"), true);
     Assert.assertEquals(properties.get("intProp"), 22);
     Assert.assertEquals(properties.get("longProp"), 1000L);
@@ -111,7 +110,18 @@ public class TerraformMojoTest {
 
     properties = terraformMojoStub.getFieldsAsProperties();
 
-    Assert.assertEquals(properties.size(), 1);
+    Assert.assertEquals(properties.size(), 2);
     Assert.assertEquals(properties.get("stringProp"), "Hello");
+  }
+
+  @Test
+  public void getFieldAsPropertiesToDisplayRefreshStateFalseParameter() throws MojoExecutionException {
+    TerraformMojoStub terraformMojoStub = new TerraformMojoStub();
+    terraformMojoStub.refreshState = false;
+
+    properties = terraformMojoStub.getFieldsAsProperties();
+
+    Assert.assertEquals(properties.get("refreshState"), false);
+
   }
 }
