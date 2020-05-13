@@ -113,6 +113,7 @@ public class TerraformPlan implements TerraformOperation<String> {
             break;
           case timeout:
             break;
+          case lockTimeout:
           default:
             options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
         }
@@ -124,8 +125,8 @@ public class TerraformPlan implements TerraformOperation<String> {
     }
 
     try {
-      if (properties.containsKey("timeout")) {
-        return terraform.execute(options.toString(), Integer.parseInt(properties.get("timeout").toString()));
+      if (properties.containsKey(TerraformPlanParam.timeout.property)) {
+        return terraform.execute(options.toString(), Integer.parseInt(properties.get(TerraformPlanParam.timeout.property).toString()));
       } else {
         return terraform.execute(options.toString());
       }

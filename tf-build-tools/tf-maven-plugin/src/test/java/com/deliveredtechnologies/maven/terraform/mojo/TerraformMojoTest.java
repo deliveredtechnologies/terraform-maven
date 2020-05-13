@@ -98,7 +98,7 @@ public class TerraformMojoTest {
 
     properties = terraformMojoStub.getFieldsAsProperties();
 
-    Assert.assertEquals(properties.size(), 4);
+    Assert.assertEquals(properties.size(), 5);
     Assert.assertEquals(properties.get("boolProp"), true);
     Assert.assertEquals(properties.get("intProp"), 22);
     Assert.assertEquals(properties.get("longProp"), 1000L);
@@ -110,7 +110,18 @@ public class TerraformMojoTest {
 
     properties = terraformMojoStub.getFieldsAsProperties();
 
-    Assert.assertEquals(properties.size(), 1);
+    Assert.assertEquals(properties.size(), 2);
     Assert.assertEquals(properties.get("stringProp"), "Hello");
+  }
+
+  @Test
+  public void getFieldAsPropertiesToDisplayRefreshStateFalseParameter() throws MojoExecutionException {
+    TerraformMojoStub terraformMojoStub = new TerraformMojoStub();
+    terraformMojoStub.refreshState = false;
+
+    properties = terraformMojoStub.getFieldsAsProperties();
+
+    Assert.assertEquals(properties.get("refreshState"), false);
+
   }
 }
