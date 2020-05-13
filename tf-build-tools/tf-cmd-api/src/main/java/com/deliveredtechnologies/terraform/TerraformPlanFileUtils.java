@@ -13,26 +13,6 @@ public class TerraformPlanFileUtils {
 
   private Logger logger;
 
-  /*
-  enum TerraformPlanFileUtilsParams {
-    tfRootDir,
-    artifactory,
-    azurerm,
-    consul,
-    cos,
-    etcd,
-    etcdv3,
-    gcs,
-    http,
-    manta,
-    oss,
-    pg,
-    s3,
-    swift,
-    terraformEnterprise;
-  }
-
-   */
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TerraformUtils.class);
 
@@ -54,36 +34,39 @@ public class TerraformPlanFileUtils {
    * @return response
    * @throws IOException
    */
-  public String  executePlanFileOperation(Properties properties) throws IOException {
-    String response = "The backend destination was not specified in the format <backendType>://<backendKey> (ex: s3://<bucket-name>/<bucket-key>) to perform planFile operations";
-    String planOutputFile = properties.getProperty("planOutputFile").isEmpty() ? "" : properties.getProperty("planOutputFile");
-    //String planFileName = planOutputFile.substring(planOutputFile.lastIndexOf("/")).replaceAll("/", "");
-    String planFileName = planOutputFile.split("/")[planOutputFile.split("/").length - 1];
+  public String executePlanFileOperation(Properties properties) throws IOException {
+    //String response = "The backend destination was not specified in the format <backendType>://<backendKey> (ex: s3://<bucket-name>/<bucket-key>) to perform planFile operations";
 
-    String backendAction = "";
-    if (!properties.getProperty("planOutputFile").isEmpty()) {
-      backendAction = "PUT";
-    } else if (!properties.getProperty("plan").isEmpty()) {
-      backendAction = "GET";
-    }
+    boolean isPlanFile = properties.containsKey("planOutputFile") || properties.containsKey("plan");
+    if (isPlanFile) {
+      String planOutputFile = properties.getProperty("planOutputFile");
+      //String planFileName = planOutputFile.substring(planOutputFile.lastIndexOf("/")).replaceAll("/", "");
+      String planFileName = planOutputFile.split("/")[planOutputFile.split("/").length - 1];
 
-    if (!properties.getProperty("planOutputFile").isEmpty() && !planOutputFile.equals(planFileName)) {
-      String backendType = planOutputFile.split(":")[0].toLowerCase();
-      switch (backendType) {
-        case "s3":
-          try {
-            backendS3operations(backendAction, planOutputFile, properties);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-          response = null;
-          break;
-        case "azurerm":
-        default:
-          response = "PlanFile operations support is not available yet";
+      String backendAction = "";
+      if (!properties.getProperty("planOutputFile").isEmpty()) {
+        backendAction = "PUT";
+      } else if (!properties.getProperty("plan").isEmpty()) {
+        backendAction = "GET";
+      }
+
+      if (!planOutputFile.equals(planFileName)) {
+        String backendType = planOutputFile.split(":")[0].toLowerCase();
+        switch (backendType) {
+          case "s3":
+            try {
+              backendS3operations(backendAction, planOutputFile, properties);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            break;
+          case "azurerm":
+          default:
+            LOGGER.info("PlanFile operations support is not available yet");
+        }
       }
     }
-    return response;
+    return null;
   }
 
   /**

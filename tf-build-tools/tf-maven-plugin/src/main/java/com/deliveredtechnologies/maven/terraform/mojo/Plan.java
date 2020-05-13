@@ -40,6 +40,9 @@ public class Plan extends TerraformMojo<String> {
   @Parameter(property = "planOutputFile")
   String planOutputFile;
 
+  @Parameter(property = "kmsKeyId")
+  String kmsKeyId;
+
   @Parameter(property = "planInput")
   boolean planInput = false;
 

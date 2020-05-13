@@ -37,8 +37,9 @@ public class TerraformPlanFileUtilsTest {
 
     planFileUtils.executePlanFileOperation(properties);
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json --sse aws:kms --sse-kms-key-id 4d6f7e4-b816-42f5-87b2-c5952285e53c");
-    Assert.assertNull(planFileUtils.executePlanFileOperation(properties));
   }
+
+
 
   @Test
   public void backendS3operationsWhenBackendTypeNotSpecified() throws IOException {
@@ -46,12 +47,10 @@ public class TerraformPlanFileUtilsTest {
 
     String kmsKeyId = "4d6f7e4-b816-42f5-87b2-c5952285e53c";
     String planFileName = "test.json";
-    String expectedResponse = "The backend destination was not specified in the format <backendType>://<backendKey> (ex: s3://<bucket-name>/<bucket-key>) to perform planFile operations";
     properties.put("kmsKeyId", kmsKeyId);
     properties.put("planOutputFile", planFileName);
 
-    planFileUtils.executePlanFileOperation(properties);
-    Assert.assertEquals(expectedResponse, planFileUtils.executePlanFileOperation(properties));
+    Assert.assertNull(planFileUtils.executePlanFileOperation(properties));
   }
 
   @Test
