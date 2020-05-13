@@ -3,7 +3,7 @@ args="$@"
 ##############################################################
 # try to figure out where the root directory of the project is
 ##############################################################
-cur_loc='pwd'
+cur_loc=`pwd`
 target_cd="$cur_loc/.tf"
 projectBaseDir=""
 
