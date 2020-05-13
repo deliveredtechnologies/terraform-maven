@@ -11,13 +11,9 @@ import java.util.Properties;
 
 public class TerraformPlanFileUtils {
 
-  String tfRootDir;
   private Logger logger;
 
-  public TerraformPlanFileUtils(String tfRootDir) {
-    tfRootDir = this.tfRootDir;
-  }
-
+  /*
   enum TerraformPlanFileUtilsParams {
     tfRootDir,
     artifactory,
@@ -36,20 +32,11 @@ public class TerraformPlanFileUtils {
     terraformEnterprise;
   }
 
+   */
+
   private static final Logger LOGGER = LoggerFactory.getLogger(TerraformUtils.class);
 
   private Executable executable;
-
-
-  /*
-  enum TerraformS3UtilsParams {
-    planOutputFile,
-    plan,
-    sse,
-    kmsKeyId;
-  }
-
-   */
 
   public TerraformPlanFileUtils(String tfRootDir, Logger logger) throws IOException {
     this(new CommandLine(tfRootDir == null  ? TerraformUtils.getDefaultTerraformRootModuleDir() : Paths.get(tfRootDir), logger), logger);
@@ -68,101 +55,57 @@ public class TerraformPlanFileUtils {
    * @throws IOException
    */
   public String  executePlanFileOperation(Properties properties) throws IOException {
-    LOGGER.info("checking for prop:::" + properties.getProperty("planOutputFile"));
-    String planAction = "";
-    if (properties.containsKey("plan")) {
-      planAction = "download";
-    } else if (properties.containsKey("planOutputFile")) {
-      planAction = "upload";
+    String response = "The backend destination was not specified in the format <backendType>://<backendKey> (ex: s3://<bucket-name>/<bucket-key>) to perform planFile operations";
+    String planOutputFile = properties.getProperty("planOutputFile").isEmpty() ? "" : properties.getProperty("planOutputFile");
+    //String planFileName = planOutputFile.substring(planOutputFile.lastIndexOf("/")).replaceAll("/", "");
+    String planFileName = planOutputFile.split("/")[planOutputFile.split("/").length - 1];
+
+    String backendAction = "";
+    if (!properties.getProperty("planOutputFile").isEmpty()) {
+      backendAction = "PUT";
+    } else if (!properties.getProperty("plan").isEmpty()) {
+      backendAction = "GET";
     }
-    String response = "Unable to perform S3 upload. The S3 destination was not specified in the format s3://<bucket-name>/<bucket-key>";
-    /*
-    String backendType = "s3";
-    String planFileName = "";
-    String planOutputFile = "";
 
-     */
-    boolean isPlanOutputFile = !properties.getProperty("planOutputFile").isEmpty();
-    LOGGER.info(String.valueOf(isPlanOutputFile));
-
-
-    String planOutputFile = properties.getProperty("planOutputFile").isEmpty() ? "planning" : properties.getProperty("planOutputFile");
-    LOGGER.info("planOutputFile" + planOutputFile);
-    String backendType = properties.getProperty("planOutputFile").isEmpty() ? "s3" : planOutputFile.split(":")[0];
-    LOGGER.info("backend" + backendType);
-    String planFileName = properties.getProperty("planOutputFile").isEmpty() ? "output.json" : planOutputFile.substring(planOutputFile.lastIndexOf("/")).replaceAll("/", "");
-    LOGGER.info("planFileName" + planFileName);
-
-
-    LOGGER.info(String.format("Running terraformPlanUtils for given backend parameters -%1$s  -%2$s  -%3$s -%4$s", planOutputFile, backendType, planFileName, planAction));
-
-    switch (backendType) {
-      case "s3":
-        if (planAction == "upload") {
-          String sse =  "AES:256";
-          LOGGER.info(sse);
-          String kmsKeyId = "jdkaf;afn;dannfda;n;d";
-          LOGGER.info(kmsKeyId);
-          LOGGER.info("running command for terraform upload");
-          response = terraformS3UploadCli(planFileName, planOutputFile, sse, kmsKeyId, false);
-        } else if (planAction == "download") {
-          String bucketName = properties.getProperty("planOutputFile").isEmpty() ? "" : planOutputFile.split("/")[2];
-          response = terraformS3GetCli(bucketName, planOutputFile.replaceAll("s3://" + bucketName + "/", ""), planFileName);
-        }
-        break;
-      case "azurerm":
-        break;
-      default:
-        response = "Plan File operations support is not available yet";
+    if (!properties.getProperty("planOutputFile").isEmpty() && !planOutputFile.equals(planFileName)) {
+      String backendType = planOutputFile.split(":")[0].toLowerCase();
+      switch (backendType) {
+        case "s3":
+          try {
+            backendS3operations(backendAction, planOutputFile, properties);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          response = null;
+          break;
+        case "azurerm":
+        default:
+          response = "PlanFile operations support is not available yet";
+      }
     }
     return response;
   }
 
-
   /**
-   * Uploads objects to s3.
-   * @param body body of the content that need to be uploaded
-   * @param key fully qualified path for the s3 object to store or destination location of the file
-   * @param sse Server side encryption mechanism either of AES:256 or aws:kms; defaults to AES:256
-   * @param kmsKeyId KmsKeyId to encrypt the Objects.
-   * @param recursive extends s3 cp command with recursive--true if sets to true
+   * Performs S3 operations.
+   * @param action backend option either GET or PUT
+   * @param s3Key fully qualified path for the s3 object to store or destination location of the file
    *
-   * @return
    */
-  protected String terraformS3UploadCli(String body, String key, String sse, String kmsKeyId, boolean recursive ) throws IOException {
-    LOGGER.info("started s3 upload");
-    try {
-      String recCmd = recursive ? "--recursive" : "";
-      if (sse.equals("AES:256")) {
-        LOGGER.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
-        executable.execute(String.format("aws s3 cp %1$s %2$s %3$s", body, key, recCmd));
-
-      } else {
+  protected void backendS3operations(String action, String s3Key, Properties properties ) throws IOException, InterruptedException {
+    String bucketName = s3Key.split("/")[2];
+    String fileName = s3Key.substring(s3Key.lastIndexOf("/")).replaceAll("/", "");
+    if (action.equals("GET")) {
+      executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName));
+    } else if (action.equals("PUT")) {
+      if (properties.contains("kmsKeyId")) {
         LOGGER.debug("uploading plan files to Amazon S3 with kms encryption");
-        executable.execute(String.format("aws s3 cp %1$s %2$s --sse %3$s --sse-kms-key-id %4$s %5$s", body, key, sse, kmsKeyId, recCmd));
+        executable.execute(String.format("aws s3 cp %1$s %2$s --sse aws:kms --sse-kms-key-id %3$s", fileName, s3Key, properties.containsKey("kmsKeyId")));
+      } else {
+        LOGGER.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
+        executable.execute(String.format("aws s3 cp %1$s %2$s", fileName, s3Key));
       }
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     }
-    return "success";
-  }
-
-  /**
-   * Uploads objects to s3.
-   * @param bucketName Name of the bucket
-   * @param key fully qualified path for the s3 object to store or destination location of the file
-   * @param outputFile fileName used to store the s3 key contents in destination location
-   *
-   * @return
-   */
-  protected String terraformS3GetCli(String bucketName, String key, String outputFile) throws IOException {
-    try {
-      LOGGER.debug("Object from s3://" + bucketName + key + " stored as " + outputFile);
-      executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, key, outputFile));
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    return bucketName;
   }
 
 }

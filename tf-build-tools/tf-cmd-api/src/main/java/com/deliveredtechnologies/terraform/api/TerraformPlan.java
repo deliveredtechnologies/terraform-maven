@@ -93,6 +93,7 @@ public class TerraformPlan implements TerraformOperation<String> {
     StringBuilder options = new StringBuilder();
 
     for (TerraformPlanParam param : TerraformPlanParam.values()) {
+
       if (properties.containsKey(param.property)) {
         if (param == TerraformPlanParam.tfVarFiles) {
           for (String file : (properties.getProperty(param.property)).split(",")) {
@@ -108,11 +109,7 @@ public class TerraformPlan implements TerraformOperation<String> {
         }
         switch (param) {
           case planOutputFile:
-            if (properties.getProperty(param.property).startsWith("s3")) {
-              options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property).split("/")[properties.getProperty(param.property).split("/").length - 1]));
-            } else {
-              options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property)));
-            }
+            options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property).split("/")[properties.getProperty(param.property).split("/").length - 1]));
             break;
           case destroyPlan:
           case noColor:

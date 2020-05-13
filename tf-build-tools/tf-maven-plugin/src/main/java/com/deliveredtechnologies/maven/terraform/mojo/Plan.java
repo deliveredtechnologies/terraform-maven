@@ -67,9 +67,7 @@ public class Plan extends TerraformMojo<String> {
       }
       TerraformPlanFileUtils planUtils = new TerraformPlanFileUtils(tfRootDir, new MavenSlf4jAdapter(getLog()));
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
-      //execute(new TerraformUpload(tfRootDir, new MavenSlf4jAdapter(getLog())), System.getProperties());
       planUtils.executePlanFileOperation(getFieldsAsProperties());
-
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
