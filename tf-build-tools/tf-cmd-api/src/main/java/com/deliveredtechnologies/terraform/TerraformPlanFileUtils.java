@@ -53,7 +53,6 @@ public class TerraformPlanFileUtils {
             } catch (InterruptedException e) {
               e.printStackTrace();
             }
-            break;
           case "azurerm":
           default:
             break;
