@@ -51,8 +51,9 @@ public class TerraformPlanFileUtils {
             try {
               backendS3operations(backendAction, planFile, properties);
             } catch (InterruptedException e) {
-              e.printStackTrace();
+              LOGGER.info("check with the backend operation arguments");
             }
+            break;
           case "azurerm":
           default:
             break;
