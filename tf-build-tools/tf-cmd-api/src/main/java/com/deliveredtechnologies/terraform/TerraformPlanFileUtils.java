@@ -34,7 +34,7 @@ public class TerraformPlanFileUtils {
    * @return response
    * @throws IOException
    */
-  public String executePlanFileOperation(Properties properties) throws IOException {
+  public String executePlanFileOperation(Properties properties) throws IOException, InterruptedException {
 
     boolean isPlanFile = properties.containsKey("planOutputFile") || properties.containsKey("plan");
 
@@ -48,11 +48,7 @@ public class TerraformPlanFileUtils {
         String backendType = planFile.split(":")[0].toLowerCase();
         switch (backendType) {
           case "s3":
-            try {
-              backendS3operations(backendAction, planFile, properties);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
+            backendS3operations(backendAction, planFile, properties);
             break;
           case "azurerm":
           default:
