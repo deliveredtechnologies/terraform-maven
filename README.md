@@ -157,7 +157,8 @@ Optional Parameters:
 | planInput      | Boolean | If set to "true", input variables not directly set will be requested; otherwise, the plan will fail               |
 | noColor        | Any     | If this property exists, the -no-color flag is set                                                                |
 | destroyPlan    | Any     | If this property exists, a destroy plan is outputted                                                              | 
-| planOutputFile | String  | The path to save the generated execution plan                                                                     |
+| planOutputFile | String  | The path to save the generated execution plan. To Upload plan to S3 (e.g. -DplanOutputFile=s3://<bucket-name>/<key-prefix>/<plan-file-name>)  |
+| kmsKeyId       | String  | To Upload plan to s3 with kms encrypted (e.g. -DkmsKeyId=<kms-Key-ID>)                                            | 
 | tfRootDir      | String  | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory        |
 | timeout        | Number  | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min                      |
 | refreshState   | Boolean | If set to "true" then Terraform will refresh the state before generating the plan                                 |

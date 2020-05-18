@@ -35,12 +35,10 @@ public class TerraformPlanFileUtils {
    * @throws IOException
    */
   public String executePlanFileOperation(Properties properties) throws IOException {
-    //String response = "The backend destination was not specified in the format <backendType>://<backendKey> (ex: s3://<bucket-name>/<bucket-key>) to perform planFile operations";
 
     boolean isPlanFile = properties.containsKey("planOutputFile") || properties.containsKey("plan");
     if (isPlanFile) {
       String planOutputFile = properties.getProperty("planOutputFile");
-      //String planFileName = planOutputFile.substring(planOutputFile.lastIndexOf("/")).replaceAll("/", "");
       String planFileName = planOutputFile.split("/")[planOutputFile.split("/").length - 1];
 
       String backendAction = "";
