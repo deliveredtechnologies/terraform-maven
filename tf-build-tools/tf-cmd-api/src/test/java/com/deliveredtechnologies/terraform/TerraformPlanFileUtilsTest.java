@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -93,6 +94,17 @@ public class TerraformPlanFileUtilsTest {
     properties.put("planOutputFile", s3BucketKey);
     planFileUtils.backendS3operations("PUT", s3BucketKey, properties);
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json --sse aws:kms --sse-kms-key-id 4d6f7e4-b816-42f5-87b2-c5952285e53c");
+  }
+
+  @Test(expected = MissingMethodInvocationException.class)
+  public void backendS3operationsExpectsInterruptedException() throws IOException, InterruptedException {
+
+    TerraformPlanFileUtils planFileUtils = new TerraformPlanFileUtils(executable, logger);
+    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
+
+    properties.put("planOutputFile", s3BucketKey);
+    Mockito.when(planFileUtils.backendS3operations("upload",s3BucketKey,properties)).thenThrow(InterruptedException.class);
+
   }
 
 }
