@@ -102,8 +102,8 @@ public class TerraformPlanFileUtilsTest {
     TerraformPlanFileUtils planFileUtils = new TerraformPlanFileUtils(executable, logger);
     String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
 
-    properties.put("planOutputFile", s3BucketKey);
-    Mockito.when(planFileUtils.backendS3operations("upload",s3BucketKey,properties)).thenThrow(InterruptedException.class);
+    properties.put("planOutputFile", "");
+    Mockito.when(planFileUtils.executePlanFileOperation(properties)).thenThrow(InterruptedException.class);
 
   }
 
