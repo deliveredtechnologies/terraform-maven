@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Decorates Executable (for use with CommandLine) to put in the context of Terraform commands.
@@ -28,6 +30,7 @@ public class TerraformCommandLineDecorator implements Executable {
   public TerraformCommandLineDecorator(TerraformCommand cmd, Executable commandLine, Logger logger) {
     this.commandLine = commandLine;
     this.cmd = cmd;
+
     this.logger = Optional.ofNullable(logger);
     this.logger.ifPresent(log -> this.commandLine.setLogger(log));
   }
@@ -99,20 +102,24 @@ public class TerraformCommandLineDecorator implements Executable {
     try {
       if (tfDir.exists()) {
         File tfScr;
+        File tfScr3;
         String os_name = System.getProperty("os.name");
         int windowsIndex = os_name.indexOf("indow");
         if (windowsIndex != -1) {
-          tfScr = new File(String.format("%s%stfw.cmd", tfDir, File.separator));
+          tfScr3= new File(String.format("%s" + "%3$s" + "%3$s" + "%3$s" + "tfw.cmd", tfDir, "YY","\\", "LL"));
+          String tempFile = tfScr3.getAbsolutePath();
+          String tempFile2 = tempFile.replace("\\","\\\\");
+          tfScr = new File (tempFile2);
         } else {
           tfScr = new File(String.format("%s%stfw", tfDir, File.separator));
         }
         if (tfScr.exists()) {
-          return String.format("%s %1$s %2$s", tfScr, cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+          return String.format("%s %s %s", tfScr, cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
         }
       }
     } catch (Exception e) {
       e.printStackTrace();
-      //throw new MojoExecutionException(String.format("Unable to load properties from %s!", tfDir.getName()), e);
+       //throw new MojoExecutionException(String.format("Unable to load properties from %s!", tfDir.getName()), e);
     }
     return String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
   }
