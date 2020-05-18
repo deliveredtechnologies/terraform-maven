@@ -48,11 +48,7 @@ public class TerraformPlanFileUtils {
         String backendType = planFile.split(":")[0].toLowerCase();
         switch (backendType) {
           case "s3":
-            try {
-              backendS3operations(backendAction, planFile, properties);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
+            backendS3operations(backendAction, planFile, properties);
             break;
           case "azurerm":
           default:
@@ -69,20 +65,25 @@ public class TerraformPlanFileUtils {
    * @param s3Key fully qualified path for the s3 object to store or destination location of the file
    *
    */
-  protected String backendS3operations(String action, String s3Key, Properties properties ) throws IOException, InterruptedException {
-    String bucketName = s3Key.split("/")[2];
-    String fileName = s3Key.substring(s3Key.lastIndexOf("/")).replaceAll("/", "");
-    if (action.equals("GET")) {
-      executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName));
-    } else if (action.equals("PUT")) {
-      if (properties.containsKey("kmsKeyId")) {
-        LOGGER.debug("uploading plan files to Amazon S3 with kms encryption");
-        executable.execute(String.format("aws s3 cp %1$s %2$s --sse aws:kms --sse-kms-key-id %3$s", fileName, s3Key, properties.getProperty("kmsKeyId")));
-      } else {
-        LOGGER.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
-        executable.execute(String.format("aws s3 cp %1$s %2$s", fileName, s3Key));
+  protected String backendS3operations(String action, String s3Key, Properties properties ) throws IOException {
+    try {
+      String bucketName = s3Key.split("/")[2];
+      String fileName = s3Key.substring(s3Key.lastIndexOf("/")).replaceAll("/", "");
+      if (action.equals("GET")) {
+        executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName));
+      } else if (action.equals("PUT")) {
+        if (properties.containsKey("kmsKeyId")) {
+          LOGGER.debug("uploading plan files to Amazon S3 with kms encryption");
+          executable.execute(String.format("aws s3 cp %1$s %2$s --sse aws:kms --sse-kms-key-id %3$s", fileName, s3Key, properties.getProperty("kmsKeyId")));
+        } else {
+          LOGGER.debug("uploading plan files to Amazon S3 with default encryption (SSE:256)");
+          executable.execute(String.format("aws s3 cp %1$s %2$s", fileName, s3Key));
+        }
       }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+
     return null;
   }
 }
