@@ -56,7 +56,7 @@ public class TerraformPlanFileUtils {
             break;
           case "azurerm":
           default:
-            LOGGER.info("PlanFile operations support is not available yet");
+            break;
         }
       }
     }
@@ -69,7 +69,7 @@ public class TerraformPlanFileUtils {
    * @param s3Key fully qualified path for the s3 object to store or destination location of the file
    *
    */
-  protected void backendS3operations(String action, String s3Key, Properties properties ) throws IOException, InterruptedException {
+  protected String backendS3operations(String action, String s3Key, Properties properties ) throws IOException, InterruptedException {
     String bucketName = s3Key.split("/")[2];
     String fileName = s3Key.substring(s3Key.lastIndexOf("/")).replaceAll("/", "");
     if (action.equals("GET")) {
@@ -83,6 +83,6 @@ public class TerraformPlanFileUtils {
         executable.execute(String.format("aws s3 cp %1$s %2$s", fileName, s3Key));
       }
     }
+    return null;
   }
-
 }
