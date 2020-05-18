@@ -65,7 +65,7 @@ public class TerraformPlanFileUtils {
    * @param s3Key fully qualified path for the s3 object to store or destination location of the file
    *
    */
-  protected String backendS3operations(String action, String s3Key, Properties properties ) throws IOException {
+  protected void backendS3operations(String action, String s3Key, Properties properties ) throws IOException {
     try {
       String bucketName = s3Key.split("/")[2];
       String fileName = s3Key.substring(s3Key.lastIndexOf("/")).replaceAll("/", "");
@@ -83,7 +83,5 @@ public class TerraformPlanFileUtils {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-
-    return null;
   }
 }

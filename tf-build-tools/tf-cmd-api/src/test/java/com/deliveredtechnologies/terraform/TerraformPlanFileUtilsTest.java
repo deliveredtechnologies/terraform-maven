@@ -95,17 +95,6 @@ public class TerraformPlanFileUtilsTest {
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json --sse aws:kms --sse-kms-key-id 4d6f7e4-b816-42f5-87b2-c5952285e53c");
   }
 
-  @Test
-  public void backendS3operationsExpectsInterruptedException() throws IOException {
-
-    TerraformPlanFileUtils planFileUtils = new TerraformPlanFileUtils(executable, logger);
-    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
-
-    properties.put("planOutputFile", s3BucketKey);
-    Mockito.when(planFileUtils.backendS3operations("PUT",s3BucketKey,properties)).thenThrow(InterruptedException.class);
-
-  }
-
 }
 
 
