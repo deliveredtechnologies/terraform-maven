@@ -37,23 +37,19 @@ public class TerraformPlanFileUtils {
   public String executePlanFileOperation(Properties properties) throws IOException {
 
     boolean isPlanFile = properties.containsKey("planOutputFile") || properties.containsKey("plan");
+
     if (isPlanFile) {
-      String planOutputFile = properties.getProperty("planOutputFile");
-      String planFileName = planOutputFile.split("/")[planOutputFile.split("/").length - 1];
+      String planFile = properties.getProperty("planOutputFile") == null ? properties.getProperty("plan") : properties.getProperty("planOutputFile");
+      String planFileName = planFile.split("/")[planFile.split("/").length - 1];
 
-      String backendAction = "";
-      if (!properties.getProperty("planOutputFile").isEmpty()) {
-        backendAction = "PUT";
-      } else if (!properties.getProperty("plan").isEmpty()) {
-        backendAction = "GET";
-      }
+      String backendAction = properties.getProperty("planOutputFile") == null ? "GET" : "PUT";
 
-      if (!planOutputFile.equals(planFileName)) {
-        String backendType = planOutputFile.split(":")[0].toLowerCase();
+      if (!planFile.equals(planFileName)) {
+        String backendType = planFile.split(":")[0].toLowerCase();
         switch (backendType) {
           case "s3":
             try {
-              backendS3operations(backendAction, planOutputFile, properties);
+              backendS3operations(backendAction, planFile, properties);
             } catch (InterruptedException e) {
               e.printStackTrace();
             }
