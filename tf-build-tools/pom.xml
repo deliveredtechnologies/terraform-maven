@@ -57,6 +57,15 @@
       <timezone>America/New_York</timezone>
     </developer>
     <developer>
+      <id>SriMaganti</id>
+      <name>Sri Vijaya Lakshmi Maganti</name>
+      <url>https://github.com/maganti07</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/Central</timezone>
+    </developer>
+    <developer>
       <id>s1234a6i</id>
       <name>Sai Chaitanya</name>
       <url>https://github.com/s1234a6i</url>

@@ -107,6 +107,9 @@ public class TerraformPlan implements TerraformOperation<String> {
           continue;
         }
         switch (param) {
+          case planOutputFile:
+            options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property).split("/")[properties.getProperty(param.property).split("/").length - 1]));
+            break;
           case destroyPlan:
           case noColor:
             options.append(String.format("-%1$s ", param));
