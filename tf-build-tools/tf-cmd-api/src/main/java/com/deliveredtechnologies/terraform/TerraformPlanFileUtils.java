@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+/**
+ * Appends functionality to plan file (i.e. sourcing and storing plan files remotely).
+ */
 public class TerraformPlanFileUtils {
 
   private Logger logger;
@@ -50,7 +53,6 @@ public class TerraformPlanFileUtils {
           case "s3":
             backendS3operations(backendAction, planFile, properties);
             break;
-          case "azurerm":
           default:
             break;
         }
