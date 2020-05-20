@@ -97,6 +97,8 @@ public class TerraformCommandLineDecorator implements Executable {
   private String getTerraformCommand(String command) {
     Path tfPath = Paths.get(".tf");
     File tfDir = tfPath.toFile();
+    String inPath = tfDir.getAbsolutePath();
+    String unixPath = inPath.replaceAll("[\\\\]","/");
     try {
       if (tfDir.exists()) {
         File tfScr;
@@ -108,7 +110,8 @@ public class TerraformCommandLineDecorator implements Executable {
           tfScr = new File(String.format("%s%stfw", tfDir, File.separator));
         }
         if (tfScr.exists()) {
-          return String.format("%s %s", ".tf/tfw", StringUtils.isEmpty(command) ? "" : command);
+          System.out.println(String.format("%s%s %s", unixPath, "/tfw", StringUtils.isEmpty(command) ? "" : command));
+          return String.format("%s%s %s", unixPath, "/tfw", StringUtils.isEmpty(command) ? "" : command);
         }
       }
     } catch (Exception e) {
