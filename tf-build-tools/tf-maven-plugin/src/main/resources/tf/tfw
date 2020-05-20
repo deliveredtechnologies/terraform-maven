@@ -89,8 +89,8 @@ then
         echo ""
     else
         echo "Different version, downloading"
-        curl -o $terraformZipLinux $releaseSourceLinux
-        curl -o $terraformZipWindows $releaseSourceWindows
+        curl --max-time 300 -o $terraformZipLinux $releaseSourceLinux
+        curl --max-time 300 -o $terraformZipWindows $releaseSourceWindows
         rm $terraformBinaryLinux
         rm $terraformBinaryWindows
         unzip -d $targetDir $terraformZipLinux
@@ -104,8 +104,8 @@ else
 # download and install the desired version
 ############################################
     echo "Terraform not found, installing"
-    curl -o $terraformZipLinux $releaseSourceLinux
-    curl -o $terraformZipWindows $releaseSourceWindows
+    curl --max-time 300 -o $terraformZipLinux $releaseSourceLinux
+    curl --max-time 300 -o $terraformZipWindows $releaseSourceWindows
     if [ -f $terraformBinaryLinux ]
     then
         rm $terraformBinaryLinux
