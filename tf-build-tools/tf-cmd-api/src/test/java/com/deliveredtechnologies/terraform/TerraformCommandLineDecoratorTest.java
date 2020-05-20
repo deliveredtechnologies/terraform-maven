@@ -3,7 +3,6 @@ package com.deliveredtechnologies.terraform;
 import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 
 public class TerraformCommandLineDecoratorTest {
@@ -93,23 +91,18 @@ public class TerraformCommandLineDecoratorTest {
 
     Path tfPath = Paths.get(".tf");
     File fetchFile = new File(String.format("..%stf-maven-plugin%ssrc%smain%sresources%stf",File.separator,File.separator,File.separator,File.separator,File.separator));
-    File fetchFileName = new File(String.format("%s",fetchFile.getPath()));
     File tfDir = tfPath.toFile();
-    String[] tfwFileNames = {"tfw", "tfw.cmd", "tfw.ps1"};
-
-    if (tfDir.exists()) {
-      System.out.println(tfPath);
-      System.out.println(tfDir);
-    } else {
-      if (tfDir.mkdir()){
-        System.out.println(String.format("Created %s",tfDir));
-        System.out.println(tfPath.toAbsolutePath());
+    String[] tfwFileNames = {"tfw", "tfw.cmd", "tfw.ps1", "terraform-maven.properties"};
+    if (!tfDir.exists()) {
+      try {
+        tfDir.mkdir();
+      } catch (Exception e) {
+        System.out.printf("Unable to create .tf directory\n");
       }
     }
     for (String tfwFileName : tfwFileNames) {
       String tfwFile = (fetchFile.toPath().toFile() + File.separator +  tfwFileName);
       String tfwFileDestName = (".tf" + File.separator +  tfwFileName);
-      System.out.println(tfwFile);
       File tfwFileSource = new File(tfwFile);
       File tfwFileDest = new File(tfwFileDestName);
       if (!tfwFileDest.exists()) {
@@ -118,6 +111,12 @@ public class TerraformCommandLineDecoratorTest {
     }
 
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION);
-    terraformCommandLineDecorator.execute("");
+    terraformCommandLineDecorator.execute("-version");
+    String[]entries = tfDir.list();
+    for (String s: entries) {
+      File currentFile = new File(tfDir.getPath(), s);
+      currentFile.delete();
+    }
+    tfDir.delete();
   }
 }
