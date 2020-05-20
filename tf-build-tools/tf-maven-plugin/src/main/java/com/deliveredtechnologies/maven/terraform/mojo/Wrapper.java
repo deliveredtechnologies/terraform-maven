@@ -32,19 +32,19 @@ public class Wrapper extends TerraformMojo<String> {
   @Parameter( property = "distributionSite")
   String indistributionSite;
 
-  @Parameter( property = "releaseDir"      )
+  @Parameter(property = "releaseDir")
   String inreleaseDir;
 
-  @Parameter( property = "releaseName"     )
+  @Parameter(property = "releaseName")
   String inreleaseName;
 
-  @Parameter( property = "releaseVer"      )
+  @Parameter(property = "releaseVer")
   String inreleaseVer;
 
-  @Parameter( property = "releaseOS"       )
+  @Parameter(property = "releaseOS")
   String inreleaseOS;
 
-  @Parameter( property = "releaseSuffix"   )
+  @Parameter(property = "releaseSuffix")
   String inreleaseSuffix;
 
   @Override
