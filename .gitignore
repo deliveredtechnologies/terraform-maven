@@ -9,3 +9,4 @@ target
 .gpg
 .flattened-pom.xml
 .DS_Store
+*.json

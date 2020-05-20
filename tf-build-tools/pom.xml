@@ -6,7 +6,7 @@
   <groupId>com.deliveredtechnologies</groupId>
   <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.8.2</version>
+  <version>0.9</version>
   <description>Terraform Build Tools: The parent POM project for Java and Terraform Tools</description>
   <modules>
     <module>tf-cmd-api</module>
@@ -55,6 +55,15 @@
         <role>developer</role>
       </roles>
       <timezone>America/New_York</timezone>
+    </developer>
+    <developer>
+      <id>SriMaganti</id>
+      <name>Sri Vijaya Lakshmi Maganti</name>
+      <url>https://github.com/maganti07</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/Central</timezone>
     </developer>
     <developer>
       <id>s1234a6i</id>

@@ -4,28 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
-    <tf-maven-version>0.8.2</tf-maven-version>
+    <tf-maven-version>0.9</tf-maven-version>
   </properties>
   <artifactId>tf-s3-consumer</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
   <version>1.0</version>
-  <profiles>
-    <profile>
-      <id>dev</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <tfVarFiles>tfvars/dev.tfvars</tfVarFiles>
-      </properties>
-    </profile>
-    <profile>
-      <id>test</id>
-      <properties>
-        <tfVarFiles>tfvars/test.tfvars</tfVarFiles>
-      </properties>
-    </profile>
-  </profiles>
   <repositories>
     <repository>
       <id>local</id>
