@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Decorates Executable (for use with CommandLine) to put in the context of Terraform commands.
@@ -102,24 +100,20 @@ public class TerraformCommandLineDecorator implements Executable {
     try {
       if (tfDir.exists()) {
         File tfScr;
-        File tfScr3;
-        String os_name = System.getProperty("os.name");
-        int windowsIndex = os_name.indexOf("indow");
+        String osName = System.getProperty("os.name");
+        int windowsIndex = osName.indexOf("indow");
         if (windowsIndex != -1) {
-          tfScr3= new File(String.format("%s" + "%3$s" + "%3$s" + "%3$s" + "tfw.cmd", tfDir, "YY","\\", "LL"));
-          String tempFile = tfScr3.getAbsolutePath();
-          String tempFile2 = tempFile.replace("\\","\\\\");
-          tfScr = new File (tempFile2);
+          tfScr = new File(".tf/tfw");
         } else {
           tfScr = new File(String.format("%s%stfw", tfDir, File.separator));
         }
         if (tfScr.exists()) {
-          return String.format("%s %s %s", tfScr, cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+          return String.format("%s %s", ".tf/tfw", StringUtils.isEmpty(command) ? "" : command);
         }
       }
     } catch (Exception e) {
       e.printStackTrace();
-       //throw new MojoExecutionException(String.format("Unable to load properties from %s!", tfDir.getName()), e);
+      System.out.printf("Unable to create .tf directory\n");
     }
     return String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
   }
