@@ -111,7 +111,7 @@ public class TerraformCommandLineDecoratorTest {
     }
 
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION);
-    terraformCommandLineDecorator.execute("-version");
+    terraformCommandLineDecorator.execute("init");
     String[]entries = tfDir.list();
     for (String s: entries) {
       File currentFile = new File(tfDir.getPath(), s);
