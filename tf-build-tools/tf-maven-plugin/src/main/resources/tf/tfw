@@ -21,6 +21,7 @@ done
 targetDir="$projectBaseDir/.tf/"
 propFile="${targetDir}terraform-maven.properties"
 search="="
+cd $targetDir
 
 ################################################################
 # read all lines from the properties file and store in variables
@@ -57,11 +58,13 @@ releaseWindows="windows"
 terraformZipLinux="${targetDir}${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
 terraformZipWindows="${targetDir}${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
 terraformBinary="${targetDir}terraform.exe"
-terraformBinaryLinux="${targetDir}terraform"
+#terraformBinaryLinux="${targetDir}terraform"
+terraformBinaryLinux="terraform"
 terraformBinaryWindows="${targetDir}terraform.exe"
 releaseSourceLinux="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
 releaseSourceWindows="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
 
+releaseOS=Linux
 if [[ $releaseOS == "windows" ]]
 then
   terraformBinary=$terraformBinaryWindows
@@ -123,5 +126,6 @@ fi
 ###################################################
 # Run terraform with the supplied arguments if any
 ###################################################
-$terraformBinary "$args"
+cd $targetDir
+$terraformBinary $args
 exit
