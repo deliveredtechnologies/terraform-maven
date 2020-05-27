@@ -110,8 +110,9 @@ public class TerraformCommandLineDecorator implements Executable {
           tfScr = new File(String.format("%s%stfw", tfDir, File.separator));
         }
         if (tfScr.exists()) {
-          System.out.println(String.format("%s%s %s", unixPath, "/tfw", StringUtils.isEmpty(command) ? "" : command));
-          return String.format("%s%s %s", unixPath, "/tfw", StringUtils.isEmpty(command) ? "" : command);
+          System.out.println(String.format("%s%s %s %s", unixPath, "/tfw", cmd.toString(), StringUtils.isEmpty(command) ? "" : command));
+          System.out.println(String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command));
+          return String.format("%s%s %s %s", unixPath, "/tfw", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
         }
       }
     } catch (Exception e) {
