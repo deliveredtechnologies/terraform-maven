@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -21,9 +20,10 @@ public class TerraformPlanFileUtils {
 
   private Executable executable;
 
-  public TerraformPlanFileUtils(String tfRootDir, Logger logger) throws IOException {
-    this(new CommandLine(tfRootDir == null  ? TerraformUtils.getDefaultTerraformRootModuleDir() : Paths.get(tfRootDir), logger), logger);
+  public TerraformPlanFileUtils(String tfRootDir, Logger logger) throws IOException, TerraformException {
+    this(new CommandLine(tfRootDir == null  ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir), logger), logger);
   }
+
 
   public TerraformPlanFileUtils(Executable executable, Logger logger) {
     this.executable = executable;
