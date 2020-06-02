@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
+import org.zeroturnaround.exec.InvalidExitValueException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -53,7 +54,7 @@ public class CommandLineTest {
     FileUtils.forceDelete(path.getParent().toFile());
   }
 
-  @Test(expected = IOException.class)
+  @Test(expected = InvalidExitValueException.class)
   public void executeThatErrorsOnItsCommandThrowsTheErrorOutput() throws IOException, InterruptedException {
     String errorCommand = "exit 1";
     Executable commandLine = new CommandLine(directory, false, LoggerFactory.getLogger(CommandLine.class));
