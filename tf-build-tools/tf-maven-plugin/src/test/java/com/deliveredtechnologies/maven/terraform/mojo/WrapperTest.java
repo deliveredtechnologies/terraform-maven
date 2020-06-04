@@ -95,6 +95,24 @@ public class WrapperTest {
       Assert.assertEquals(props.getProperty("releaseOS"), System.getProperty("os.name").contains("indow") ? "windows" : "linux");
       Assert.assertEquals(props.getProperty("releaseSuffix"), "amd64.zip");
     }
+    if (tfDir.exists()) {
+      try {
+        String[]entries = tfDir.list();
+        if (entries != null) {
+          for (String s: entries) {
+            File currentFile = new File(tfDir.getPath(), s);
+            try {
+              currentFile.delete();
+            } catch (Exception e) {
+              System.out.printf("Unable to delete %s\n", currentFile);
+            }
+          }
+        }
+        tfDir.delete();
+      } catch (Exception e) {
+        System.out.printf("Unable to delete .tf directory\n");
+      }
+    }
   }
 
   @Test
@@ -119,5 +137,25 @@ public class WrapperTest {
       Assert.assertEquals(props.getProperty("releaseOS"), "windowsTest");
       Assert.assertEquals(props.getProperty("releaseSuffix"), "amd64.zipTest");
     }
+    if (tfDir.exists()) {
+      try {
+        String[]entries = tfDir.list();
+        if (entries != null) {
+          for (String s: entries) {
+            File currentFile = new File(tfDir.getPath(), s);
+            try {
+              currentFile.delete();
+            } catch (Exception e) {
+              System.out.printf("Unable to delete %s\n", currentFile);
+            }
+          }
+        }
+        tfDir.delete();
+      } catch (Exception e) {
+        System.out.printf("Unable to delete .tf directory\n");
+      }
+    }
+
+
   }
 }
