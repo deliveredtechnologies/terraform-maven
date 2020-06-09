@@ -67,7 +67,7 @@ public class WrapperTest {
         Assert.assertEquals(props.getProperty("distributionSite"), "https://repo.dtcc.com");
         Assert.assertEquals(props.getProperty("releaseDir"), "repository/dtcc-foss-public/terraform-core");
         Assert.assertEquals(props.getProperty("releaseName"), "terraform");
-        Assert.assertEquals(props.getProperty("releaseVer"), "0.12.24");
+        Assert.assertEquals(props.getProperty("releaseVer"), "0.12.25");
         Assert.assertEquals(props.getProperty("releaseOS"), System.getProperty("os.name").contains("indow") ? "windows" : "linux");
         Assert.assertEquals(props.getProperty("releaseSuffix"), "amd64.zip");
       }
