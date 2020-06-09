@@ -88,10 +88,10 @@ public class WrapperTest {
     Properties props = new Properties();
     try (InputStream fis = new FileInputStream(tfPath.resolve(tfwFileNames[3]).toFile())) {
       props.load(fis);
-      Assert.assertEquals(props.getProperty("distributionSite"), "https://releases.hashicorp.com");
-      Assert.assertEquals(props.getProperty("releaseDir"), "terraform");
+      Assert.assertEquals(props.getProperty("distributionSite"), "https://repo.dtcc.com");
+      Assert.assertEquals(props.getProperty("releaseDir"), "repository/dtcc-foss-public/terraform-core");
       Assert.assertEquals(props.getProperty("releaseName"), "terraform");
-      Assert.assertEquals(props.getProperty("releaseVer"), "0.12.24");
+      Assert.assertEquals(props.getProperty("releaseVer"), "0.12.25");
       Assert.assertEquals(props.getProperty("releaseOS"), System.getProperty("os.name").contains("indow") ? "windows" : "linux");
       Assert.assertEquals(props.getProperty("releaseSuffix"), "amd64.zip");
     }
