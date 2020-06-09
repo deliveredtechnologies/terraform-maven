@@ -1,3 +1,4 @@
+/*
 package com.deliveredtechnologies.terraform;
 
 import com.deliveredtechnologies.io.CommandLine;
@@ -8,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * Appends functionality to plan file (i.e. sourcing and storing plan files remotely).
- */
+
 public class TerraformPlanFileUtils {
 
   private Logger logger;
@@ -31,12 +30,7 @@ public class TerraformPlanFileUtils {
   }
 
 
-  /**
-   * Executes given planAction for a given backendType - GET/PUTs terraform plan files from/to specified backend.
-   * @param properties property options
-   * @return response
-   * @throws IOException
-   */
+
   public String executePlanFileOperation(Properties properties) throws IOException {
 
     boolean isPlanFile = properties.containsKey("planOutputFile") || properties.containsKey("plan");
@@ -61,12 +55,7 @@ public class TerraformPlanFileUtils {
     return null;
   }
 
-  /**
-   * Performs S3 operations.
-   * @param action backend option either GET or PUT
-   * @param s3Key fully qualified path for the s3 object to store or destination location of the file
-   *
-   */
+
   protected void backendS3operations(String action, String s3Key, Properties properties ) throws IOException {
     try {
       String bucketName = s3Key.split("/")[2];
@@ -87,3 +76,7 @@ public class TerraformPlanFileUtils {
     }
   }
 }
+
+ */
+
+

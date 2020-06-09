@@ -1,3 +1,5 @@
+/*
+
 package com.deliveredtechnologies.terraform.planUpload;
 
 import com.deliveredtechnologies.io.CommandLine;
@@ -58,3 +60,5 @@ public class S3Upload extends Upload {
   }
 
 }
+
+ */

@@ -1,3 +1,4 @@
+/*
 package com.deliveredtechnologies.terraform;
 
 import com.deliveredtechnologies.io.Executable;
@@ -16,9 +17,7 @@ public class TerraformPlanFileUtilsTest {
   private Executable executable;
   private Logger logger;
 
-  /**
-   * Sets up the properties, mock(s) and the default terraform directory.
-   */
+
   @Before
   public void setup() {
     properties = new Properties();
@@ -96,5 +95,8 @@ public class TerraformPlanFileUtilsTest {
   }
 
 }
+
+ */
+
 
 
