@@ -36,12 +36,12 @@ public class S3 extends PlanFileUtils {
     if (isPlanFile) {
       String planFile = properties.getProperty("planOutputFile") == null ? properties.getProperty("plan") : properties.getProperty("planOutputFile");
       String planFileName = planFile.split("/")[planFile.split("/").length - 1];
-      String bucketName = planFile.split("/")[2];
-      String fileName = planFile.substring(planFile.lastIndexOf("/")).replaceAll("/", "");
       String backendAction = properties.getProperty("planOutputFile") == null ? "GET" : "PUT";
 
       if (!planFile.equals(planFileName)) {
         try {
+          String bucketName = planFile.split("/")[2];
+          String fileName = planFile.substring(planFile.lastIndexOf("/")).replaceAll("/", "");
           if (backendAction.equals("GET")) {
             executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName));
           } else if (backendAction.equals("PUT")) {
