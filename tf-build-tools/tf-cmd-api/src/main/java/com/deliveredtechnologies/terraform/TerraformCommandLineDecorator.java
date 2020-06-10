@@ -99,8 +99,6 @@ public class TerraformCommandLineDecorator implements Executable {
 
   private String getTFExecutable() {
     File tfwrapper = new File(".tf/tfw");
-    String inPath = tfwrapper.getAbsolutePath();
-    String unixPath = inPath.replaceAll("[\\\\]","/");
-    return tfwrapper.exists() ? unixPath : "terraform";
+    return tfwrapper.exists() ? tfwrapper.getAbsolutePath().replaceAll("[\\\\]","/") : "terraform";
   }
 }
