@@ -70,6 +70,7 @@ public class Plan extends TerraformMojo<String> {
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
+      //Dynamically load the backend
       S3 planUtils = new S3(tfRootDir, new MavenSlf4jAdapter((getLog())));
       //TerraformPlanFileUtils planUtils = new TerraformPlanFileUtils(tfRootDir, new MavenSlf4jAdapter(getLog()));
       planUtils.executePlanFileOperation(getFieldsAsProperties());
