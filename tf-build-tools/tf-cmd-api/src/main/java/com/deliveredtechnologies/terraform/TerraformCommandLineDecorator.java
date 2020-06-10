@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -95,28 +93,14 @@ public class TerraformCommandLineDecorator implements Executable {
   }
 
   private String getTerraformCommand(String command) {
-    Path tfPath = Paths.get(".tf");
-    File tfDir = tfPath.toFile();
-    String inPath = tfDir.getAbsolutePath();
+
+    return String.format("%s %s %s", getTFExecutable(), cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+  }
+
+  private String getTFExecutable() {
+    File tfwrapper = new File(".tf/tfw");
+    String inPath = tfwrapper.getAbsolutePath();
     String unixPath = inPath.replaceAll("[\\\\]","/");
-    try {
-      if (tfDir.exists()) {
-        File tfScr;
-        String osName = System.getProperty("os.name");
-        int windowsIndex = osName.indexOf("indow");
-        if (windowsIndex != -1) {
-          tfScr = new File(".tf/tfw");
-        } else {
-          tfScr = new File(String.format("%s%stfw", tfDir, File.separator));
-        }
-        if (tfScr.exists()) {
-          return String.format("%s%s %s %s", unixPath, "/tfw", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.printf(".tf directory does not exist, please run mvn tf:wrapper first\n");
-    }
-    return String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+    return tfwrapper.exists() ? unixPath : "terraform";
   }
 }
