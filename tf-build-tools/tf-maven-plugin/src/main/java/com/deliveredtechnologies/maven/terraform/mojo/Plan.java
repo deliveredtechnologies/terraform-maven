@@ -4,7 +4,8 @@ import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
-import com.deliveredtechnologies.terraform.planfileutils.S3;
+import com.deliveredtechnologies.terraform.planfileutils.PlanFileActions;
+import com.deliveredtechnologies.terraform.planfileutils.TerraformPlanS3Handler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -70,10 +71,8 @@ public class Plan extends TerraformMojo<String> {
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
-      //Dynamically load the backend
-      S3 planUtils = new S3(tfRootDir, new MavenSlf4jAdapter((getLog())));
-      //TerraformPlanFileUtils planUtils = new TerraformPlanFileUtils(tfRootDir, new MavenSlf4jAdapter(getLog()));
-      planUtils.executePlanFileOperation(getFieldsAsProperties());
+      PlanFileActions planUtils = new TerraformPlanS3Handler(tfRootDir, new MavenSlf4jAdapter(getLog()));
+      planUtils.doAction(getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
