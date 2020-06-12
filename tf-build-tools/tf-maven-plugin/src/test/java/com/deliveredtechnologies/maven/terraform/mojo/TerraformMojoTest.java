@@ -26,7 +26,6 @@ public class TerraformMojoTest {
    */
   @Before
   public void setup() {
-    log = Mockito.mock(Log.class);
     terraformOperation = Mockito.mock(TerraformOperation.class);
     properties = new Properties();
   }
@@ -40,17 +39,10 @@ public class TerraformMojoTest {
       public void execute() throws MojoExecutionException, MojoFailureException {
         execute((TerraformOperation<String>)terraformOperation, properties);
       }
-
-      @Override
-      public Log getLog() {
-        return log;
-      }
     };
 
     terraformMojo.execute();
-
     Mockito.verify(terraformOperation, Mockito.times(1)).execute(properties);
-    Mockito.verify(log, Mockito.times(1)).info("Testing!");
   }
 
   @Test
@@ -62,16 +54,10 @@ public class TerraformMojoTest {
         execute(terraformOperation, properties);
       }
 
-      @Override
-      public Log getLog() {
-        return log;
-      }
     };
 
     terraformMojo.execute();
-
     Mockito.verify(terraformOperation, Mockito.times(1)).execute(properties);
-    Mockito.verify(log, Mockito.times(0)).info(Mockito.anyString());
   }
 
   @Test(expected = MojoExecutionException.class)
