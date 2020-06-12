@@ -5,7 +5,7 @@
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
 [maven-badge]:https://img.shields.io/badge/maven%20central-0.9.1-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.10-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.9.1-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -52,11 +52,11 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 
 ### Artifacts in This Repository
 
-| Artifact Name    | Version | Latest Snapshot | Security Scan Results | Description |
-|------------------|---------|-----------------|-----------------------|-------------|
-| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | [![tf-maven-plugin vulnerabilities][tf-maven-plugin-synk-badge]][tf-maven-plugin-synk] | Terraform Maven Plugin       |
-| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | [![tf-cmd-api vulnerabilities][tf-cmd-api-synk-badge]][tf-cmd-api-synk]                | Terraform Command API        |
-| tf-s3-archetype  | [![Maven Central][maven-badge]][tf-s3-archetype]  | [![Maven Snapshot][maven-snapshot-badge]][tf-s3-archetype-snapshot]  | N/A                                                                                    | Maven Terraform S3 Archetype |
+| Artifact Name    | Version | Latest Snapshot | Description |
+|------------------|---------|-----------------|-------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin       |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API        |
+| tf-s3-archetype  | [![Maven Central][maven-badge]][tf-s3-archetype]  | [![Maven Snapshot][maven-snapshot-badge]][tf-s3-archetype-snapshot]  | Maven Terraform S3 Archetype |
 
 ### Repository Directory Structure
 * examples - Terraform Maven example projects
