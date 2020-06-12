@@ -30,9 +30,7 @@ public class TerraformApplyS3Handler extends PlanFileActions {
   @Override
   public void doAction(Properties properties) {
 
-    boolean isPlanFile = properties.containsKey("plan");
-
-    if (isPlanFile) {
+    if (properties.containsKey("plan")) {
       String planFile = properties.getProperty("plan");
       String planFileName = planFile.split("/")[planFile.split("/").length - 1];
 
@@ -40,7 +38,7 @@ public class TerraformApplyS3Handler extends PlanFileActions {
         try {
           String bucketName = planFile.split("/")[2];
           String fileName = planFile.substring(planFile.lastIndexOf("/")).replaceAll("/", "");
-          executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName));
+          executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, planFile, fileName));
         } catch (InterruptedException | IOException e) {
           e.printStackTrace();
         }

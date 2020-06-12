@@ -12,6 +12,7 @@ public abstract class PlanFileActions {
   PlanFileActions nextPlanFileAction;
 
   public void planFileOperation(PlanFileActions nextPlanFileAction) {
+
     this.nextPlanFileAction = nextPlanFileAction;
   }
 
