@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Properties;
 
-public class TerraformApplyS3Handler extends PlanFileActions {
+public class TerraformApplyS3Handler extends TerraformHandler {
   private Logger logger;
 
 
@@ -29,22 +29,18 @@ public class TerraformApplyS3Handler extends PlanFileActions {
 
   @Override
   public void doAction(Properties properties) {
-
-    if (properties.containsKey("plan")) {
-      String planFile = properties.getProperty("plan");
-      String planFileName = planFile.split("/")[planFile.split("/").length - 1];
-
-      if (!planFile.equals(planFileName)) {
-        try {
-          String bucketName = planFile.split("/")[2];
-          String fileName = planFile.substring(planFile.lastIndexOf("/")).replaceAll("/", "");
-          executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, planFile, fileName));
-        } catch (InterruptedException | IOException e) {
-          e.printStackTrace();
-        }
+    if (properties.containsKey("plan") && properties.getProperty("plan").startsWith("s3")) {
+      try {
+        String planFile = properties.getProperty("plan");
+        String bucketName = planFile.split("/")[2];
+        String fileName = planFile.substring(planFile.lastIndexOf("/")).replaceAll("/", "");
+        executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, planFile, fileName));
+      } catch (InterruptedException | IOException e) {
+        e.printStackTrace();
       }
     } else {
-      nextPlanFileAction.doAction(properties);
+      handleRequest(properties);
     }
   }
 }
+

@@ -107,6 +107,7 @@ public class TerraformApply implements TerraformOperation<String> {
             break;
           case timeout:
           case plan:
+            options.append(String.format("-%1$s ", properties.getProperty(param.property).split("/")[properties.getProperty(param.property).split("/").length - 1]));
             break;
           default:
             options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
@@ -117,9 +118,6 @@ public class TerraformApply implements TerraformOperation<String> {
     options.append("-auto-approve ");
 
     try {
-      if (properties.containsKey(TerraformApplyParam.plan.property)) {
-        options.append(properties.getProperty(TerraformApplyParam.plan.property));
-      }
 
       if (properties.containsKey(TerraformApplyParam.timeout.property)) {
         return terraform.execute(options.toString(), Integer.parseInt(properties.get(TerraformApplyParam.timeout.property).toString()));
