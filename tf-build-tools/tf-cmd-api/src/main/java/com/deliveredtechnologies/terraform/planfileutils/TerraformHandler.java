@@ -1,6 +1,5 @@
 package com.deliveredtechnologies.terraform.planfileutils;
 
-import java.util.Optional;
 import java.util.Properties;
 
 
@@ -9,10 +8,18 @@ import java.util.Properties;
  */
 
 public abstract class TerraformHandler {
-  Optional<TerraformHandler> nextHandler = Optional.empty();
+
+  private TerraformHandler nextHandlerAction;
+
+  public TerraformHandler nextHandlerAction(TerraformHandler nextHandlerAction) {
+    this.nextHandlerAction = nextHandlerAction;
+    return nextHandlerAction;
+  }
 
   void handleRequest(Properties properties) {
-    this.nextHandler.ifPresent(handler -> handler.doAction(properties));
+    if (nextHandlerAction != null) {
+      nextHandlerAction.doAction(properties);
+    }
   }
 
   public void doAction(Properties properties) {}
