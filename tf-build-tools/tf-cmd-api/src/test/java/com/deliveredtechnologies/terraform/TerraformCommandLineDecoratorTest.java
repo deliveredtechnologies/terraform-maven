@@ -69,13 +69,15 @@ public class TerraformCommandLineDecoratorTest {
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, logger);
     terraformCommandLineDecorator.execute("");
 
-    Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
+    Mockito.verify(logger, Mockito.times(1)).info(Mockito.anyString(), Mockito.any(Path.class));
+    Mockito.verify(logger, Mockito.times(1)).info(Mockito.anyString(), Mockito.anyString());
 
     logger = Mockito.mock(Logger.class);
     terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, new CommandLine(TerraformUtils.getDefaultTerraformRootModuleDir()), logger);
     terraformCommandLineDecorator.execute("");
 
-    Mockito.verify(logger, Mockito.times(2)).debug(Mockito.anyString());
+    Mockito.verify(logger, Mockito.times(1)).info(Mockito.anyString(), Mockito.any(Path.class));
+    Mockito.verify(logger, Mockito.times(1)).info(Mockito.anyString(), Mockito.anyString());
 
     Executable executable = Mockito.mock(Executable.class);
     terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, executable);
