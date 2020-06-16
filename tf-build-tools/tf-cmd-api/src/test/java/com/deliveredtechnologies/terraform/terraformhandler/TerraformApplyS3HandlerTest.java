@@ -1,4 +1,4 @@
-package com.deliveredtechnologies.terraform.planfileutils;
+package com.deliveredtechnologies.terraform.terraformhandler;
 
 import com.deliveredtechnologies.io.Executable;
 import org.junit.Before;

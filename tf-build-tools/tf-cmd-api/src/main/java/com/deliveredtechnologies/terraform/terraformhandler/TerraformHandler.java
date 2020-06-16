@@ -1,4 +1,4 @@
-package com.deliveredtechnologies.terraform.planfileutils;
+package com.deliveredtechnologies.terraform.terraformhandler;
 
 import java.util.Properties;
 
@@ -6,7 +6,6 @@ import java.util.Properties;
 /**
  * Chain of responsibility handler.
  */
-
 public abstract class TerraformHandler {
 
   private TerraformHandler nextHandlerAction;
