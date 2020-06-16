@@ -36,5 +36,18 @@ public class TerraformApplyS3HandlerTest {
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3api get-object --bucket terraform-maven-state --key planfiles/test.json test.json");
   }
 
+  @Test
+  public void planPropertyNotSpecified() throws IOException, InterruptedException {
+    TerraformHandler terraformHandler = new TerraformApplyS3Handler(executable, logger);
+    terraformHandler.nextHandlerAction(new TerraformPlanS3Handler(executable, logger));
+
+    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
+
+    properties.put("plan", "create.json");
+    properties.put("planOutputFile", s3BucketKey);
+    terraformHandler.doAction(properties);
+    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json");
+
+  }
 
 }

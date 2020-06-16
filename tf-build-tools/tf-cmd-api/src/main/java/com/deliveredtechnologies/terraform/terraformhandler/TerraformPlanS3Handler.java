@@ -49,5 +49,4 @@ public class TerraformPlanS3Handler extends TerraformHandler {
       handleRequest(properties);
     }
   }
-
 }
