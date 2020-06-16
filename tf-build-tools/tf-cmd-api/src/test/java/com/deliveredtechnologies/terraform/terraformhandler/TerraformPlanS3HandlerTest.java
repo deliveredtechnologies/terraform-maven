@@ -1,6 +1,7 @@
 package com.deliveredtechnologies.terraform.terraformhandler;
 
 import com.deliveredtechnologies.io.Executable;
+import com.deliveredtechnologies.terraform.TerraformException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,6 +15,7 @@ public class TerraformPlanS3HandlerTest {
   private Properties properties;
   private Executable executable;
   private Logger logger;
+  String tfRootDir;
 
   /**
    * Sets up the properties, mock(s) and the default terraform directory.
@@ -40,6 +42,8 @@ public class TerraformPlanS3HandlerTest {
 
   @Test
   public void planOperationWithAllPropertiesSpecifiedWithoutKmsKeyId() throws IOException, InterruptedException {
+
+
     TerraformHandler planFileUtils = new TerraformPlanS3Handler(executable, logger);
 
     String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
@@ -48,6 +52,18 @@ public class TerraformPlanS3HandlerTest {
     planFileUtils.doAction(properties);
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json");
 
+  }
+
+  @Test
+  public void planOperationWithtfRootDirTerraformPlanS3Handler() throws IOException, InterruptedException, TerraformException {
+
+
+    TerraformHandler planFileUtils = new TerraformPlanS3Handler(tfRootDir, logger);
+
+    String s3BucketKey = "S3://terraform-maven-state/planfiles/test.json";
+
+    properties.put("planOutputFile", s3BucketKey);
+    planFileUtils.doAction(properties);
   }
 
   @Test

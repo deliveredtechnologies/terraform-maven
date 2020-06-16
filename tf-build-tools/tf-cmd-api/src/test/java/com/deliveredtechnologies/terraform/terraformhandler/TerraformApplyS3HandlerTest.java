@@ -1,6 +1,7 @@
 package com.deliveredtechnologies.terraform.terraformhandler;
 
 import com.deliveredtechnologies.io.Executable;
+import com.deliveredtechnologies.terraform.TerraformException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,6 +15,7 @@ public class TerraformApplyS3HandlerTest {
   private Properties properties;
   private Executable executable;
   private Logger logger;
+  String tfRootDir;
 
   /**
    * Sets up the properties, mock(s) and the default terraform directory.
@@ -48,6 +50,18 @@ public class TerraformApplyS3HandlerTest {
     terraformHandler.doAction(properties);
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json");
 
+  }
+
+  @Test
+  public void planOperationWithtfRootDirTerraformApplyS3Handler() throws IOException, InterruptedException, TerraformException {
+
+
+    TerraformHandler planFileUtils = new TerraformPlanS3Handler(tfRootDir, logger);
+
+    String s3BucketKey = "S3://terraform-maven-state/planfiles/test.json";
+
+    properties.put("plan", s3BucketKey);
+    planFileUtils.doAction(properties);
   }
 
 }
