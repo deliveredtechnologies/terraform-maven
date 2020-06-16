@@ -34,7 +34,7 @@ public class TerraformApplyS3Handler extends TerraformHandler {
         String planFile = properties.getProperty("plan");
         String bucketName = planFile.split("/")[2];
         String fileName = planFile.replaceAll("s3://" + bucketName + "/", "");
-        executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, fileName.split("/")[-1].trim()));
+        executable.execute(String.format("aws s3api get-object --bucket %1$s --key %2$s %3$s", bucketName, fileName, planFile.substring(planFile.lastIndexOf("/")).replaceAll("/", "")));
       } catch (InterruptedException | IOException e) {
         e.printStackTrace();
       }
