@@ -56,7 +56,7 @@ public class TerraformApplyS3HandlerTest {
   public void planOperationWithtfRootDirTerraformApplyS3Handler() throws IOException, InterruptedException, TerraformException {
 
 
-    TerraformHandler planFileUtils = new TerraformPlanS3Handler(tfRootDir, logger);
+    TerraformHandler planFileUtils = new TerraformApplyS3Handler(tfRootDir, logger);
 
     String s3BucketKey = "S3://terraform-maven-state/planfiles/test.json";
 
