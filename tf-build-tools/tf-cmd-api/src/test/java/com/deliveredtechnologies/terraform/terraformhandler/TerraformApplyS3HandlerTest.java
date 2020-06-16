@@ -39,29 +39,26 @@ public class TerraformApplyS3HandlerTest {
   }
 
   @Test
-  public void planPropertyNotSpecified() throws IOException, InterruptedException {
+  public void planOperationWithTfRootDirTerraformApplyS3Handler() throws IOException, TerraformException {
+    TerraformHandler terraformHandler = new TerraformApplyS3Handler(tfRootDir, logger);
+
+    String s3BucketKey = "S3://terraform-maven-state/planfiles/test.json";
+    properties.put("plan", s3BucketKey);
+
+    terraformHandler.doAction(properties);
+  }
+
+  @Test
+  public void planOperationWithPlanPropertyNotSpecified() throws IOException, InterruptedException {
     TerraformHandler terraformHandler = new TerraformApplyS3Handler(executable, logger);
     terraformHandler.nextHandlerAction(new TerraformPlanS3Handler(executable, logger));
 
     String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
-
     properties.put("plan", "create.json");
     properties.put("planOutputFile", s3BucketKey);
+
     terraformHandler.doAction(properties);
     Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json");
-
-  }
-
-  @Test
-  public void planOperationWithtfRootDirTerraformApplyS3Handler() throws IOException, InterruptedException, TerraformException {
-
-
-    TerraformHandler planFileUtils = new TerraformApplyS3Handler(tfRootDir, logger);
-
-    String s3BucketKey = "S3://terraform-maven-state/planfiles/test.json";
-
-    properties.put("plan", s3BucketKey);
-    planFileUtils.doAction(properties);
   }
 
 }
