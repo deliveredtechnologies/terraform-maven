@@ -4,7 +4,6 @@ import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
-import com.deliveredtechnologies.terraform.planfileutils.TerraformApplyS3Handler;
 import com.deliveredtechnologies.terraform.planfileutils.TerraformHandler;
 import com.deliveredtechnologies.terraform.planfileutils.TerraformPlanS3Handler;
 import org.apache.commons.lang3.StringUtils;
@@ -73,8 +72,6 @@ public class Plan extends TerraformMojo<String> {
       }
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
       TerraformHandler planUtils = new TerraformPlanS3Handler(tfRootDir, new MavenSlf4jAdapter(getLog()));
-      //TODO: Technically, no where we refer plan and apply goals at the same time but we can test chain of responsibility
-      planUtils.nextHandlerAction(new TerraformApplyS3Handler(tfRootDir, new MavenSlf4jAdapter(getLog())));
       planUtils.doAction(getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
