@@ -4,9 +4,12 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -16,6 +19,7 @@ import java.util.Properties;
 public class TerraformPlan implements TerraformOperation<String> {
 
   private Executable terraform;
+  private ObjectMapper mapper = new ObjectMapper();
 
   enum TerraformPlanParam {
     tfVars("var"),
@@ -101,8 +105,23 @@ public class TerraformPlan implements TerraformOperation<String> {
           continue;
         }
         if (param == TerraformPlanParam.tfVars) {
-          for (String var : (properties.get(param.property)).toString().split(",")) {
-            options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+
+          Object value = properties.get(param.property);
+
+          if (value instanceof Map) {
+
+            ((Map) value ).forEach((key, val) -> {
+              try {
+                options.append(String.format("-%s '%s=%s' ", param, key, val instanceof String ? val : mapper.writeValueAsString(val)));
+              } catch (JsonProcessingException e) {
+                e.printStackTrace();
+              }
+            });
+          }
+          if (value instanceof String) {
+            for (String var : (properties.get(param.property)).toString().split(",")) {
+              options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+            }
           }
           continue;
         }

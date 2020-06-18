@@ -22,6 +22,12 @@ variable "is_versioned" {
   default     = false
 }
 
+variable "test_map" {
+  type = map(any)
+}
+variable "test_list" {
+  type = list(any)
+}
 variable "kms_key_arn" {
   description = "if set, kms bucket encryption is used with the key arn supplied"
   type = string

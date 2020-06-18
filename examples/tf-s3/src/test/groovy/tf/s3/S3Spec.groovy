@@ -7,6 +7,7 @@ import com.deliveredtechnologies.terraform.api.TerraformDestroy
 import com.deliveredtechnologies.terraform.api.TerraformInit
 import com.deliveredtechnologies.terraform.api.TerraformOutput
 import com.deliveredtechnologies.terraform.api.TerraformPlan
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import spock.lang.Specification
 
@@ -26,7 +27,9 @@ class S3Spec extends Specification {
             AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion("us-east-1").build()
 
             tfProperties.put('tfRootDir', stackName)
-            tfProperties.put('tfVars', "region=${region},environment=${environment}".toString())
+            def tfvars = [region: region, environment: environment, test_map: [foo: "bar"], test_list: ["one", "two"] ]
+            println JsonOutput.toJson(tfvars)
+            tfProperties.put('tfVars', tfvars)
 
         when:
             init.execute(tfProperties)
