@@ -14,6 +14,9 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -71,6 +74,21 @@ public class TerraformDestroyTest {
     Assert.assertEquals("Success!", terraformDestroy.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
   }
+
+  @Test
+  public void terraformDestroyExecutesWhenTFvarsIsMap() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
+    Mockito.when(this.executable.execute("terraform destroy -var 'key1=value1' -var 'key2=[\"value2\",\"value3\"]' -auto-approve ")).thenReturn("Success!");
+    TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
+
+    Map tfvars = new HashMap();
+    tfvars.put("key1", "value1");
+    tfvars.put("key2", Arrays.asList("value2", "value3"));
+    this.properties.put(TerraformApply.TerraformApplyParam.tfVars.property, tfvars);
+    Assert.assertEquals("Success!", terraformDestroy.execute(this.properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
+  }
+
 
   @Test
   public void terraformDestroyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
