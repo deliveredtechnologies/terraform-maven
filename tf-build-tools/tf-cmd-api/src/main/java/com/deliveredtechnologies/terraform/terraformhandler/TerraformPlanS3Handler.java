@@ -45,8 +45,6 @@ public class TerraformPlanS3Handler extends TerraformHandler {
       } catch (InterruptedException | IOException e) {
         e.printStackTrace();
       }
-    } else {
-      handleRequest(properties);
     }
   }
 }

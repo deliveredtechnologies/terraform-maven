@@ -5,7 +5,6 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -13,8 +12,6 @@ import java.util.Properties;
 public class TerraformApplyS3Handler extends TerraformHandler {
   private Logger logger;
 
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(TerraformUtils.class);
 
   private Executable executable;
 
@@ -38,8 +35,6 @@ public class TerraformApplyS3Handler extends TerraformHandler {
       } catch (InterruptedException | IOException e) {
         e.printStackTrace();
       }
-    } else {
-      handleRequest(properties);
     }
   }
 }

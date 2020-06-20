@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.terraform.terraformhandler;
 
+import java.util.Optional;
 import java.util.Properties;
 
 
@@ -8,17 +9,16 @@ import java.util.Properties;
  */
 public abstract class TerraformHandler {
 
-  private TerraformHandler nextHandlerAction;
+  private TerraformHandler nextHandler ;
 
-  public TerraformHandler nextHandlerAction(TerraformHandler nextHandlerAction) {
-    this.nextHandlerAction = nextHandlerAction;
-    return nextHandlerAction;
+  public TerraformHandler nextHandler(TerraformHandler nextHandler) {
+    this.nextHandler = nextHandler;
+    return nextHandler;
   }
 
-  void handleRequest(Properties properties) {
-    if (nextHandlerAction != null) {
-      nextHandlerAction.doAction(properties);
-    }
+  protected final void handleRequest(Properties properties) {
+    doAction(properties);
+    Optional.ofNullable(nextHandler).ifPresent(handler -> handler.handleRequest(properties));
   }
 
   public void doAction(Properties properties) {}
