@@ -65,7 +65,8 @@ public class TerraformGet implements TerraformOperation<List<Path>> {
    * The common modules directory is defaulted to src/main/.tfmodules
    */
   public TerraformGet() throws IOException {
-    this(new Slf4jMavenAdapter(LoggerFactory.getLogger(TerraformGet.class)), (String)null);
+    this(new
+      Slf4jMavenAdapter(LoggerFactory.getLogger(TerraformGet.class)), (String)null);
   }
 
   @Override

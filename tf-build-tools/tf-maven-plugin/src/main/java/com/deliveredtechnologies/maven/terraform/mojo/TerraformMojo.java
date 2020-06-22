@@ -27,13 +27,7 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
    */
   protected final void execute(TerraformOperation<T> tfOperation, Properties properties) throws MojoExecutionException {
     try {
-      Object response = tfOperation.execute(properties);
-      if (response instanceof String) {
-        String responseString = (String)response;
-        if (!responseString.isEmpty()) {
-          getLog().info((String) response);
-        }
-      }
+      tfOperation.execute(properties);
     } catch (TerraformException e) {
       throw new MojoExecutionException("Failed to execute terraform operation", e);
     }
@@ -66,7 +60,7 @@ public abstract class TerraformMojo<T> extends AbstractMojo {
         field.setAccessible(true);
         Object fieldVal = field.get(this);
         if (fieldVal == null
-            || fieldVal.equals(false)
+            || (fieldVal.equals(false) && !field.getName().startsWith("refresh"))
             || (Number.class.isAssignableFrom(fieldVal.getClass()) && ((Number)fieldVal).longValue() <= 0)) {
           continue;
         }

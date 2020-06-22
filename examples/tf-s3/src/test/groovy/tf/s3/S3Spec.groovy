@@ -105,7 +105,6 @@ class S3Spec extends Specification {
         TerraformOutput output = new TerraformOutput(stackName)
         String tfOutput = output.execute(new Properties())
         JsonSlurper slurper = new JsonSlurper()
-        println tfOutput
         slurper.parseText(tfOutput)
     }
 }

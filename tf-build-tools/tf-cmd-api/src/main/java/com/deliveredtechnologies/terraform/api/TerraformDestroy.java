@@ -23,6 +23,7 @@ public class TerraformDestroy implements TerraformOperation<String> {
     tfVars("var"),
     tfVarFiles("var-file"),
     noColor("no-color"),
+    refreshState("refresh"),
     timeout("timeout");
 
     Optional<String> name = Optional.empty();
@@ -68,10 +69,13 @@ public class TerraformDestroy implements TerraformOperation<String> {
    * Executes terraform destroy. <br>
    * <p>
    *   Valid Properties: <br>
+   *   tfVars - a comma delimited list of terraform variables<br>
+   *   varFiles - a comma delimited list of terraform vars files<br>
    *   lockTimeout - state file lock timeout<br>
    *   target - resource target<br>
    *   autoApprove - approve without prompt<br>
    *   noColor - remove color encoding from output<br>
+   *   refreshState - if true then refresh the state prior to apply<br>
    *   timeout - how long in milliseconds the terraform apply command can run<br>
    * </p>
    * @param properties  paramter options and properties for terraform apply
@@ -81,32 +85,34 @@ public class TerraformDestroy implements TerraformOperation<String> {
   @Override
   public String execute(Properties properties) throws TerraformException {
     StringBuilder options = new StringBuilder();
+
     for (TerraformDestroyParam param : TerraformDestroyParam.values()) {
-      if (!properties.containsKey(param.property)) continue;
-
-      if (param == TerraformDestroy.TerraformDestroyParam.tfVarFiles) {
-        for (String file : (properties.getProperty(param.property)).split(",")) {
-          options.append(String.format("-%1$s=%2$s ", param, file.trim()));
+      if (properties.containsKey(param.property)) {
+        if (param == TerraformDestroyParam.tfVarFiles) {
+          for (String file : (properties.getProperty(param.property)).split(",")) {
+            options.append(String.format("-%1$s=%2$s ", param, file.trim()));
+          }
+          continue;
         }
-        continue;
-      }
-      if (param == TerraformDestroyParam.tfVars) {
-        for (String var : (properties.get(param.property)).toString().split(",")) {
-          options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+        if (param == TerraformDestroyParam.tfVars) {
+          for (String var : (properties.get(param.property)).toString().split(",")) {
+            options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+          }
+          continue;
         }
-        continue;
-      }
 
-      switch (param) {
-        case lockTimeout:
-        case target:
-          options.append(String.format("-%1$s=%2$s ", param.toString(), properties.getProperty(param.property)));
-          break;
-        case noColor:
-          options.append(String.format("-%1$s ", param));
-          break;
-        default:
-          break;
+        switch (param) {
+          case noColor:
+            options.append(String.format("-%1$s ", param));
+            break;
+          case timeout:
+            break;
+          case lockTimeout:
+          case target:
+          case refreshState:
+          default:
+            options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
+        }
       }
     }
     options.append("-auto-approve ");

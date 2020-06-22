@@ -1,6 +1,5 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
-import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformApply;
@@ -19,6 +18,7 @@ import java.io.IOException;
  */
 @Mojo(name = "apply", requiresProject = false)
 public class Apply extends TerraformMojo<String> {
+
   @Parameter(property = "tfRootDir")
   String tfRootDir;
 
@@ -37,11 +37,17 @@ public class Apply extends TerraformMojo<String> {
   @Parameter(property = "target")
   String target;
 
+  @Parameter(property = "plan")
+  String plan;
+
   @Parameter(property = "noColor")
   boolean noColor = true;
 
   @Parameter(property = "timeout")
   long timeout;
+
+  @Parameter(property = "refreshState")
+  boolean refreshState = true;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
@@ -50,7 +56,7 @@ public class Apply extends TerraformMojo<String> {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-      execute(new TerraformApply(tfRootDir, new MavenSlf4jAdapter(getLog())), getFieldsAsProperties());
+      execute(new TerraformApply(tfRootDir), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }

@@ -1,6 +1,5 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
-import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformDestroy;
@@ -19,6 +18,7 @@ import java.io.IOException;
  */
 @Mojo(name = "destroy", requiresProject = false)
 public class Destroy extends TerraformMojo<String> {
+
   @Parameter(property = "tfRootDir")
   String tfRootDir;
 
@@ -37,6 +37,9 @@ public class Destroy extends TerraformMojo<String> {
   @Parameter(property = "target")
   String target;
 
+  @Parameter(property = "refreshState")
+  boolean refreshState = true;
+
   @Parameter(property = "noColor")
   boolean noColor = true;
 
@@ -50,7 +53,7 @@ public class Destroy extends TerraformMojo<String> {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-      execute(new TerraformDestroy(tfRootDir, new MavenSlf4jAdapter(getLog())), getFieldsAsProperties());
+      execute(new TerraformDestroy(tfRootDir), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }

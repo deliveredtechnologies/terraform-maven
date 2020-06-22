@@ -1,15 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.8.2/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.8.2/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.8.2/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.9.1/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.9.1/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.9.1/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.8.2-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.9-green.svg
-[tf-maven-plugin-synk-badge]:https://img.shields.io/badge/vulnerabilities-1-yellow.svg
-[tf-maven-plugin-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-maven-plugin%2Fpom.xml
-[tf-cmd-api-synk-badge]:https://img.shields.io/badge/vulnerabilities-0-green.svg
-[tf-cmd-api-synk]:https://snyk.io/test/github/deliveredtechnologies/terraform-maven?targetFile=tf-build-tools%2Ftf-cmd-api%2Fpom.xml
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.9.1-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.10-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -56,11 +52,11 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 
 ### Artifacts in This Repository
 
-| Artifact Name    | Version | Latest Snapshot | Security Scan Results | Description |
-|------------------|---------|-----------------|-----------------------|-------------|
-| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | [![tf-maven-plugin vulnerabilities][tf-maven-plugin-synk-badge]][tf-maven-plugin-synk] | Terraform Maven Plugin       |
-| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | [![tf-cmd-api vulnerabilities][tf-cmd-api-synk-badge]][tf-cmd-api-synk]                | Terraform Command API        |
-| tf-s3-archetype  | [![Maven Central][maven-badge]][tf-s3-archetype]  | [![Maven Snapshot][maven-snapshot-badge]][tf-s3-archetype-snapshot]  | N/A                                                                                    | Maven Terraform S3 Archetype |
+| Artifact Name    | Version | Latest Snapshot | Description |
+|------------------|---------|-----------------|-------------|
+| tf-maven-plugin  | [![Maven Central][maven-badge]][tf-maven-plugin]  | [![Maven Snapshot][maven-snapshot-badge]][tf-maven-plugin-snapshot]  | Terraform Maven Plugin       |
+| tf-cmd-api       | [![Maven Central][maven-badge]][tf-cmd-api]       | [![Maven Snapshot][maven-snapshot-badge]][tf-cmd-api-snapshot]       | Terraform Command API        |
+| tf-s3-archetype  | [![Maven Central][maven-badge]][tf-s3-archetype]  | [![Maven Snapshot][maven-snapshot-badge]][tf-s3-archetype-snapshot]  | Maven Terraform S3 Archetype |
 
 ### Repository Directory Structure
 * examples - Terraform Maven example projects
@@ -148,21 +144,22 @@ Executes the `terraform plan` command. See [https://www.terraform.io/docs/comman
 
 Optional Parameters:
 
-| Name           | Type    | Description                                                                                                       |
-| -------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| tfVarFiles     | String  | A comma delimited string of tfvars files (e.g. -var-file=foo)                                                     |
-| tfVars         | String  | A comma delimited string of tfvars (e.g. -var 'name=value')                                                       |
-| lockTimeout    | Number  | Duration to retry a state lock                                                                                    |
-| target         | String  | A resource address to target                                                                                      |
-| planInput      | Boolean | If set to "true", input variables not directly set will be requested; otherwise, the plan will fail               |
-| noColor        | Any     | If this property exists, the -no-color flag is set                                                                |
-| destroyPlan    | Any     | If this property exists, a destroy plan is outputted                                                              | 
-| planOutputFile | String  | The path to save the generated execution plan                                                                     |
-| tfRootDir      | String  | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory        |
-| timeout        | Number  | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min                      |
-| refreshState   | Boolean | If set to "true" then Terraform will refresh the state before generating the plan                                 |
-| tfState        | String  | The path to the state file; defaults to `terraform.tfstate`                                                       |
-| artifact       | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module |
+| Name           | Type    | Description                                                                                                                                   |
+| -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| tfVarFiles     | String  | A comma delimited string of tfvars files (e.g. -var-file=foo)                                                                                 |
+| tfVars         | String  | A comma delimited string of tfvars (e.g. -var 'name=value')                                                                                   |
+| lockTimeout    | Number  | Duration to retry a state lock                                                                                                                |
+| target         | String  | A resource address to target                                                                                                                  |
+| planInput      | Boolean | If set to "true", input variables not directly set will be requested; otherwise, the plan will fail                                           |
+| noColor        | Any     | If this property exists, the -no-color flag is set                                                                                            |
+| destroyPlan    | Any     | If this property exists, a destroy plan is outputted                                                                                          | 
+| planOutputFile | String  | The path to save the generated execution plan. To upload plan to S3 (e.g. -DplanOutputFile=s3://<bucket-name>/<key-prefix>/<plan-file-name>)  |
+| kmsKeyId       | String  | To Upload plan to s3 with kms encrypted (e.g. -DkmsKeyId=<kms-Key-ID>)                                                                        | 
+| tfRootDir      | String  | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory                                    |
+| timeout        | Number  | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min                                                  |
+| refreshState   | Boolean | If set to "true" then Terraform will refresh the state before generating the plan                                                             |
+| tfState        | String  | The path to the state file; defaults to `terraform.tfstate`                                                                                   |
+| artifact       | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module                             |
 
 ---
 
@@ -183,6 +180,7 @@ Optional Parameters:
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                                 |
 | plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used                             |
 | tfRootDir   | String | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory         |
+| refreshState | Boolean | If set to "true" then Terraform will refresh the state before apply                                              |
 | timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min                       |
 | artifact    | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module |
 
@@ -203,7 +201,8 @@ Optional Parameters:
 | tfVars      | String | A comma delimited string of tfvars (e.g. -var 'name=value')                                                        |
 | target      | Number | A resource address to target                                                                                       |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                                 |
-| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                                             |
+| tfRootDir   | String | A terraform config directory to destroy; defaults to current directory                         |
+| refreshState | Boolean | If set to "true" then Terraform will refresh the state before apply                                              |
 | timeout     | Number | The maximum time in milliseconds that the terraform destroy command can run; defaults to 10min                     |
 | artifact    | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module |
 

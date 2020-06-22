@@ -16,10 +16,12 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class TerraformApplyTest {
-  private Properties properties;
+  private Map<String,String> properties;
   private Executable executable;
   private String tfRootModule = "test";
 
@@ -34,7 +36,8 @@ public class TerraformApplyTest {
         Paths.get("src", "main", "tf", tfRootModule).toFile()
     );
 
-    properties = new Properties();
+
+    properties = new HashMap<>();
     executable = Mockito.mock(Executable.class);
   }
 
@@ -47,6 +50,8 @@ public class TerraformApplyTest {
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
+
+
     this.properties.put(TerraformApplyParam.tfVarFiles.property, "test1.txt, test2.txt");
     this.properties.put(TerraformApplyParam.tfVars.property, "key1=value1, key2=value2");
     this.properties.put(TerraformApplyParam.lockTimeout.property, "1000");
@@ -54,6 +59,19 @@ public class TerraformApplyTest {
     this.properties.put(TerraformApplyParam.noColor.property, "true");
     this.properties.put(TerraformApplyParam.timeout.property, "1111");
     this.properties.put(TerraformApplyParam.plan.property, "someplan.tfplan");
+
+    Assert.assertEquals("Success!", terraformApply.execute(properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
+  public void terraformApplyExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
+    Mockito.when(this.executable.execute("terraform apply -refresh=false -auto-approve ",1111)).thenReturn("Success!");
+    TerraformApply terraformApply = new TerraformApply(terraformDecorator);
+
+    this.properties.put(TerraformApply.TerraformApplyParam.refreshState.property, "false");
+    this.properties.put(TerraformApply.TerraformApplyParam.timeout.property, "1111");
 
     Assert.assertEquals("Success!", terraformApply.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
