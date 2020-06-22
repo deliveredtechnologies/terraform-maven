@@ -155,7 +155,5 @@ public class WrapperTest {
         System.out.printf("Unable to delete .tf directory\n");
       }
     }
-
-
   }
 }
