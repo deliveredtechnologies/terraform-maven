@@ -109,6 +109,7 @@ public class TerraformCommandLineDecoratorTest {
       File tfwFileDest = new File(tfwFileDestName);
       if (!tfwFileDest.exists()) {
         Files.copy(tfwFileSource.toPath(), tfwFileDest.toPath());
+        tfwFileDest.setExecutable(true,false);
       }
     }
 
