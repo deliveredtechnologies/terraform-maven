@@ -118,7 +118,7 @@ public class TerraformApply implements TerraformOperation<String> {
 
     try {
       if (properties.containsKey(TerraformApplyParam.plan.property)) {
-        options.append(properties.getProperty(TerraformApplyParam.plan.property));
+        options.append(String.format("%1$s ", properties.getProperty(TerraformApplyParam.plan.property).split("/")[properties.getProperty(TerraformApplyParam.plan.property).split("/").length - 1]));
       }
 
       if (properties.containsKey(TerraformApplyParam.timeout.property)) {

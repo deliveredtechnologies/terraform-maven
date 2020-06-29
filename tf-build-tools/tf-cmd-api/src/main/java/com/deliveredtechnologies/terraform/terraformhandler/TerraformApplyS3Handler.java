@@ -5,6 +5,7 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -12,6 +13,7 @@ import java.util.Properties;
 public class TerraformApplyS3Handler extends TerraformHandler {
   private Logger logger;
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(TerraformUtils.class);
 
   private Executable executable;
 
@@ -28,6 +30,7 @@ public class TerraformApplyS3Handler extends TerraformHandler {
   public void doAction(Properties properties) {
     if (properties.containsKey("plan") && properties.getProperty("plan").startsWith("s3")) {
       try {
+        LOGGER.debug("Getting plan file from S3");
         String planFile = properties.getProperty("plan");
         String bucketName = planFile.split("/")[2];
         String fileName = planFile.replaceAll("s3://" + bucketName + "/", "");

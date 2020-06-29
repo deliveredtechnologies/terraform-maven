@@ -42,7 +42,7 @@ public class TerraformApplyTest {
   public void terraformApplyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
     TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
     Mockito.when(this.executable.execute(
-      "terraform apply -var 'key1=value1' -var 'key2=value2' -var-file=test1.txt -var-file=test2.txt -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve someplan.tfplan",
+      "terraform apply -var 'key1=value1' -var 'key2=value2' -var-file=test1.txt -var-file=test2.txt -lock-timeout=1000 -target=module1.module2 -no-color -auto-approve someplan.tfplan ",
       1111))
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
@@ -57,6 +57,21 @@ public class TerraformApplyTest {
 
     Assert.assertEquals("Success!", terraformApply.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
+  public void terrafromApplyExecuteWhenPlanFileGettingFromS3() throws TerraformException, IOException, InterruptedException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
+    Mockito.when(this.executable.execute("terraform apply -refresh=false -auto-approve create.tfplan ",1111)).thenReturn("Success!");
+    TerraformApply terraformApply = new TerraformApply(terraformDecorator);
+
+    this.properties.put(TerraformApply.TerraformApplyParam.refreshState.property, "false");
+    this.properties.put(TerraformApply.TerraformApplyParam.timeout.property, "1111");
+    this.properties.put(TerraformApplyParam.plan.property, "s3://plan-files-bucket/planfiles/create.tfplan");
+
+    Assert.assertEquals("Success!", terraformApply.execute(properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+
   }
 
   @Test

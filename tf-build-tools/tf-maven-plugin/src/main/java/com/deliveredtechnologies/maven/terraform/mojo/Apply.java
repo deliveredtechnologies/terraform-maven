@@ -1,8 +1,10 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
+import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformApply;
+import com.deliveredtechnologies.terraform.terraformhandler.TerraformChainHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -56,6 +58,8 @@ public class Apply extends TerraformMojo<String> {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
+      TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir, new MavenSlf4jAdapter(getLog()));
+      terraformChainHandler.chainInitiator(getFieldsAsProperties());
       execute(new TerraformApply(tfRootDir), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);

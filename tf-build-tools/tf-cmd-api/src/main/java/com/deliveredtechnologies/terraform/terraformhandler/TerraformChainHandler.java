@@ -34,6 +34,6 @@ public class TerraformChainHandler {
   public void chainInitiator(Properties properties) throws IOException, TerraformException {
     TerraformHandler terraformHandler = new TerraformPlanS3Handler(tfRootDir, logger);
     terraformHandler.nextHandler(new TerraformApplyS3Handler(tfRootDir, logger));
-    terraformHandler.doAction(properties);
+    terraformHandler.handleRequest(properties);
   }
 }
