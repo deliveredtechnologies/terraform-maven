@@ -50,8 +50,6 @@ public class TerraformApplyTest {
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
-
-
     this.properties.put(TerraformApplyParam.tfVarFiles.property, "test1.txt, test2.txt");
     this.properties.put(TerraformApplyParam.tfVars.property, "key1=value1, key2=value2");
     this.properties.put(TerraformApplyParam.lockTimeout.property, "1000");

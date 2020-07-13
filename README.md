@@ -38,6 +38,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
   * [tf:wrapper](#tfwrapper)
+
 * [How Commands Are Delegated to Terraform](#how-commands-are-delegated-to-terraform)
   * [*nix-based Operating Systems](#nix-based-operating-systems)
   * [Windows Operating Systems](#windows-operating-systems)
@@ -256,6 +257,8 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 | ------------ | ------- | --------------------------------------------------------------------------------------------- |
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
+
+---
 
 #### tf:wrapper
 

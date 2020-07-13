@@ -145,6 +145,72 @@
         </executions>
       </plugin>
       <plugin>
+        <!-- disables default jar packaging: https://stackoverflow.com/questions/2188746/what-is-the-best-way-to-avoid-maven-jar -->
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>never</phase>
+            <configuration>
+              <finalName>unwanted</finalName>
+              <classifier>unwanted</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.deliveredtechnologies</groupId>
+        <artifactId>tf-maven-plugin</artifactId>
+        <version>${tf-maven-version}</version>
+        <executions>
+          <execution>
+            <id>terraform-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>init</goal>
+              <goal>destroy</goal>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-plan</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>init</goal>
+              <goal>plan</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-pacakge</id>
+            <phase>package</phase>
+            <goals>
+              <goal>package</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-install</id>
+            <phase>install</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-deploy</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>terraform-get</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>get</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
