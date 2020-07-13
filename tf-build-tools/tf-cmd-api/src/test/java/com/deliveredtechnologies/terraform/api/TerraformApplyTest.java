@@ -16,10 +16,12 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class TerraformApplyTest {
-  private Properties properties;
+  private Map<String,String> properties;
   private Executable executable;
   private String tfRootModule = "test";
 
@@ -34,7 +36,8 @@ public class TerraformApplyTest {
         Paths.get("src", "main", "tf", tfRootModule).toFile()
     );
 
-    properties = new Properties();
+
+    properties = new HashMap<>();
     executable = Mockito.mock(Executable.class);
   }
 

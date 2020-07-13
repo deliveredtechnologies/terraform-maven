@@ -3,7 +3,7 @@ args="$@"
 ##############################################################
 # try to figure out where the root directory of the project is
 ##############################################################
-cur_loc='pwd'
+cur_loc=`pwd`
 target_cd="$cur_loc/.tf"
 projectBaseDir=""
 
@@ -21,6 +21,7 @@ done
 targetDir="$projectBaseDir/.tf/"
 propFile="${targetDir}terraform-maven.properties"
 search="="
+cd $targetDir
 
 ################################################################
 # read all lines from the properties file and store in variables
@@ -57,10 +58,12 @@ releaseWindows="windows"
 terraformZipLinux="${targetDir}${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
 terraformZipWindows="${targetDir}${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
 terraformBinary="${targetDir}terraform.exe"
-terraformBinaryLinux="${targetDir}terraform"
+terraformBinaryLinux="terraform"
 terraformBinaryWindows="${targetDir}terraform.exe"
 releaseSourceLinux="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
 releaseSourceWindows="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
+
+releaseOS=Linux
 
 if [[ $releaseOS == "windows" ]]
 then
@@ -89,8 +92,8 @@ then
         echo ""
     else
         echo "Different version, downloading"
-        curl -o $terraformZipLinux $releaseSourceLinux
-        curl -o $terraformZipWindows $releaseSourceWindows
+        curl --max-time 300 -o $terraformZipLinux $releaseSourceLinux
+        curl --max-time 300 -o $terraformZipWindows $releaseSourceWindows
         rm $terraformBinaryLinux
         rm $terraformBinaryWindows
         unzip -d $targetDir $terraformZipLinux
@@ -104,8 +107,8 @@ else
 # download and install the desired version
 ############################################
     echo "Terraform not found, installing"
-    curl -o $terraformZipLinux $releaseSourceLinux
-    curl -o $terraformZipWindows $releaseSourceWindows
+    curl --max-time 300 -o $terraformZipLinux $releaseSourceLinux
+    curl --max-time 300 -o $terraformZipWindows $releaseSourceWindows
     if [ -f $terraformBinaryLinux ]
     then
         rm $terraformBinaryLinux
@@ -123,5 +126,6 @@ fi
 ###################################################
 # Run terraform with the supplied arguments if any
 ###################################################
-$terraformBinary "$args"
+cd $targetDir
+$terraformBinary $args
 exit

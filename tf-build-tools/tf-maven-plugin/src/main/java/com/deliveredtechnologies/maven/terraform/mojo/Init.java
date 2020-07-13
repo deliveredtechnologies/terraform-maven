@@ -1,6 +1,5 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
-import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformInit;
@@ -51,8 +50,7 @@ public class Init extends TerraformMojo<String> {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-
-      execute(new TerraformInit(tfRootDir, new MavenSlf4jAdapter(getLog())), getFieldsAsProperties());
+      execute(new TerraformInit(tfRootDir), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
