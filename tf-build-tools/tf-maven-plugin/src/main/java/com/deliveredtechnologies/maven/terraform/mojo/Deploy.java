@@ -9,7 +9,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
-import java.net.URL;
 
 /**
  * Mojo terraform:deploy goal.
