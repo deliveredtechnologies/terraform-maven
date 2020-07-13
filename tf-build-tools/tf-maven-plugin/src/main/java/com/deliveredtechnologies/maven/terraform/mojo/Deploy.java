@@ -26,7 +26,7 @@ public class Deploy extends TerraformMojo<String> {
   File file;
 
   @Parameter(property = "url")
-  URL url;
+  String url;
 
   @Parameter(property = "pomFile")
   File pomFile;
