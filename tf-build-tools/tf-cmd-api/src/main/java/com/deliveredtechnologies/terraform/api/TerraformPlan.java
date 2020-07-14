@@ -7,6 +7,7 @@ import com.deliveredtechnologies.terraform.TerraformException;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -101,8 +102,16 @@ public class TerraformPlan implements TerraformOperation<String> {
           continue;
         }
         if (param == TerraformPlanParam.tfVars) {
-          for (String var : (properties.get(param.property)).toString().split(",")) {
-            options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+
+          Object value = properties.get(param.property);
+
+          if (value instanceof Map) {
+            options.append(convertMapToCommandLineOptions(param.name.get(), (Map<String, Object>) value ));
+          }
+          if (value instanceof String) {
+            for (String var : (properties.get(param.property)).toString().split(",")) {
+              options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
+            }
           }
           continue;
         }
