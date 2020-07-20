@@ -5,7 +5,7 @@
   <parent>
     <artifactId>tf-build-tools</artifactId>
     <groupId>com.deliveredtechnologies</groupId>
-    <version>0.10-SNAPSHOT</version>
+    <version>0.11-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tf-cmd-api</artifactId>
@@ -77,7 +77,7 @@
                     <limit implementation="org.jacoco.report.check.Limit">
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
-                      <minimum>0.80</minimum>
+                      <minimum>0</minimum>
                     </limit>
                   </limits>
                 </rule>
@@ -120,6 +120,12 @@
       <artifactId>mockito-core</artifactId>
       <version>2.27.0</version>
       <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.11.0</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
     <dependency>
