@@ -4,82 +4,84 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
+import org.hamcrest.CoreMatchers;
+
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Tests for TerraformDestroy.
  */
 public class TerraformDestroyTest {
-  private Properties properties;
+  private Map<String, String> properties;
+  private TerraformDestroy terraformDestroy;
+
+  @Mock
   private Executable executable;
-  private String tfRootModule = "test";
+
+  @Rule
+  public MockitoRule rule = MockitoJUnit.rule();
+
+  @Captor
+  private ArgumentCaptor<String> captor;
 
   /**
-   * Resets properties and mock Executable.
+   * Sets up properties, Mock(s) and creates the terraform root module source.
+   *
+   * @throws IOException
    */
   @Before
-  public void setup() throws IOException {
-    FileUtils.copyDirectory(
-        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
-        Paths.get("src", "main", "tf", tfRootModule).toFile()
-    );
+  public void setup() {
 
-    properties = new Properties();
-    executable = Mockito.mock(Executable.class);
+    properties = new HashMap<>();
+    terraformDestroy = new TerraformDestroy(new TerraformCommandLineDecorator(TerraformCommand.DESTROY, executable));
   }
 
   @Test
   public void terraformDestroyExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
-    Mockito.when(this.executable.execute(
-      "terraform destroy -lock-timeout=1000 -target=module1.module2 -var 'var1=one' -var 'var2=two' -var-file=test1.txt -var-file=test2.txt -no-color -refresh=true -auto-approve ",
-      1111))
-      .thenReturn("Success!");
-    TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
 
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.lockTimeout.property, "1000");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.target.property, "module1.module2");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.noColor.property, "true");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
-    this.properties.put(TerraformPlan.TerraformPlanParam.tfVarFiles.property, "test1.txt, test2.txt");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.tfVars.property, "var1=one,var2=two");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.refreshState.property, "true");
+    properties.put(TerraformDestroy.Option.tfVars.getPropertyName(), "key1=value1, key2=value2");
+    properties.put(TerraformDestroy.Option.tfVarFiles.getPropertyName(), "test1.txt, test2.txt");
+    properties.put(TerraformDestroy.Option.lockTimeout.getPropertyName(), "1000s");
+    properties.put(TerraformDestroy.Option.target.getPropertyName(), "module1.module2");
+    properties.put(TerraformDestroy.Option.noColor.getPropertyName(), "true");
+    properties.put(TerraformDestroy.Option.refreshState.getPropertyName(), "false");
+    properties.put(TerraformDestroy.Option.autoApprove.getPropertyName(), "any");
 
-    Assert.assertEquals("Success!", terraformDestroy.execute(properties));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
-  }
+    terraformDestroy.execute(properties);
 
-  @Test
-  public void terraformDestroyExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
-    Mockito.when(this.executable.execute("terraform destroy -refresh=false -auto-approve ", 1111)).thenReturn("Success!");
-    TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
+    Mockito.verify(this.executable, Mockito.times(1)).execute(captor.capture());
+    String tfCommand = captor.getValue();
 
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.refreshState.property, "false");
-    this.properties.put(TerraformDestroy.TerraformDestroyParam.timeout.property, "1111");
-
-    Assert.assertEquals("Success!", terraformDestroy.execute(properties));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+    Assert.assertThat(tfCommand, CoreMatchers.startsWith("terraform destroy"));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var 'key1=value1' -var 'key2=value2' "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var-file=test1.txt -var-file=test2.txt "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-lock-timeout=1000s "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-target=module1.module2 "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-no-color "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-auto-approve "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-refresh=false "));
   }
 
   @Test
   public void terraformDestroyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable);
-    Mockito.when(this.executable.execute("terraform destroy -auto-approve ")).thenReturn("Success!");
-    TerraformDestroy terraformDestroy = new TerraformDestroy(terraformDecorator);
+    TerraformDestroy terraformDestroy = new TerraformDestroy(new TerraformCommandLineDecorator(TerraformCommand.DESTROY, this.executable));
+    terraformDestroy.execute(properties);
 
-    Assert.assertEquals("Success!", terraformDestroy.execute(new Properties()));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
+    Mockito.verify(this.executable, Mockito.times(1)).execute("terraform destroy -auto-approve ");
   }
 
   @Test(expected = TerraformException.class)
@@ -91,15 +93,10 @@ public class TerraformDestroyTest {
 
   @Test
   public void terraformDestroyPassesLoggerToExecutable() {
-    Executable executable = Mockito.mock(Executable.class);
+
     Logger logger = Mockito.mock(Logger.class);
-    TerraformDestroy terraformDestroy = new TerraformDestroy(executable, logger);
+    new TerraformDestroy(executable, logger);
 
     Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
-  }
-
-  @After
-  public void destroy() throws IOException {
-    FileUtils.forceDelete(Paths.get("src", "main", "tf").toFile());
   }
 }
