@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.terraform.api.converters;
 
+import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformOption;
 import org.reflections.Reflections;
 
@@ -26,7 +27,7 @@ public class TfCliOptionBuilder {
    * @param properties
    * @return
    */
-  public String convert(TerraformOption[] params, Properties properties) {
+  public String convert(TerraformOption[] params, Properties properties) throws TerraformException {
     StringBuilder sb = new StringBuilder();
 
     for (TerraformOption param : params) { //iterate over all the supported parameters associated with the operation
@@ -35,7 +36,7 @@ public class TfCliOptionBuilder {
         //get converter from registry
         TfOptionFormatter converter = Optional.ofNullable(registry.get(param.toString().toLowerCase()))
             .orElse(registry.get("default"));
-        sb.append(converter.convert(param.getFormat(), properties.getProperty(param.getPropertyName(), param.getDefault())));
+        sb.append(converter.convert(param.getFormat(), properties.getOrDefault(param.getPropertyName(), param.getDefault())));
       }
     }
     return sb.toString();

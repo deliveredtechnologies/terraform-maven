@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.terraform.api.converters;
 
+import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformApply;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -12,7 +13,7 @@ public class TfCliOptionBuilderTest {
 
 
   @Test
-  public void convert() throws IOException {
+  public void convert() throws IOException, TerraformException {
     Properties properties = new Properties();
     properties.put(TerraformApply.Option.tfVarFiles.getPropertyName(), "test1.txt, test2.txt");
     properties.put(TerraformApply.Option.tfVars.getPropertyName(), "key1=value1, key2=value2");

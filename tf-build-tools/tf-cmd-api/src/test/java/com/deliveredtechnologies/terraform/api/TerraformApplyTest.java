@@ -19,11 +19,12 @@ import org.mockito.junit.MockitoRule;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TerraformApplyTest {
-  private Map<String, String> properties;
+  private Map<String,Object> properties;
   private TerraformApply terraformApply;
 
   @Mock
@@ -77,6 +78,24 @@ public class TerraformApplyTest {
     Assert.assertThat(tfCommand, CoreMatchers.endsWith("someplan.tfplan "));
   }
 
+  @Test
+  public void terraformApplyExecutesWhenTFvarsIsMap() throws IOException, InterruptedException, TerraformException {
+    String str = "terraform apply -var 'key1=value1' -var 'key2=[\"value2\",\"value3\"]' -auto-approve ";
+
+    Map tfvars = new HashMap();
+    tfvars.put("key1", "value1");
+    tfvars.put("key2", Arrays.asList("value2", "value3"));
+    properties.put(TerraformApply.Option.tfVars.getPropertyName(), tfvars);
+
+    terraformApply.execute(properties);
+
+    Mockito.verify(this.executable, Mockito.times(1)).execute(captor.capture());
+    String tfCommand = captor.getValue();
+
+    Assert.assertThat(tfCommand, CoreMatchers.startsWith("terraform apply"));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var 'key1=value1' "));
+
+  }
 
   @Test
   public void terraformApplyExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {

@@ -1,5 +1,6 @@
 package com.deliveredtechnologies.terraform.api.converters;
 
+import com.deliveredtechnologies.terraform.TerraformException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ public class DefaultOptionFormatterTest {
   TfOptionFormatter formatter = new DefaultOptionFormatter();
 
   @Test
-  public void convertKeyValueOption() {
+  public void convertKeyValueOption() throws TerraformException {
     String format = "-lock-timeout=";
     String value = "10s";
 
@@ -16,7 +17,7 @@ public class DefaultOptionFormatterTest {
   }
 
   @Test
-  public void convertKeyOption() {
+  public void convertKeyOption() throws TerraformException {
     String format = "-no-color";
     String value = "any";
 
@@ -24,7 +25,7 @@ public class DefaultOptionFormatterTest {
   }
 
   @Test
-  public void convertValueOption() {
+  public void convertValueOption() throws TerraformException {
     String format = "%s";
     String value = "path/some.plan";
 
