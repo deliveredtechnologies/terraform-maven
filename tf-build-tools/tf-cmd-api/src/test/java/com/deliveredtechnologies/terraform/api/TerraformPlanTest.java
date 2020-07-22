@@ -16,6 +16,9 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -91,6 +94,20 @@ public class TerraformPlanTest {
 
     Assert.assertEquals("Success!", terraformPlan.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
+  public void terraformPlanExecutesWhenTFvarsIsMap() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
+    Mockito.when(this.executable.execute("terraform plan -var 'key1=value1' -var 'key2=[\"value2\",\"value3\"]' -input=false ")).thenReturn("Success!");
+    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
+
+    Map tfvars = new HashMap();
+    tfvars.put("key1", "value1");
+    tfvars.put("key2", Arrays.asList("value2", "value3"));
+    this.properties.put(TerraformApply.TerraformApplyParam.tfVars.property, tfvars);
+    Assert.assertEquals("Success!", terraformPlan.execute(this.properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
   }
 
   @Test

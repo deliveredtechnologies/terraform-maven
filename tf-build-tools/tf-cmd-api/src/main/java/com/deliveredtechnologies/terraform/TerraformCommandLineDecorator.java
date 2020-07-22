@@ -26,6 +26,7 @@ public class TerraformCommandLineDecorator implements Executable {
   public TerraformCommandLineDecorator(TerraformCommand cmd, Executable commandLine, Logger logger) {
     this.commandLine = commandLine;
     this.cmd = cmd;
+
     this.logger = Optional.ofNullable(logger);
     this.logger.ifPresent(log -> this.commandLine.setLogger(log));
   }

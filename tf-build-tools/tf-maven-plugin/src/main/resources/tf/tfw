@@ -64,7 +64,6 @@ releaseSourceLinux="${distributionSite}/${releaseDir}/${releaseVer}/${releaseNam
 releaseSourceWindows="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
 
 releaseOS=Linux
-
 if [[ $releaseOS == "windows" ]]
 then
   terraformBinary=$terraformBinaryWindows

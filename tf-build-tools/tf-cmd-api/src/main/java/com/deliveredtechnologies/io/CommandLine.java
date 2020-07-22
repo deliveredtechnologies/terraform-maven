@@ -115,8 +115,4 @@ public class CommandLine implements Executable {
   public Path getDirectory() {
     return this.directory;
   }
-
-  private void addShutdownHook(Process process) {
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> process.destroyForcibly()));
-  }
 }

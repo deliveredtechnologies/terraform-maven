@@ -48,6 +48,8 @@
       <version>1.7.30</version>
       <scope>test</scope>
     </dependency>
+
+
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk</artifactId>
@@ -74,55 +76,6 @@
           <execution>
             <id>default-jar</id>
             <phase>none</phase>
-            <configuration>
-              <finalName>unwanted</finalName>
-              <classifier>unwanted</classifier>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.deliveredtechnologies</groupId>
-        <artifactId>tf-maven-plugin</artifactId>
-        <version>${tf-maven-version}</version>
-        <executions>
-          <execution>
-            <id>terraform-clean</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>terraform-install</id>
-            <phase>install</phase>
-            <goals>
-              <goal>deploy</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>terraform-package</id>
-            <phase>package</phase>
-            <goals>
-              <goal>package</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>terraform-deploy</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>deploy</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <!-- disables default jar packaging: https://stackoverflow.com/questions/2188746/what-is-the-best-way-to-avoid-maven-jar -->
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>never</phase>
             <configuration>
               <finalName>unwanted</finalName>
               <classifier>unwanted</classifier>

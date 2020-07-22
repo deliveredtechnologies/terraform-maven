@@ -16,12 +16,13 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 public class TerraformApplyTest {
-  private Map<String,String> properties;
+  private Map<String,Object> properties;
   private Executable executable;
   private String tfRootModule = "test";
 
@@ -50,6 +51,8 @@ public class TerraformApplyTest {
       .thenReturn("Success!");
     TerraformApply terraformApply = new TerraformApply(terraformDecorator);
 
+
+
     this.properties.put(TerraformApplyParam.tfVarFiles.property, "test1.txt, test2.txt");
     this.properties.put(TerraformApplyParam.tfVars.property, "key1=value1, key2=value2");
     this.properties.put(TerraformApplyParam.lockTimeout.property, "1000");
@@ -73,6 +76,20 @@ public class TerraformApplyTest {
 
     Assert.assertEquals("Success!", terraformApply.execute(properties));
     Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+  }
+
+  @Test
+  public void terraformApplyExecutesWhenTFvarsIsMap() throws IOException, InterruptedException, TerraformException {
+    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.APPLY, this.executable);
+    Mockito.when(this.executable.execute("terraform apply -var 'key1=value1' -var 'key2=[\"value2\",\"value3\"]' -auto-approve ")).thenReturn("Success!");
+    TerraformApply terraformApply = new TerraformApply(terraformDecorator);
+
+    Map tfvars = new HashMap();
+    tfvars.put("key1", "value1");
+    tfvars.put("key2", Arrays.asList("value2", "value3"));
+    this.properties.put(TerraformApplyParam.tfVars.property, tfvars);
+    Assert.assertEquals("Success!", terraformApply.execute(this.properties));
+    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
   }
 
   @Test
