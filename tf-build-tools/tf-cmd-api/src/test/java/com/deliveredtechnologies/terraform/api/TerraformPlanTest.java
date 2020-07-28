@@ -4,140 +4,100 @@ import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformCommand;
 import com.deliveredtechnologies.terraform.TerraformCommandLineDecorator;
 import com.deliveredtechnologies.terraform.TerraformException;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Tests for TerraformPlan.
  */
 public class TerraformPlanTest {
-  private Properties properties;
+  private Map<String, String> properties;
+  private TerraformPlan terraformPlan;
+
+  @Mock
   private Executable executable;
 
+  @Rule
+  public MockitoRule rule = MockitoJUnit.rule();
+
+  @Captor
+  private ArgumentCaptor<String> captor;
+
   /**
-   * Sets up the properties, mock(s) and the default terraform directory.
+   * Sets up properties, Mock(s) and creates the terraform root module source.
+   *
    * @throws IOException
    */
   @Before
-  public void setup() throws IOException {
-    FileUtils.copyDirectory(
-        Paths.get("src", "test", "resources", "tf_initialized", "root").toFile(),
-        Paths.get("src", "main", "tf", "test").toFile()
-    );
-    properties = new Properties();
-    executable = Mockito.mock(Executable.class);
+  public void setup() {
+
+    properties = new HashMap<>();
+    terraformPlan = new TerraformPlan(new TerraformCommandLineDecorator(TerraformCommand.PLAN, executable));
   }
 
   @Test
   public void terraformPlanExecutesWhenAllPossiblePropertiesArePassed() throws IOException, InterruptedException, TerraformException {
-    Path tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath();
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute(
-      "terraform plan -var 'key1=value1' -var 'key2=value2' -var-file=test1.txt -var-file=test2.txt -lock-timeout=1000 -target=module1.module2 -out=destroy.plan -input=true -refresh=true -state=my.tfstate -no-color -destroy ",
-      1111))
-      .thenReturn("Success!");
-    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
 
-    this.properties.put(TerraformPlan.TerraformPlanParam.tfVarFiles.property, "test1.txt, test2.txt");
-    this.properties.put(TerraformPlan.TerraformPlanParam.tfVars.property, "key1=value1, key2=value2");
-    this.properties.put(TerraformPlan.TerraformPlanParam.lockTimeout.property, "1000");
-    this.properties.put(TerraformPlan.TerraformPlanParam.target.property, "module1.module2");
-    this.properties.put(TerraformPlan.TerraformPlanParam.planOutputFile.property, "destroy.plan");
-    this.properties.put(TerraformPlan.TerraformPlanParam.planInput.property, "true");
-    this.properties.put(TerraformPlan.TerraformPlanParam.refreshState.property, "true");
-    this.properties.put(TerraformPlan.TerraformPlanParam.destroyPlan.property, "true");
-    this.properties.put(TerraformPlan.TerraformPlanParam.tfState.property, "my.tfstate");
-    this.properties.put(TerraformPlan.TerraformPlanParam.noColor.property, "true");
-    this.properties.put(TerraformPlan.TerraformPlanParam.timeout.property, "1111");
+    properties.put(TerraformPlan.Option.compactWarnings.getPropertyName(), "true");
+    properties.put(TerraformPlan.Option.destroyPlan.getPropertyName(), "true");
+    properties.put(TerraformPlan.Option.detailedExitcode.getPropertyName(), "true");
+    properties.put(TerraformPlan.Option.planInput.getPropertyName(), "true");
+    properties.put(TerraformPlan.Option.lock.getPropertyName(), "true");
+    properties.put(TerraformPlan.Option.lockTimeout.getPropertyName(), "1000s");
+    properties.put(TerraformPlan.Option.noColor.getPropertyName(), "true");
+    properties.put(TerraformPlan.Option.planOutputFile.getPropertyName(), "destroy.plan");
+    properties.put(TerraformPlan.Option.refreshState.getPropertyName(), "false");
+    properties.put(TerraformPlan.Option.tfState.getPropertyName(), "my.tfstate");
+    properties.put(TerraformPlan.Option.target.getPropertyName(), "module1.module2");
+    properties.put(TerraformPlan.Option.tfVars.getPropertyName(), "key1=value1, key2=value2");
+    properties.put(TerraformPlan.Option.tfVarFiles.getPropertyName(), "test1.txt, test2.txt");
 
-    Assert.assertEquals("Success!", terraformPlan.execute(properties));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
+    terraformPlan.execute(properties);
+
+    Mockito.verify(this.executable, Mockito.times(1)).execute(captor.capture());
+    String tfCommand = captor.getValue();
+
+    Assert.assertThat(tfCommand, CoreMatchers.startsWith("terraform plan"));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-compact-warnings "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-destroy "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-detailed-exitcode "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-input=true "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-lock=true "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-lock-timeout=1000s "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-no-color "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-out=destroy.plan "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-refresh=false "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-state=my.tfstate "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-target=module1.module2 "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var 'key1=value1' -var 'key2=value2' "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var-file=test1.txt -var-file=test2.txt "));
   }
 
   @Test
   public void terraformPlanExecutesWhenPlanOutputFileReferencesS3Path() throws IOException, InterruptedException, TerraformException {
-    Path tfRootDir = Paths.get("src", "test", "resources", "tf_initialized", "root").toAbsolutePath();
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute(
-      "terraform plan -out=destroy.plan -input=false ")).thenReturn("Success!");
-    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
 
-    this.properties.put(TerraformPlan.TerraformPlanParam.planOutputFile.property, "s3://plan-files-bucket/planfiles/destroy.plan");
-
-    Assert.assertEquals("Success!", terraformPlan.execute(properties));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
-  }
-
-  @Test
-  public void terraformPlanExecuteWhenRefreshStatePassedAsFalse() throws IOException, InterruptedException, TerraformException {
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute("terraform plan -input=true -refresh=false ",1111)).thenReturn("Success!");
-    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
-
-    this.properties.put(TerraformPlan.TerraformPlanParam.planInput.property, "true");
-    this.properties.put(TerraformPlan.TerraformPlanParam.refreshState.property, "false");
-    this.properties.put(TerraformPlan.TerraformPlanParam.timeout.property, "1111");
-
-    Assert.assertEquals("Success!", terraformPlan.execute(properties));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString(), Mockito.anyInt());
-  }
-
-  @Test
-  public void terraformPlanExecutesWhenTFvarsIsMap() throws IOException, InterruptedException, TerraformException {
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute("terraform plan -var 'key1=value1' -var 'key2=[\"value2\",\"value3\"]' -input=false ")).thenReturn("Success!");
-    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
-
-    Map tfvars = new HashMap();
-    tfvars.put("key1", "value1");
-    tfvars.put("key2", Arrays.asList("value2", "value3"));
-    this.properties.put(TerraformApply.TerraformApplyParam.tfVars.property, tfvars);
-    Assert.assertEquals("Success!", terraformPlan.execute(this.properties));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
-  }
-
-  @Test
-  public void terraformPlanExecutesWhenNoPropertiesArePassed() throws IOException, InterruptedException, TerraformException {
-    TerraformCommandLineDecorator terraformDecorator = new TerraformCommandLineDecorator(TerraformCommand.PLAN, this.executable);
-    Mockito.when(this.executable.execute("terraform plan -input=false ")).thenReturn("Success!");
-    TerraformPlan terraformPlan = new TerraformPlan(terraformDecorator);
-
-    Assert.assertEquals("Success!", terraformPlan.execute(new Properties()));
-    Mockito.verify(this.executable, Mockito.times(1)).execute(Mockito.anyString());
-  }
-
-  @Test(expected = TerraformException.class)
-  public void terraformPlanThrowsTerraformExceptionOnError() throws IOException, InterruptedException, TerraformException {
-    Mockito.when(this.executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
-    TerraformPlan terraformPlan = new TerraformPlan(this.executable);
+    properties.put(TerraformPlan.Option.planOutputFile.getPropertyName(), "s3://plan-files-bucket/planfiles/destroy.plan");
     terraformPlan.execute(properties);
-  }
 
-  @Test
-  public void terraformPlanPassesLoggerToExecutable() {
-    Executable executable = Mockito.mock(Executable.class);
-    Logger logger = Mockito.mock(Logger.class);
-    TerraformPlan terraformPlan = new TerraformPlan(executable, logger);
+    Mockito.verify(this.executable, Mockito.times(1)).execute(captor.capture());
+    String tfCommand = captor.getValue();
 
-    Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
-  }
+    Assert.assertThat(tfCommand, CoreMatchers.startsWith("terraform plan"));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-out=destroy.plan "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-input=false "));
 
-  @After
-  public void destroy() throws IOException {
-    FileUtils.forceDelete(Paths.get("src", "main", "tf").toFile());
   }
 }

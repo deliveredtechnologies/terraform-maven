@@ -49,6 +49,9 @@ public class Apply extends TerraformMojo<String> {
   @Parameter(property = "refreshState")
   boolean refreshState = true;
 
+  @Parameter(property = "autoApprove")
+  boolean autoApprove = true;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {

@@ -7,51 +7,57 @@ import com.deliveredtechnologies.terraform.TerraformException;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
 
 /**
  * API for terraform plan.
  */
-public class TerraformPlan implements TerraformOperation<String> {
+public class TerraformPlan extends TerraformCliOperation {
 
-  private Executable terraform;
+  public enum Option implements TerraformOption {
 
-  enum TerraformPlanParam {
-    tfVars("var"),
-    tfVarFiles("var-file"),
-    lockTimeout("lock-timeout"),
-    target("target"),
-    planOutputFile("out"),
-    planInput("input"),
-    refreshState("refresh"),
-    tfState("state"),
-    noColor("no-color"),
-    destroyPlan("destroy"),
-    timeout("timeout");
+    compactWarnings("-compact-warnings"),
+    destroyPlan("-destroy"),
+    detailedExitcode("-detailed-exitcode"),
+    planInput("-input=","false"),
+    lock("-lock="),
+    lockTimeout("-lock-timeout="),
+    noColor("-no-color"),
+    planOutputFile("-out="),
+    refreshState("-refresh="),
+    tfState("-state="),
+    target("-target="),
+    tfVars("-var"),
+    tfVarFiles("-var-file");
 
-    Optional<String> name = Optional.empty();
-    String property;
+    public String format;
+    public String defaultValue;
 
-    TerraformPlanParam(String name) {
-      this.property = this.toString();
-      this.name = Optional.of(name);
+    Option(String format) {
+      this.format = format;
+    }
+
+    Option(String format, String defaultValue) {
+      this.format = format;
+      this.defaultValue = defaultValue;
     }
 
     @Override
-    public String toString() {
-      return name.orElse(super.toString());
+    public String getDefault() {
+      return this.defaultValue;
+    }
+
+    @Override
+    public String getFormat() {
+      return this.format;
     }
   }
 
   TerraformPlan(Executable terraform) {
-    this.terraform = terraform;
+    super(terraform);
   }
 
   TerraformPlan(Executable terraform, Logger logger) {
-    this.terraform = terraform;
-    this.terraform.setLogger(logger);
+    super(terraform, logger);
   }
 
   public TerraformPlan() throws IOException {
@@ -70,80 +76,8 @@ public class TerraformPlan implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.PLAN, tfRootDir), logger);
   }
 
-  /**
-   * Executes terraform plan.
-   * <p>
-   *   Valid Properties: <br>
-   *   tfVars - a comma delimited list of terraform variables<br>
-   *   varFiles - a comma delimited list of terraform vars files<br>
-   *   lockTimeout - state file lock timeout<br>
-   *   target - resource target<br>
-   *   planInput - ask for input for variables not directly set<br>
-   *   planOutputFile - path to save the generated execution plan<br>
-   *   refreshState - if true then refresh the state prior to running plan<br>
-   *   tfState - path to the state file; defaults to "terraform.tfstate"<br>
-   *   noColor - remove color encoding from output<br>
-   *   destroyPlan - if set then output a destroy plan<br>
-   * </p>
-   * @param properties  parameter options and properties for terraform apply
-   * @return            the output of terraform apply
-   * @throws TerraformException
-   */
   @Override
-  public String execute(Properties properties) throws TerraformException {
-    StringBuilder options = new StringBuilder();
-
-    for (TerraformPlanParam param : TerraformPlanParam.values()) {
-      if (properties.containsKey(param.property)) {
-        if (param == TerraformPlanParam.tfVarFiles) {
-          for (String file : (properties.getProperty(param.property)).split(",")) {
-            options.append(String.format("-%1$s=%2$s ", param, file.trim()));
-          }
-          continue;
-        }
-        if (param == TerraformPlanParam.tfVars) {
-
-          Object value = properties.get(param.property);
-
-          if (value instanceof Map) {
-            options.append(convertMapToCommandLineOptions(param.name.get(), (Map<String, Object>) value ));
-          }
-          if (value instanceof String) {
-            for (String var : (properties.get(param.property)).toString().split(",")) {
-              options.append(String.format("-%1$s '%2$s' ", param, var.trim()));
-            }
-          }
-          continue;
-        }
-        switch (param) {
-          case planOutputFile:
-            options.append(String.format("-%1$s=%2$s ", param, properties.getProperty(param.property).split("/")[properties.getProperty(param.property).split("/").length - 1]));
-            break;
-          case destroyPlan:
-          case noColor:
-            options.append(String.format("-%1$s ", param));
-            break;
-          case timeout:
-            break;
-          case lockTimeout:
-          default:
-            options.append(String.format("-%1$s=%2$s ", param, properties.get(param.property)));
-        }
-      }
-    }
-
-    if (!properties.containsKey(TerraformPlanParam.planInput.property)) {
-      options.append((String.format("-%1$s=false ", TerraformPlanParam.planInput.toString())));
-    }
-
-    try {
-      if (properties.containsKey(TerraformPlanParam.timeout.property)) {
-        return terraform.execute(options.toString(), Integer.parseInt(properties.get(TerraformPlanParam.timeout.property).toString()));
-      } else {
-        return terraform.execute(options.toString());
-      }
-    } catch (InterruptedException | IOException e) {
-      throw new TerraformException(e.getMessage(), e);
-    }
+  protected TerraformOption[] getTerraformParams() {
+    return TerraformPlan.Option.values();
   }
 }
