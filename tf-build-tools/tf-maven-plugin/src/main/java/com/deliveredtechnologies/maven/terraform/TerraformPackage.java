@@ -95,45 +95,21 @@ public class TerraformPackage implements TerraformOperation<String> {
           : TerraformUtils.getDefaultTfModulesDir();
       logger.debug(String.format("tfModulesPath is %1$s", tfModulesPath.toAbsolutePath().toString()));
 
+      if (targetTfRootPath.toFile().exists()) FileUtils.forceDelete(targetTfRootPath.toFile());
+      FileUtils.forceMkdir(targetTfRootPath.toFile());
+
       File tfSourceFile = Paths.get("src", "main", "tf").toFile();
+
       Path tfRootPath = !StringUtils.isEmpty(tfRootDir)
           ? TerraformUtils.getTerraformRootModuleDir(tfRootDir)
           : (tfSourceFile.exists() && tfSourceFile.isDirectory() && tfSourceFile.listFiles().length > 1
-              ? tfSourceFile.toPath()
-              : TerraformUtils.getDefaultTerraformRootModuleDir());
+          ? tfSourceFile.toPath()
+          : TerraformUtils.getDefaultTerraformRootModuleDir());
       logger.debug(String.format("tfRootPath is %1$s", tfRootPath.toAbsolutePath().toString()));
 
-      List<Path> tfVarFilePaths = StringUtils.isEmpty(tfVarFiles)
-          ? new ArrayList<>()
-          : Arrays.stream(tfVarFiles.split(","))
-          .map(x -> tfRootPath.resolve(x.trim()))
-          .collect(Collectors.toList());
-      logger.debug(String.format("tfVarFiles is %1$s", tfVarFilePaths));
+      copyTfRootDir(tfRootPath, targetTfRootPath);
 
-      //copy tfRoot directory to target
-      if (targetTfRootPath.toFile().exists()) FileUtils.forceDelete(targetTfRootPath.toFile());
-
-      FileUtils.forceMkdir(targetTfRootPath.toFile());
-      List<Path> tfRootDirFiles = Files.walk(tfRootPath, 1)
-          .filter(path -> !path.equals(tfRootPath))
-          .collect(Collectors.toList());
-
-      for (Path file : tfRootDirFiles.stream().filter(f -> !excludedFiles.contains(f.getFileName().toString())).collect(Collectors.toList())) {
-        if (file.toFile().isDirectory()) {
-          FileUtils.copyDirectory(file.toFile(), targetTfRootPath.resolve(file.getFileName().toString()).toFile(), new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-              return excludedFiles.stream().noneMatch(excludedFile -> pathname.getName().endsWith(excludedFile));
-            }
-          });
-        } else {
-          Files.copy(file, targetTfRootPath.resolve(file.getFileName().toString()));
-        }
-      }
-
-      for (Path tfVarFilePath : tfVarFilePaths) {
-        Files.copy(tfVarFilePath, targetTfRootPath.resolve(tfVarFilePath.getFileName().toString().replaceAll(".tfvars", "").concat(".auto.tfvars")));
-      }
+      copyTfVarFiles(tfRootPath, tfVarFiles, targetTfRootPath);
 
       if (isFatTar) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
@@ -146,6 +122,38 @@ public class TerraformPackage implements TerraformOperation<String> {
       return String.format("Created zip file '%1$s'", createZip(targetPath, targetTfRootPath));
     } catch (IOException e) {
       throw new TerraformException(e.getMessage(), e);
+    }
+  }
+
+  private void copyTfRootDir(Path sourceDir, Path targetDir) throws IOException {
+    List<Path> files = Files.walk(sourceDir, 1)
+        .filter(path -> !path.equals(sourceDir))
+        .collect(Collectors.toList());
+
+    for (Path file : files.stream().filter(f -> !excludedFiles.contains(f.getFileName().toString())).collect(Collectors.toList())) {
+      if (file.toFile().isDirectory()) {
+        FileUtils.copyDirectory(file.toFile(), targetDir.resolve(file.getFileName().toString()).toFile(), new FileFilter() {
+          @Override
+          public boolean accept(File pathname) {
+            return excludedFiles.stream().noneMatch(excludedFile -> pathname.getName().endsWith(excludedFile));
+          }
+        });
+      } else {
+        Files.copy(file, targetDir.resolve(file.getFileName().toString()));
+      }
+    }
+  }
+
+  private void copyTfVarFiles(Path sourceDir, String files, Path targetDir) throws IOException {
+    List<Path> filePaths = StringUtils.isEmpty(files)
+        ? new ArrayList<>()
+        : Arrays.stream(files.split(","))
+        .map(file -> sourceDir.resolve(file.trim()))
+        .collect(Collectors.toList());
+    logger.debug(String.format("tfVarFiles is %1$s", filePaths));
+
+    for (Path filePath : filePaths) {
+      Files.copy(filePath, targetDir.resolve(filePath.getFileName().toString().replaceAll(".tfvars", "").concat(".auto.tfvars")));
     }
   }
 
