@@ -27,6 +27,9 @@ public class Package extends TerraformMojo<String> {
   @Parameter(property = "tfVarFiles")
   String tfVarFiles;
 
+  @Parameter(property = "tfVars")
+  String tfVars;
+
   @Parameter(property = "fatTar")
   boolean fatTar;
 

@@ -40,6 +40,7 @@ public class TerraformPackageTest {
   private Path tfModules;
   private Path tfRoot;
   private List<Path> tfVarFiles;
+  private String tfVars;
   private Properties properties;
 
   /**
@@ -53,18 +54,20 @@ public class TerraformPackageTest {
     this.tfVarFiles = new ArrayList<>();
     tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev1.tfvars").toURI()));
     tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev2.tfvars").toURI()));
+    this.tfVars = "key1=value1, key2=value2";
     this.targetTfRootModule = Paths.get("target/tf-root-module");
     this.terraformPackage = new TerraformPackage(project);
     this.properties = new Properties();
     this.properties.put(TerraformPackageParams.tfRootDir.toString(), tfRoot.toString());
     this.properties.put(TerraformPackageParams.tfModulesDir.toString(), tfModules.toString());
-    this.properties.put(TerraformPackageParams.tfVarFiles.toString(), tfVarFiles.toString().replaceAll("(\\[|\\])", ""));
+    this.properties.put(TerraformPackageParams.tfVars.toString(), tfVars);
     if (targetTfRootModule.toFile().exists()) FileUtils.forceDelete(targetTfRootModule.toFile());
   }
 
   @Test
   public void packageWithFatTarPackagesTfModulesInsideTfRootInTheTargetDir() throws IOException, TerraformException {
     properties.put(TerraformPackageParams.fatTar.toString(), true);
+    this.properties.put(TerraformPackageParams.tfVarFiles.toString(), tfVarFiles.toString().replaceAll("(\\[|\\])", ""));
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
@@ -153,7 +156,7 @@ public class TerraformPackageTest {
     String response = this.terraformPackage.execute(properties);
 
     Assert.assertEquals(response, String.format("Created zip file '%1$s'", zipFilePath.toString()));
-    Assert.assertEquals(4, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
     Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("root")));
     Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("other")));
 
@@ -165,7 +168,7 @@ public class TerraformPackageTest {
         zipEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(6, count);
+      Assert.assertEquals(4, count);
       Assert.assertTrue(zipEntryNames.contains("root/"));
       Assert.assertTrue(zipEntryNames.contains("other/"));
       Assert.assertTrue(zipEntryNames.contains("root/main.tf"));

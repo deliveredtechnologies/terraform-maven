@@ -50,6 +50,7 @@ public class TerraformPackage implements TerraformOperation<String> {
     tfModulesDir,
     tfRootDir,
     tfVarFiles,
+    tfVars,
     fatTar;
   }
 
@@ -86,6 +87,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       String tfModulesDir = properties.getProperty(TerraformPackageParams.tfModulesDir.toString());
       String tfRootDir = properties.getProperty(TerraformPackageParams.tfRootDir.toString());
       String tfVarFiles = properties.getProperty(TerraformPackageParams.tfVarFiles.toString());
+      String tfVars = properties.getProperty(TerraformPackageParams.tfVars.toString());
 
       Object isFatTarObj = properties.getOrDefault(TerraformPackageParams.fatTar.toString(), false);
       boolean isFatTar = isFatTarObj instanceof Boolean ? (Boolean)isFatTarObj : Boolean.valueOf(isFatTarObj.toString());
@@ -110,6 +112,8 @@ public class TerraformPackage implements TerraformOperation<String> {
       copyTfRootDir(tfRootPath, targetTfRootPath);
 
       copyTfVarFiles(tfRootPath, tfVarFiles, targetTfRootPath);
+
+      saveTfVarsAsTfVarFile(tfRootPath, tfVars, targetTfRootPath);
 
       if (isFatTar) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
@@ -155,6 +159,10 @@ public class TerraformPackage implements TerraformOperation<String> {
     for (Path filePath : filePaths) {
       Files.copy(filePath, targetDir.resolve(filePath.getFileName().toString().replaceAll(".tfvars", "").concat(".auto.tfvars")));
     }
+  }
+
+  private void saveTfVarsAsTfVarFile(Path sourceDir, String tfVars, Path targetDir) throws IOException {
+    logger.debug(String.format("tfVars is %1$s", tfVars));
   }
 
   private void updateDependenciesInTfRoot(Path targetTfRootPath, Path tfModulesPath, Path tfRootPath) throws IOException {
