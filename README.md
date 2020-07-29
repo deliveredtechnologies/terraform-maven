@@ -223,6 +223,7 @@ extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 | ------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------|
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} or src/main/tf if there are multiple source modules |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules                                                     |
+| tfVarFiles   | String  | A comma delimited string of tfvars files in relation to tfRootDir (e.g., variables/dev1.tfvars,variables/dev2.tfvars)                             | 
 | fatTar       | Boolean | Set to true if a fat compressed tar.gz package should be created, otherwise false; defaults to false                                              |
 
 ---

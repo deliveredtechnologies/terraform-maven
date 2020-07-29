@@ -83,6 +83,15 @@
       </roles>
       <timezone>America/New_York</timezone>
     </developer>
+    <developer>
+      <id>palaniswamy</id>
+      <name>Palaniswamy Ramasamy</name>
+      <url>https://github.com/palaniswamy</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+    </developer>
   </developers>
   <profiles>
     <profile>

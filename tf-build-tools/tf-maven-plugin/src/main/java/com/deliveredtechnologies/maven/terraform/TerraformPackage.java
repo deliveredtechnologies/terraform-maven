@@ -27,6 +27,7 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -48,6 +49,7 @@ public class TerraformPackage implements TerraformOperation<String> {
   enum TerraformPackageParams {
     tfModulesDir,
     tfRootDir,
+    tfVarFiles,
     fatTar;
   }
 
@@ -83,6 +85,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       Path targetTfRootPath = targetPath.resolve(targetTfRootDir);
       String tfModulesDir = properties.getProperty(TerraformPackageParams.tfModulesDir.toString());
       String tfRootDir = properties.getProperty(TerraformPackageParams.tfRootDir.toString());
+      String tfVarFiles = properties.getProperty(TerraformPackageParams.tfVarFiles.toString());
 
       Object isFatTarObj = properties.getOrDefault(TerraformPackageParams.fatTar.toString(), false);
       boolean isFatTar = isFatTarObj instanceof Boolean ? (Boolean)isFatTarObj : Boolean.valueOf(isFatTarObj.toString());
@@ -99,6 +102,13 @@ public class TerraformPackage implements TerraformOperation<String> {
               ? tfSourceFile.toPath()
               : TerraformUtils.getDefaultTerraformRootModuleDir());
       logger.debug(String.format("tfRootPath is %1$s", tfRootPath.toAbsolutePath().toString()));
+
+      List<Path> tfVarFilePaths = StringUtils.isEmpty(tfVarFiles)
+          ? new ArrayList<>()
+          : Arrays.stream(tfVarFiles.split(","))
+          .map(x -> tfRootPath.resolve(x.trim()))
+          .collect(Collectors.toList());
+      logger.debug(String.format("tfVarFiles is %1$s", tfVarFilePaths));
 
       //copy tfRoot directory to target
       if (targetTfRootPath.toFile().exists()) FileUtils.forceDelete(targetTfRootPath.toFile());
@@ -119,6 +129,10 @@ public class TerraformPackage implements TerraformOperation<String> {
         } else {
           Files.copy(file, targetTfRootPath.resolve(file.getFileName().toString()));
         }
+      }
+
+      for (Path tfVarFilePath : tfVarFilePaths) {
+        Files.copy(tfVarFilePath, targetTfRootPath.resolve(tfVarFilePath.getFileName().toString().replaceAll(".tfvars", "").concat(".auto.tfvars")));
       }
 
       if (isFatTar) {
@@ -177,4 +191,5 @@ public class TerraformPackage implements TerraformOperation<String> {
     compressor.compress();
     return tarFilename;
   }
+
 }
