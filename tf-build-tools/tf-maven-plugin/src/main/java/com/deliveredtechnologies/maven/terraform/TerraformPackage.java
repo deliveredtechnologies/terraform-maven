@@ -118,7 +118,7 @@ public class TerraformPackage implements TerraformOperation<String> {
 
       copyTfVarFiles(tfRootPath, tfVarFiles, targetTfRootPath);
 
-      saveTfVarsAsTfVarFile(tfRootPath, tfVars, targetTfRootPath);
+      saveTfVarsAsTfVarFile(tfRootPath, tfVars, targetTfRootPath, "zzz_command_line.auto.tfvars.json");
 
       if (isFatTar) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
@@ -166,7 +166,7 @@ public class TerraformPackage implements TerraformOperation<String> {
     }
   }
 
-  private void saveTfVarsAsTfVarFile(Path sourceDir, Object tfVars, Path targetDir) throws IOException {
+  private void saveTfVarsAsTfVarFile(Path sourceDir, Object tfVars, Path targetDir, String targetFileName) throws IOException {
     if (tfVars == null) {
       return;
     }
@@ -174,9 +174,8 @@ public class TerraformPackage implements TerraformOperation<String> {
     String fileContent;
     Map<String,Object> tfVarsMap;
     ObjectMapper objectMapper = new ObjectMapper();
-    String fileNameHoldingCommandLineTfVars = "zzz_command_line.auto.tfvars.json";
-    File sourceFile = new File(sourceDir.resolve(fileNameHoldingCommandLineTfVars).toUri());
-    File targetFile = new File(targetDir.resolve(fileNameHoldingCommandLineTfVars).toUri());
+    File sourceFile = new File(sourceDir.resolve(targetFileName).toUri());
+    File targetFile = new File(targetDir.resolve(targetFileName).toUri());
 
     logger.debug(String.format("tfVars is %1$s", tfVars.toString()));
 
