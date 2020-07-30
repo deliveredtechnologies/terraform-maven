@@ -174,8 +174,9 @@ public class TerraformPackage implements TerraformOperation<String> {
     String fileContent;
     Map<String,Object> tfVarsMap;
     ObjectMapper objectMapper = new ObjectMapper();
-    File sourceFile = new File(sourceDir.resolve("terraform.tfvars.json").toUri());
-    File targetFile = new File(targetDir.resolve("terraform.tfvars.json").toUri());
+    String fileNameHoldingCommandLineTfVars = "zzz_command_line.auto.tfvars.json";
+    File sourceFile = new File(sourceDir.resolve(fileNameHoldingCommandLineTfVars).toUri());
+    File targetFile = new File(targetDir.resolve(fileNameHoldingCommandLineTfVars).toUri());
 
     logger.debug(String.format("tfVars is %1$s", tfVars.toString()));
 
@@ -199,7 +200,7 @@ public class TerraformPackage implements TerraformOperation<String> {
     if (tfVarsMap.size() > 0) {
       fileContent = objectMapper.writeValueAsString(tfVarsMap);
 
-      FileWriter fr = new FileWriter(targetFile, true);
+      FileWriter fr = new FileWriter(targetFile, false);
       BufferedWriter br = new BufferedWriter(fr);
       br.write(fileContent);
       br.close();

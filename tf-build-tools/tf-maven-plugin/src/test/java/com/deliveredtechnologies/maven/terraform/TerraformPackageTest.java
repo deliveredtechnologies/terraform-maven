@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -40,6 +41,7 @@ public class TerraformPackageTest {
   private Path tfModules;
   private Path tfRoot;
   private List<Path> tfVarFiles;
+  private Path commandLineTfVarsAsFile;
   private String tfVars;
   private Properties properties;
 
@@ -54,6 +56,7 @@ public class TerraformPackageTest {
     this.tfVarFiles = new ArrayList<>();
     tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev1.tfvars").toURI()));
     tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev2.tfvars").toURI()));
+    this.commandLineTfVarsAsFile = this.tfRoot.resolve("zzz_command_line.auto.tfvars.json");
     this.tfVars = "key1=value1, key2=value2";
     this.targetTfRootModule = Paths.get("target/tf-root-module");
     this.terraformPackage = new TerraformPackage(project);
@@ -61,6 +64,7 @@ public class TerraformPackageTest {
     this.properties.put(TerraformPackageParams.tfRootDir.toString(), tfRoot.toString());
     this.properties.put(TerraformPackageParams.tfModulesDir.toString(), tfModules.toString());
     if (targetTfRootModule.toFile().exists()) FileUtils.forceDelete(targetTfRootModule.toFile());
+    if (commandLineTfVarsAsFile.toFile().exists()) FileUtils.forceDelete(commandLineTfVarsAsFile.toFile());
   }
 
   @Test
@@ -68,13 +72,16 @@ public class TerraformPackageTest {
     properties.put(TerraformPackageParams.fatTar.toString(), true);
     this.properties.put(TerraformPackageParams.tfVarFiles.toString(), tfVarFiles.toString().replaceAll("(\\[|\\])", ""));
     this.properties.put(TerraformPackageParams.tfVars.toString(), tfVars);
+    FileWriter myWriter = new FileWriter(this.commandLineTfVarsAsFile.toFile());
+    myWriter.write("{ \"key3\": \"value3\"}");
+    myWriter.close();
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
 
     Assert.assertEquals(response, String.format("Created fatTar gzipped tar file '%1$s'", tarFilePath.toString()));
     Assert.assertEquals(6, this.targetTfRootModule.toFile().listFiles().length);
-    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,terraform.tfvars.json",
+    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,zzz_command_line.auto.tfvars.json",
         Files.walk(this.targetTfRootModule, 1)
         .filter(path -> !path.toFile().isDirectory())
         .map(path -> path.getFileName().toString())
@@ -110,7 +117,7 @@ public class TerraformPackageTest {
       Assert.assertTrue(tarEntryNames.contains("main.tf"));
       Assert.assertTrue(tarEntryNames.contains("dev1.auto.tfvars"));
       Assert.assertTrue(tarEntryNames.contains("dev2.auto.tfvars"));
-      Assert.assertTrue(tarEntryNames.contains("terraform.tfvars.json"));
+      Assert.assertTrue(tarEntryNames.contains("zzz_command_line.auto.tfvars.json"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/main.tf"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/variables.tf"));
     }
