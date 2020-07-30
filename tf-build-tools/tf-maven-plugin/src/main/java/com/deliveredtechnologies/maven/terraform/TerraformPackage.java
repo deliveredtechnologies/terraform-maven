@@ -8,6 +8,7 @@ import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.TerraformUtils;
 import com.deliveredtechnologies.terraform.api.TerraformOperation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -29,8 +31,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -87,7 +92,7 @@ public class TerraformPackage implements TerraformOperation<String> {
       String tfModulesDir = properties.getProperty(TerraformPackageParams.tfModulesDir.toString());
       String tfRootDir = properties.getProperty(TerraformPackageParams.tfRootDir.toString());
       String tfVarFiles = properties.getProperty(TerraformPackageParams.tfVarFiles.toString());
-      String tfVars = properties.getProperty(TerraformPackageParams.tfVars.toString());
+      Object tfVars = properties.getProperty(TerraformPackageParams.tfVars.toString());
 
       Object isFatTarObj = properties.getOrDefault(TerraformPackageParams.fatTar.toString(), false);
       boolean isFatTar = isFatTarObj instanceof Boolean ? (Boolean)isFatTarObj : Boolean.valueOf(isFatTarObj.toString());
@@ -161,8 +166,45 @@ public class TerraformPackage implements TerraformOperation<String> {
     }
   }
 
-  private void saveTfVarsAsTfVarFile(Path sourceDir, String tfVars, Path targetDir) throws IOException {
-    logger.debug(String.format("tfVars is %1$s", tfVars));
+  private void saveTfVarsAsTfVarFile(Path sourceDir, Object tfVars, Path targetDir) throws IOException {
+    if (tfVars == null) {
+      return;
+    }
+
+    String fileContent;
+    Map<String,Object> tfVarsMap;
+    ObjectMapper objectMapper = new ObjectMapper();
+    File sourceFile = new File(sourceDir.resolve("terraform.tfvars.json").toUri());
+    File targetFile = new File(targetDir.resolve("terraform.tfvars.json").toUri());
+
+    logger.debug(String.format("tfVars is %1$s", tfVars.toString()));
+
+    if (sourceFile.exists()) {
+      tfVarsMap = objectMapper.readValue(new FileInputStream(sourceFile), Map.class);
+    } else {
+      tfVarsMap = new HashMap<>();
+    }
+
+    if (tfVars instanceof String) {
+      StringJoiner sj = new StringJoiner(",", "{", "}");
+      for (String var : ((String) tfVars).split(",")) {
+        String[] kvPair = var.split("=");
+        sj.add(String.format("\"%s\": \"%s\"", kvPair[0], kvPair[1]));
+      }
+      tfVarsMap.putAll(objectMapper.readValue(sj.toString(), Map.class));
+    } else if (tfVars instanceof Map) {
+      tfVarsMap.putAll((Map) tfVars);
+    }
+
+    if (tfVarsMap.size() > 0) {
+      fileContent = objectMapper.writeValueAsString(tfVarsMap);
+
+      FileWriter fr = new FileWriter(targetFile, true);
+      BufferedWriter br = new BufferedWriter(fr);
+      br.write(fileContent);
+      br.close();
+      fr.close();
+    }
   }
 
   private void updateDependenciesInTfRoot(Path targetTfRootPath, Path tfModulesPath, Path tfRootPath) throws IOException {

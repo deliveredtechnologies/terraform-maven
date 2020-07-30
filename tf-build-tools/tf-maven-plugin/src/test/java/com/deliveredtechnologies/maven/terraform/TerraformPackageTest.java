@@ -60,7 +60,6 @@ public class TerraformPackageTest {
     this.properties = new Properties();
     this.properties.put(TerraformPackageParams.tfRootDir.toString(), tfRoot.toString());
     this.properties.put(TerraformPackageParams.tfModulesDir.toString(), tfModules.toString());
-    this.properties.put(TerraformPackageParams.tfVars.toString(), tfVars);
     if (targetTfRootModule.toFile().exists()) FileUtils.forceDelete(targetTfRootModule.toFile());
   }
 
@@ -68,13 +67,14 @@ public class TerraformPackageTest {
   public void packageWithFatTarPackagesTfModulesInsideTfRootInTheTargetDir() throws IOException, TerraformException {
     properties.put(TerraformPackageParams.fatTar.toString(), true);
     this.properties.put(TerraformPackageParams.tfVarFiles.toString(), tfVarFiles.toString().replaceAll("(\\[|\\])", ""));
+    this.properties.put(TerraformPackageParams.tfVars.toString(), tfVars);
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
 
     Assert.assertEquals(response, String.format("Created fatTar gzipped tar file '%1$s'", tarFilePath.toString()));
-    Assert.assertEquals(5, this.targetTfRootModule.toFile().listFiles().length);
-    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf",
+    Assert.assertEquals(6, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,terraform.tfvars.json",
         Files.walk(this.targetTfRootModule, 1)
         .filter(path -> !path.toFile().isDirectory())
         .map(path -> path.getFileName().toString())
@@ -106,10 +106,11 @@ public class TerraformPackageTest {
         tarEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(10, count);
+      Assert.assertEquals(11, count);
       Assert.assertTrue(tarEntryNames.contains("main.tf"));
       Assert.assertTrue(tarEntryNames.contains("dev1.auto.tfvars"));
       Assert.assertTrue(tarEntryNames.contains("dev2.auto.tfvars"));
+      Assert.assertTrue(tarEntryNames.contains("terraform.tfvars.json"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/main.tf"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/variables.tf"));
     }
