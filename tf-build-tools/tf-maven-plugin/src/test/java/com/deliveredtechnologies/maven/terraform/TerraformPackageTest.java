@@ -10,7 +10,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.project.MavenProject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -45,6 +47,10 @@ public class TerraformPackageTest {
   private String tfVars;
   private Properties properties;
 
+  @Rule
+  public final EnvironmentVariables environmentVariables
+      = new EnvironmentVariables();
+
   /**
    * Sets up dependencies for TerraformPackage.
    * @throws URISyntaxException
@@ -75,13 +81,14 @@ public class TerraformPackageTest {
     FileWriter myWriter = new FileWriter(this.commandLineTfVarsAsFile.toFile());
     myWriter.write("{ \"key3\": \"value3\"}");
     myWriter.close();
+    environmentVariables.set("TF_VAR_key4", "value4");
     String response = this.terraformPackage.execute(properties);
     Path tarFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
 
     Assert.assertEquals(response, String.format("Created fatTar gzipped tar file '%1$s'", tarFilePath.toString()));
-    Assert.assertEquals(6, this.targetTfRootModule.toFile().listFiles().length);
-    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,properties.auto.tfvars.json",
+    Assert.assertEquals(7, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,pipeline.auto.tfvars.json,properties.auto.tfvars.json",
         Files.walk(this.targetTfRootModule, 1)
         .filter(path -> !path.toFile().isDirectory())
         .map(path -> path.getFileName().toString())
@@ -113,7 +120,7 @@ public class TerraformPackageTest {
         tarEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(11, count);
+      Assert.assertEquals(12, count);
       Assert.assertTrue(tarEntryNames.contains("main.tf"));
       Assert.assertTrue(tarEntryNames.contains("dev1.auto.tfvars"));
       Assert.assertTrue(tarEntryNames.contains("dev2.auto.tfvars"));

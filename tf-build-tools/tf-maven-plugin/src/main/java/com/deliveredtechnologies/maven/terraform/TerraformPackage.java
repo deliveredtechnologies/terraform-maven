@@ -120,6 +120,14 @@ public class TerraformPackage implements TerraformOperation<String> {
 
       saveTfVarsAsTfVarFile(tfRootPath, tfVars, targetTfRootPath, "properties.auto.tfvars.json");
 
+      Map<String,String> envTfVars = System.getenv()
+          .entrySet()
+          .stream()
+          .filter(map -> map.getKey().startsWith("TF_VAR_"))
+          .collect(Collectors.toMap(map -> map.getKey().substring(7), map -> map.getValue()));
+
+      saveTfVarsAsTfVarFile(tfRootPath, envTfVars, targetTfRootPath, "pipeline.auto.tfvars.json");
+
       if (isFatTar) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
         //copy tfmodules directory into tfRoot directory; i.e. {targetTfRootDir}/{tfModulesDir} if it exists
