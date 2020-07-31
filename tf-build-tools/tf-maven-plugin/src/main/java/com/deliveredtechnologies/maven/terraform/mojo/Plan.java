@@ -4,7 +4,7 @@ import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
-import com.deliveredtechnologies.terraform.terraformhandler.TerraformChainHandler;
+import com.deliveredtechnologies.terraform.handler.TerraformChainHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

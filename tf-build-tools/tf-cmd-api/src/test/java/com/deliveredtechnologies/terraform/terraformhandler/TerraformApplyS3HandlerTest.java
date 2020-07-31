@@ -2,6 +2,10 @@ package com.deliveredtechnologies.terraform.terraformhandler;
 
 import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformException;
+import com.deliveredtechnologies.terraform.handler.TerraformApplyS3Handler;
+import com.deliveredtechnologies.terraform.handler.TerraformChainHandler;
+import com.deliveredtechnologies.terraform.handler.TerraformHandler;
+import com.deliveredtechnologies.terraform.handler.TerraformPlanS3Handler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

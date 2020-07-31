@@ -1,4 +1,4 @@
-package com.deliveredtechnologies.terraform.terraformhandler;
+package com.deliveredtechnologies.terraform.handler;
 
 import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;

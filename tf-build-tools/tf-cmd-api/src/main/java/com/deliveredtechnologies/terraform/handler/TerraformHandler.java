@@ -1,4 +1,4 @@
-package com.deliveredtechnologies.terraform.terraformhandler;
+package com.deliveredtechnologies.terraform.handler;
 
 import java.util.Optional;
 import java.util.Properties;
