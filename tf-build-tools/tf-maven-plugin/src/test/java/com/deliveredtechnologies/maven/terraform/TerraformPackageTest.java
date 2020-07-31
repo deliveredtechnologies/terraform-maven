@@ -56,7 +56,7 @@ public class TerraformPackageTest {
     this.tfVarFiles = new ArrayList<>();
     tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev1.tfvars").toURI()));
     tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev2.tfvars").toURI()));
-    this.commandLineTfVarsAsFile = this.tfRoot.resolve("zzz_command_line.auto.tfvars.json");
+    this.commandLineTfVarsAsFile = this.tfRoot.resolve("properties.auto.tfvars.json");
     this.tfVars = "key1=value1, key2=value2";
     this.targetTfRootModule = Paths.get("target/tf-root-module");
     this.terraformPackage = new TerraformPackage(project);
@@ -81,7 +81,7 @@ public class TerraformPackageTest {
 
     Assert.assertEquals(response, String.format("Created fatTar gzipped tar file '%1$s'", tarFilePath.toString()));
     Assert.assertEquals(6, this.targetTfRootModule.toFile().listFiles().length);
-    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,zzz_command_line.auto.tfvars.json",
+    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf,properties.auto.tfvars.json",
         Files.walk(this.targetTfRootModule, 1)
         .filter(path -> !path.toFile().isDirectory())
         .map(path -> path.getFileName().toString())
@@ -117,7 +117,7 @@ public class TerraformPackageTest {
       Assert.assertTrue(tarEntryNames.contains("main.tf"));
       Assert.assertTrue(tarEntryNames.contains("dev1.auto.tfvars"));
       Assert.assertTrue(tarEntryNames.contains("dev2.auto.tfvars"));
-      Assert.assertTrue(tarEntryNames.contains("zzz_command_line.auto.tfvars.json"));
+      Assert.assertTrue(tarEntryNames.contains("properties.auto.tfvars.json"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/main.tf"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/variables.tf"));
     }

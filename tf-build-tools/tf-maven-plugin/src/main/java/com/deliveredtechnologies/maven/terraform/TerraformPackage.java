@@ -118,7 +118,7 @@ public class TerraformPackage implements TerraformOperation<String> {
 
       copyTfVarFiles(tfRootPath, tfVarFiles, targetTfRootPath);
 
-      saveTfVarsAsTfVarFile(tfRootPath, tfVars, targetTfRootPath, "zzz_command_line.auto.tfvars.json");
+      saveTfVarsAsTfVarFile(tfRootPath, tfVars, targetTfRootPath, "properties.auto.tfvars.json");
 
       if (isFatTar) {
         updateDependenciesInTfRoot(targetTfRootPath, tfModulesPath, tfRootPath);
