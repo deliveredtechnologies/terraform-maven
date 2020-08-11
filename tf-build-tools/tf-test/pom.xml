@@ -86,10 +86,38 @@
         </configuration>
         <executions>
           <execution>
+            <id>jacoco-prepare</id>
             <goals>
               <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-report</id>
+            <phase>test</phase>
+            <goals>
               <goal>report</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <phase>test</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule implementation="org.jacoco.maven.RuleConfiguration">
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit implementation="org.jacoco.report.check.Limit">
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
           </execution>
         </executions>
       </plugin>
