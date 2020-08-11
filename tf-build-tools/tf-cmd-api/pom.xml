@@ -5,7 +5,7 @@
   <parent>
     <artifactId>tf-build-tools</artifactId>
     <groupId>com.deliveredtechnologies</groupId>
-    <version>0.10.1</version>
+    <version>0.11-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tf-cmd-api</artifactId>
@@ -43,7 +43,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.4.201502262128</version>
+        <version>0.8.5</version>
         <configuration>
           <excludes>
             <exclude>**/*Exception*</exclude>
