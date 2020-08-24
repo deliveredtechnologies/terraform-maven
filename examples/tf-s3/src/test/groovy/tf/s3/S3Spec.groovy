@@ -6,8 +6,6 @@ import com.deliveredtechnologies.terraform.api.TerraformApply
 import com.deliveredtechnologies.terraform.api.TerraformDestroy
 import com.deliveredtechnologies.terraform.api.TerraformInit
 import com.deliveredtechnologies.terraform.api.TerraformOutput
-import com.deliveredtechnologies.terraform.api.TerraformPlan
-import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import spock.lang.Specification
 

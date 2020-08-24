@@ -27,6 +27,11 @@
       <artifactId>tf-cmd-api</artifactId>
       <version>${tf-maven-version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.deliveredtechnologies</groupId>
+      <artifactId>tf-test</artifactId>
+      <version>${tf-maven-version}</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy -->
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
