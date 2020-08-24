@@ -1,29 +1,6 @@
 #!/usr/bin/env bash
 args="$@"
 
-######################################################
-# Determine where the root directory of the project is
-######################################################
-function findProjectBaseDir()
-{
-  cur_loc=`pwd`
-  tf_bin="$cur_loc/.tf"
-
-  while [[ $projectBaseDir == "" ]]
-  do
-    if [ -d "$tf_bin" ]
-    then
-      projectBaseDir="$cur_loc"
-    else
-      cd ..
-      cur_loc=`pwd`
-      tf_bin="$cur_loc/.tf"
-    fi
-  done
-
-  echo $projectBaseDir
-}
-
 ###############################
 # Download the terraform binary
 ###############################
@@ -38,7 +15,8 @@ function downloadTerraformBinary()
 }
 
 projectBaseDir=$(findProjectBaseDir)
-targetDir="$projectBaseDir/.tf/"
+thisScript=$0
+targetDir=${thisScript%"tfw"}
 
 propFile="${targetDir}terraform-maven.properties"
 search="="
