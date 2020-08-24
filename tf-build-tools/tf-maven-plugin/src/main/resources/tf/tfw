@@ -14,7 +14,6 @@ function downloadTerraformBinary()
   rm -f $terraformZip
 }
 
-projectBaseDir=$(findProjectBaseDir)
 thisScript=$0
 targetDir=${thisScript%"tfw"}
 
