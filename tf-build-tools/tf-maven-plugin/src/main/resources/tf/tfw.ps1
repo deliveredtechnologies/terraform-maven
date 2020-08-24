@@ -44,8 +44,8 @@ $terraformBinary = $targetDir + "terraform.exe"
 ##########################################################################
 # if the terraform binary is already there, figure out what version it is
 ##########################################################################
-if ( [System.IO.File]::Exists($terraformBinaryWindows) ) {
-    $versionString       = & $terraformBinaryWindows -version
+if ( [System.IO.File]::Exists($terraformBinary) ) {
+    $versionString       = & $terraformBinary -version
     $arr                 = $versionString.split(" ")
     $installedVerionFull = $arr[1]
     $len                 = $installedVerionFull.Length
