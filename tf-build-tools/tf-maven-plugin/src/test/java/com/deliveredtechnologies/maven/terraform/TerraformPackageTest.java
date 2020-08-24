@@ -20,10 +20,13 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 
@@ -36,6 +39,7 @@ public class TerraformPackageTest {
   private TerraformPackage terraformPackage;
   private Path tfModules;
   private Path tfRoot;
+  private List<Path> tfVarFiles;
   private Properties properties;
 
   /**
@@ -43,14 +47,19 @@ public class TerraformPackageTest {
    * @throws URISyntaxException
    */
   @Before
-  public void setup() throws URISyntaxException {
+  public void setup() throws URISyntaxException, IOException {
     this.tfRoot = Paths.get(this.getClass().getResource("/tf/root").toURI());
     this.tfModules = Paths.get(this.getClass().getResource("/tfmodules").toURI());
+    this.tfVarFiles = new ArrayList<>();
+    tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev1.tfvars").toURI()));
+    tfVarFiles.add(Paths.get(this.getClass().getResource("/tf/root/variables/dev2.tfvars").toURI()));
     this.targetTfRootModule = Paths.get("target/tf-root-module");
     this.terraformPackage = new TerraformPackage(project);
     this.properties = new Properties();
     this.properties.put(TerraformPackageParams.tfRootDir.toString(), tfRoot.toString());
     this.properties.put(TerraformPackageParams.tfModulesDir.toString(), tfModules.toString());
+    this.properties.put(TerraformPackageParams.tfVarFiles.toString(), tfVarFiles.toString().replaceAll("(\\[|\\])", ""));
+    if (targetTfRootModule.toFile().exists()) FileUtils.forceDelete(targetTfRootModule.toFile());
   }
 
   @Test
@@ -61,12 +70,13 @@ public class TerraformPackageTest {
         .resolve(String.format("%1$s-%2$s.tar.gz", project.getArtifactId(), project.getVersion()));
 
     Assert.assertEquals(response, String.format("Created fatTar gzipped tar file '%1$s'", tarFilePath.toString()));
-    Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
-    Assert.assertEquals("main.tf",
+    Assert.assertEquals(5, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf",
         Files.walk(this.targetTfRootModule, 1)
         .filter(path -> !path.toFile().isDirectory())
-        .findAny()
-        .get().getFileName().toString());
+        .map(path -> path.getFileName().toString())
+          .sorted()
+        .collect(Collectors.joining(",")));
     Assert.assertEquals(2, Files.walk(this.targetTfRootModule.resolve(tfModules.getFileName().toString()).resolve("test-module"), 1)
         .filter(path -> path.getFileName().toString().equals("main.tf")
         || path.getFileName().toString().equals("variables.tf"))
@@ -93,8 +103,10 @@ public class TerraformPackageTest {
         tarEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(5, count);
+      Assert.assertEquals(10, count);
       Assert.assertTrue(tarEntryNames.contains("main.tf"));
+      Assert.assertTrue(tarEntryNames.contains("dev1.auto.tfvars"));
+      Assert.assertTrue(tarEntryNames.contains("dev2.auto.tfvars"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/main.tf"));
       Assert.assertTrue(tarEntryNames.contains("tfmodules/test-module/variables.tf"));
     }
@@ -104,15 +116,17 @@ public class TerraformPackageTest {
   public void packageGoalWithNoFatZipPackagesOnlyTfRootContentsInTheTargetDir() throws TerraformException, IOException {
     Path zipFilePath = Paths.get(TerraformPackage.targetDir)
         .resolve(String.format("%1$s-%2$s.zip", project.getArtifactId(), project.getVersion()));
+    this.properties.put(TerraformPackageParams.tfVarFiles.toString(), "variables/dev1.tfvars,variables/dev2.tfvars");
     String response = this.terraformPackage.execute(properties);
 
     Assert.assertEquals(response, String.format("Created zip file '%1$s'", zipFilePath.toString()));
-    Assert.assertEquals(1, this.targetTfRootModule.toFile().listFiles().length);
-    Assert.assertEquals("main.tf",
+    Assert.assertEquals(4, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals("dev1.auto.tfvars,dev2.auto.tfvars,main.tf",
         Files.walk(this.targetTfRootModule, 1)
-        .filter(path -> !path.toFile().isDirectory())
-        .findAny()
-        .get().getFileName().toString());
+          .filter(path -> !path.toFile().isDirectory())
+          .map(path -> path.getFileName().toString())
+          .sorted()
+          .collect(Collectors.joining(",")));
 
     try (IterableZipInputStream zipStream = new IterableZipInputStream(new FileInputStream(zipFilePath.toFile()))) {
       int count = 0;
@@ -122,8 +136,10 @@ public class TerraformPackageTest {
         zipEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(1, count);
+      Assert.assertEquals(6, count);
       Assert.assertTrue(zipEntryNames.contains("main.tf"));
+      Assert.assertTrue(zipEntryNames.contains("dev1.auto.tfvars"));
+      Assert.assertTrue(zipEntryNames.contains("dev2.auto.tfvars"));
     }
   }
 
@@ -137,7 +153,7 @@ public class TerraformPackageTest {
     String response = this.terraformPackage.execute(properties);
 
     Assert.assertEquals(response, String.format("Created zip file '%1$s'", zipFilePath.toString()));
-    Assert.assertEquals(2, this.targetTfRootModule.toFile().listFiles().length);
+    Assert.assertEquals(4, this.targetTfRootModule.toFile().listFiles().length);
     Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("root")));
     Assert.assertTrue(Arrays.stream(this.targetTfRootModule.toFile().listFiles()).anyMatch(file -> file.getName().equals("other")));
 
@@ -149,11 +165,12 @@ public class TerraformPackageTest {
         zipEntryNames.add(entry.getName());
       }
 
-      Assert.assertEquals(4, count);
+      Assert.assertEquals(6, count);
       Assert.assertTrue(zipEntryNames.contains("root/"));
       Assert.assertTrue(zipEntryNames.contains("other/"));
       Assert.assertTrue(zipEntryNames.contains("root/main.tf"));
       Assert.assertTrue(zipEntryNames.contains("other/main.tf"));
     }
   }
+
 }
