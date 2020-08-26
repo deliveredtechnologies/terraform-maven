@@ -1,0 +1,945 @@
+{
+  "format_version": "0.1",
+  "terraform_version": "0.12.25",
+  "variables": {
+    "bucket_name": {
+      "value": ""
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "is_versioned": {
+      "value": "false"
+    },
+    "kms_key_arn": {
+      "value": ""
+    },
+    "region": {
+      "value": "us-east-1"
+    }
+  },
+  "planned_values": {
+    "outputs": {
+      "bucket": {
+        "sensitive": false,
+        "value": {
+          "acceleration_status": "",
+          "acl": "private",
+          "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+          "bucket": "bucket-bb8937d0c3d09cab",
+          "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+          "bucket_prefix": null,
+          "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+          "cors_rule": [],
+          "force_destroy": true,
+          "grant": [],
+          "hosted_zone_id": "Z3AQBSTGFYJSTF",
+          "id": "bucket-bb8937d0c3d09cab",
+          "lifecycle_rule": [],
+          "logging": [],
+          "object_lock_configuration": [],
+          "policy": null,
+          "region": "us-east-1",
+          "replication_configuration": [],
+          "request_payer": "BucketOwner",
+          "server_side_encryption_configuration": [],
+          "tags": {
+            "environment": "dev"
+          },
+          "versioning": [
+            {
+              "enabled": false,
+              "mfa_delete": false
+            }
+          ],
+          "website": [],
+          "website_domain": null,
+          "website_endpoint": null
+        }
+      }
+    },
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_s3_bucket.bucket",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "bucket",
+          "provider_name": "aws",
+          "schema_version": 0,
+          "values": {
+            "acceleration_status": "",
+            "acl": "private",
+            "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+            "bucket": "bucket-bb8937d0c3d09cab",
+            "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+            "bucket_prefix": null,
+            "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": true,
+            "grant": [],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "bucket-bb8937d0c3d09cab",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [],
+            "policy": null,
+            "region": "us-east-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [],
+            "tags": {
+              "environment": "dev"
+            },
+            "versioning": [
+              {
+                "enabled": false,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          }
+        },
+        {
+          "address": "random_id.bucket_name",
+          "mode": "managed",
+          "type": "random_id",
+          "name": "bucket_name",
+          "provider_name": "random",
+          "schema_version": 0,
+          "values": {
+            "b64": "bucket-u4k30MPQnKs",
+            "b64_std": "bucket-u4k30MPQnKs=",
+            "b64_url": "bucket-u4k30MPQnKs",
+            "byte_length": 8,
+            "dec": "bucket-13513393526679837867",
+            "hex": "bucket-bb8937d0c3d09cab",
+            "id": "u4k30MPQnKs",
+            "keepers": null,
+            "prefix": "bucket-"
+          }
+        }
+      ],
+      "child_modules": [
+        {
+          "resources": [
+            {
+              "address": "module.pet.random_pet.pet",
+              "mode": "managed",
+              "type": "random_pet",
+              "name": "pet",
+              "provider_name": "random",
+              "schema_version": 0,
+              "values": {
+                "id": "proud-caribou",
+                "keepers": null,
+                "length": 2,
+                "prefix": null,
+                "separator": "-"
+              }
+            }
+          ],
+          "address": "module.pet",
+          "child_modules": [
+            {
+              "resources": [
+                {
+                  "address": "module.pet.module.bar.random_integer.random",
+                  "mode": "managed",
+                  "type": "random_integer",
+                  "name": "random",
+                  "provider_name": "random",
+                  "schema_version": 0,
+                  "values": {
+                    "id": "6",
+                    "keepers": null,
+                    "max": 10,
+                    "min": 0,
+                    "result": 6,
+                    "seed": null
+                  }
+                }
+              ],
+              "address": "module.pet.module.bar"
+            }
+          ]
+        },
+        {
+          "resources": [
+            {
+              "address": "module.pet2.random_pet.pet",
+              "mode": "managed",
+              "type": "random_pet",
+              "name": "pet",
+              "provider_name": "random",
+              "schema_version": 0,
+              "values": {
+                "id": "touched-monster",
+                "keepers": null,
+                "length": 2,
+                "prefix": null,
+                "separator": "-"
+              }
+            }
+          ],
+          "address": "module.pet2",
+          "child_modules": [
+            {
+              "resources": [
+                {
+                  "address": "module.pet2.module.bar.random_integer.random",
+                  "mode": "managed",
+                  "type": "random_integer",
+                  "name": "random",
+                  "provider_name": "random",
+                  "schema_version": 0,
+                  "values": {
+                    "id": "9",
+                    "keepers": null,
+                    "max": 10,
+                    "min": 0,
+                    "result": 9,
+                    "seed": null
+                  }
+                }
+              ],
+              "address": "module.pet2.module.bar"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_s3_bucket.bucket",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "bucket",
+      "provider_name": "aws",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "acceleration_status": "",
+          "acl": "private",
+          "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+          "bucket": "bucket-bb8937d0c3d09cab",
+          "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+          "bucket_prefix": null,
+          "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+          "cors_rule": [],
+          "force_destroy": true,
+          "grant": [],
+          "hosted_zone_id": "Z3AQBSTGFYJSTF",
+          "id": "bucket-bb8937d0c3d09cab",
+          "lifecycle_rule": [],
+          "logging": [],
+          "object_lock_configuration": [],
+          "policy": null,
+          "region": "us-east-1",
+          "replication_configuration": [],
+          "request_payer": "BucketOwner",
+          "server_side_encryption_configuration": [],
+          "tags": {
+            "environment": "dev"
+          },
+          "versioning": [
+            {
+              "enabled": false,
+              "mfa_delete": false
+            }
+          ],
+          "website": [],
+          "website_domain": null,
+          "website_endpoint": null
+        },
+        "after": {
+          "acceleration_status": "",
+          "acl": "private",
+          "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+          "bucket": "bucket-bb8937d0c3d09cab",
+          "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+          "bucket_prefix": null,
+          "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+          "cors_rule": [],
+          "force_destroy": true,
+          "grant": [],
+          "hosted_zone_id": "Z3AQBSTGFYJSTF",
+          "id": "bucket-bb8937d0c3d09cab",
+          "lifecycle_rule": [],
+          "logging": [],
+          "object_lock_configuration": [],
+          "policy": null,
+          "region": "us-east-1",
+          "replication_configuration": [],
+          "request_payer": "BucketOwner",
+          "server_side_encryption_configuration": [],
+          "tags": {
+            "environment": "dev"
+          },
+          "versioning": [
+            {
+              "enabled": false,
+              "mfa_delete": false
+            }
+          ],
+          "website": [],
+          "website_domain": null,
+          "website_endpoint": null
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "module.pet.module.bar.random_integer.random",
+      "module_address": "module.pet.module.bar",
+      "mode": "managed",
+      "type": "random_integer",
+      "name": "random",
+      "provider_name": "random",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "id": "6",
+          "keepers": null,
+          "max": 10,
+          "min": 0,
+          "result": 6,
+          "seed": null
+        },
+        "after": {
+          "id": "6",
+          "keepers": null,
+          "max": 10,
+          "min": 0,
+          "result": 6,
+          "seed": null
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "module.pet.random_pet.pet",
+      "module_address": "module.pet",
+      "mode": "managed",
+      "type": "random_pet",
+      "name": "pet",
+      "provider_name": "random",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "id": "proud-caribou",
+          "keepers": null,
+          "length": 2,
+          "prefix": null,
+          "separator": "-"
+        },
+        "after": {
+          "id": "proud-caribou",
+          "keepers": null,
+          "length": 2,
+          "prefix": null,
+          "separator": "-"
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "module.pet2.module.bar.random_integer.random",
+      "module_address": "module.pet2.module.bar",
+      "mode": "managed",
+      "type": "random_integer",
+      "name": "random",
+      "provider_name": "random",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "id": "9",
+          "keepers": null,
+          "max": 10,
+          "min": 0,
+          "result": 9,
+          "seed": null
+        },
+        "after": {
+          "id": "9",
+          "keepers": null,
+          "max": 10,
+          "min": 0,
+          "result": 9,
+          "seed": null
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "module.pet2.random_pet.pet",
+      "module_address": "module.pet2",
+      "mode": "managed",
+      "type": "random_pet",
+      "name": "pet",
+      "provider_name": "random",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "id": "touched-monster",
+          "keepers": null,
+          "length": 2,
+          "prefix": null,
+          "separator": "-"
+        },
+        "after": {
+          "id": "touched-monster",
+          "keepers": null,
+          "length": 2,
+          "prefix": null,
+          "separator": "-"
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "random_id.bucket_name",
+      "mode": "managed",
+      "type": "random_id",
+      "name": "bucket_name",
+      "provider_name": "random",
+      "change": {
+        "actions": [
+          "no-op"
+        ],
+        "before": {
+          "b64": "bucket-u4k30MPQnKs",
+          "b64_std": "bucket-u4k30MPQnKs=",
+          "b64_url": "bucket-u4k30MPQnKs",
+          "byte_length": 8,
+          "dec": "bucket-13513393526679837867",
+          "hex": "bucket-bb8937d0c3d09cab",
+          "id": "u4k30MPQnKs",
+          "keepers": null,
+          "prefix": "bucket-"
+        },
+        "after": {
+          "b64": "bucket-u4k30MPQnKs",
+          "b64_std": "bucket-u4k30MPQnKs=",
+          "b64_url": "bucket-u4k30MPQnKs",
+          "byte_length": 8,
+          "dec": "bucket-13513393526679837867",
+          "hex": "bucket-bb8937d0c3d09cab",
+          "id": "u4k30MPQnKs",
+          "keepers": null,
+          "prefix": "bucket-"
+        },
+        "after_unknown": {}
+      }
+    }
+  ],
+  "output_changes": {
+    "bucket": {
+      "actions": [
+        "create"
+      ],
+      "before": null,
+      "after": {
+        "acceleration_status": "",
+        "acl": "private",
+        "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+        "bucket": "bucket-bb8937d0c3d09cab",
+        "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+        "bucket_prefix": null,
+        "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+        "cors_rule": [],
+        "force_destroy": true,
+        "grant": [],
+        "hosted_zone_id": "Z3AQBSTGFYJSTF",
+        "id": "bucket-bb8937d0c3d09cab",
+        "lifecycle_rule": [],
+        "logging": [],
+        "object_lock_configuration": [],
+        "policy": null,
+        "region": "us-east-1",
+        "replication_configuration": [],
+        "request_payer": "BucketOwner",
+        "server_side_encryption_configuration": [],
+        "tags": {
+          "environment": "dev"
+        },
+        "versioning": [
+          {
+            "enabled": false,
+            "mfa_delete": false
+          }
+        ],
+        "website": [],
+        "website_domain": null,
+        "website_endpoint": null
+      },
+      "after_unknown": false
+    }
+  },
+  "prior_state": {
+    "format_version": "0.1",
+    "terraform_version": "0.12.25",
+    "values": {
+      "outputs": {
+        "bucket": {
+          "sensitive": false,
+          "value": {
+            "acceleration_status": "",
+            "acl": "private",
+            "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+            "bucket": "bucket-bb8937d0c3d09cab",
+            "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+            "bucket_prefix": null,
+            "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": true,
+            "grant": [],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "bucket-bb8937d0c3d09cab",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [],
+            "policy": null,
+            "region": "us-east-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [],
+            "tags": {
+              "environment": "dev"
+            },
+            "versioning": [
+              {
+                "enabled": false,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          }
+        }
+      },
+      "root_module": {
+        "resources": [
+          {
+            "address": "aws_s3_bucket.bucket",
+            "mode": "managed",
+            "type": "aws_s3_bucket",
+            "name": "bucket",
+            "provider_name": "aws",
+            "schema_version": 0,
+            "values": {
+              "acceleration_status": "",
+              "acl": "private",
+              "arn": "arn:aws:s3:::bucket-bb8937d0c3d09cab",
+              "bucket": "bucket-bb8937d0c3d09cab",
+              "bucket_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+              "bucket_prefix": null,
+              "bucket_regional_domain_name": "bucket-bb8937d0c3d09cab.s3.amazonaws.com",
+              "cors_rule": [],
+              "force_destroy": true,
+              "grant": [],
+              "hosted_zone_id": "Z3AQBSTGFYJSTF",
+              "id": "bucket-bb8937d0c3d09cab",
+              "lifecycle_rule": [],
+              "logging": [],
+              "object_lock_configuration": [],
+              "policy": null,
+              "region": "us-east-1",
+              "replication_configuration": [],
+              "request_payer": "BucketOwner",
+              "server_side_encryption_configuration": [],
+              "tags": {
+                "environment": "dev"
+              },
+              "versioning": [
+                {
+                  "enabled": false,
+                  "mfa_delete": false
+                }
+              ],
+              "website": [],
+              "website_domain": null,
+              "website_endpoint": null
+            },
+            "depends_on": [
+              "random_id.bucket_name"
+            ]
+          },
+          {
+            "address": "random_id.bucket_name",
+            "mode": "managed",
+            "type": "random_id",
+            "name": "bucket_name",
+            "provider_name": "random",
+            "schema_version": 0,
+            "values": {
+              "b64": "bucket-u4k30MPQnKs",
+              "b64_std": "bucket-u4k30MPQnKs=",
+              "b64_url": "bucket-u4k30MPQnKs",
+              "byte_length": 8,
+              "dec": "bucket-13513393526679837867",
+              "hex": "bucket-bb8937d0c3d09cab",
+              "id": "u4k30MPQnKs",
+              "keepers": null,
+              "prefix": "bucket-"
+            }
+          }
+        ],
+        "child_modules": [
+          {
+            "resources": [
+              {
+                "address": "random_pet.pet",
+                "mode": "managed",
+                "type": "random_pet",
+                "name": "pet",
+                "provider_name": "random",
+                "schema_version": 0,
+                "values": {
+                  "id": "touched-monster",
+                  "keepers": null,
+                  "length": 2,
+                  "prefix": null,
+                  "separator": "-"
+                }
+              }
+            ],
+            "address": "module.pet2",
+            "child_modules": [
+              {
+                "resources": [
+                  {
+                    "address": "random_integer.random",
+                    "mode": "managed",
+                    "type": "random_integer",
+                    "name": "random",
+                    "provider_name": "random",
+                    "schema_version": 0,
+                    "values": {
+                      "id": "9",
+                      "keepers": null,
+                      "max": 10,
+                      "min": 0,
+                      "result": 9,
+                      "seed": null
+                    }
+                  }
+                ],
+                "address": "module.pet2.module.bar"
+              }
+            ]
+          },
+          {
+            "resources": [
+              {
+                "address": "random_pet.pet",
+                "mode": "managed",
+                "type": "random_pet",
+                "name": "pet",
+                "provider_name": "random",
+                "schema_version": 0,
+                "values": {
+                  "id": "proud-caribou",
+                  "keepers": null,
+                  "length": 2,
+                  "prefix": null,
+                  "separator": "-"
+                }
+              }
+            ],
+            "address": "module.pet",
+            "child_modules": [
+              {
+                "resources": [
+                  {
+                    "address": "random_integer.random",
+                    "mode": "managed",
+                    "type": "random_integer",
+                    "name": "random",
+                    "provider_name": "random",
+                    "schema_version": 0,
+                    "values": {
+                      "id": "6",
+                      "keepers": null,
+                      "max": 10,
+                      "min": 0,
+                      "result": 6,
+                      "seed": null
+                    }
+                  }
+                ],
+                "address": "module.pet.module.bar"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "configuration": {
+    "provider_config": {
+      "aws": {
+        "name": "aws",
+        "version_constraint": "~\u003e 2.49",
+        "expressions": {
+          "region": {
+            "references": [
+              "var.region"
+            ]
+          }
+        }
+      }
+    },
+    "root_module": {
+      "outputs": {
+        "bucket": {
+          "expression": {
+            "references": [
+              "aws_s3_bucket.bucket"
+            ]
+          },
+          "description": "bucket object"
+        }
+      },
+      "resources": [
+        {
+          "address": "aws_s3_bucket.bucket",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "bucket",
+          "provider_config_key": "aws",
+          "expressions": {
+            "acl": {
+              "constant_value": "private"
+            },
+            "bucket": {
+              "references": [
+                "local.bucket_name"
+              ]
+            },
+            "force_destroy": {
+              "constant_value": "true"
+            },
+            "tags": {
+              "references": [
+                "var.environment"
+              ]
+            },
+            "versioning": [
+              {
+                "enabled": {
+                  "references": [
+                    "var.is_versioned"
+                  ]
+                }
+              }
+            ]
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "random_id.bucket_name",
+          "mode": "managed",
+          "type": "random_id",
+          "name": "bucket_name",
+          "provider_config_key": "random",
+          "expressions": {
+            "byte_length": {
+              "constant_value": 8
+            },
+            "prefix": {
+              "constant_value": "bucket-"
+            }
+          },
+          "schema_version": 0
+        }
+      ],
+      "module_calls": {
+        "pet": {
+          "source": "../foo",
+          "expressions": {
+            "input": {
+              "constant_value": "foo"
+            }
+          },
+          "module": {
+            "outputs": {
+              "output": {
+                "expression": {
+                  "references": [
+                    "random_pet.pet"
+                  ]
+                }
+              }
+            },
+            "resources": [
+              {
+                "address": "random_pet.pet",
+                "mode": "managed",
+                "type": "random_pet",
+                "name": "pet",
+                "provider_config_key": "pet:random",
+                "schema_version": 0
+              }
+            ],
+            "module_calls": {
+              "bar": {
+                "source": "../bar",
+                "expressions": {
+                  "input": {
+                    "constant_value": "test"
+                  }
+                },
+                "module": {
+                  "outputs": {
+                    "output": {
+                      "expression": {
+                        "references": [
+                          "random_integer.random"
+                        ]
+                      }
+                    }
+                  },
+                  "resources": [
+                    {
+                      "address": "random_integer.random",
+                      "mode": "managed",
+                      "type": "random_integer",
+                      "name": "random",
+                      "provider_config_key": "bar:random",
+                      "expressions": {
+                        "max": {
+                          "constant_value": 10
+                        },
+                        "min": {
+                          "constant_value": 0
+                        }
+                      },
+                      "schema_version": 0
+                    }
+                  ],
+                  "variables": {
+                    "input": {}
+                  }
+                }
+              }
+            },
+            "variables": {
+              "input": {}
+            }
+          }
+        },
+        "pet2": {
+          "source": "../foo",
+          "expressions": {
+            "input": {
+              "constant_value": "bar"
+            }
+          },
+          "module": {
+            "outputs": {
+              "output": {
+                "expression": {
+                  "references": [
+                    "random_pet.pet"
+                  ]
+                }
+              }
+            },
+            "resources": [
+              {
+                "address": "random_pet.pet",
+                "mode": "managed",
+                "type": "random_pet",
+                "name": "pet",
+                "provider_config_key": "pet2:random",
+                "schema_version": 0
+              }
+            ],
+            "module_calls": {
+              "bar": {
+                "source": "../bar",
+                "expressions": {
+                  "input": {
+                    "constant_value": "test"
+                  }
+                },
+                "module": {
+                  "outputs": {
+                    "output": {
+                      "expression": {
+                        "references": [
+                          "random_integer.random"
+                        ]
+                      }
+                    }
+                  },
+                  "resources": [
+                    {
+                      "address": "random_integer.random",
+                      "mode": "managed",
+                      "type": "random_integer",
+                      "name": "random",
+                      "provider_config_key": "bar:random",
+                      "expressions": {
+                        "max": {
+                          "constant_value": 10
+                        },
+                        "min": {
+                          "constant_value": 0
+                        }
+                      },
+                      "schema_version": 0
+                    }
+                  ],
+                  "variables": {
+                    "input": {}
+                  }
+                }
+              }
+            },
+            "variables": {
+              "input": {}
+            }
+          }
+        }
+      },
+      "variables": {
+        "bucket_name": {
+          "default": "",
+          "description": "name of the bucket; defaults to a 'bucket-{random id}'"
+        },
+        "environment": {
+          "default": "dev",
+          "description": "value of the 'Environment' tag"
+        },
+        "is_versioned": {
+          "default": "false",
+          "description": "true if versioning is to be enabled, otherwise false; defaults to false"
+        },
+        "kms_key_arn": {
+          "default": "",
+          "description": "if set, kms bucket encryption is used with the key arn supplied"
+        },
+        "region": {
+          "default": "us-east-1",
+          "description": "region where the bucket will be created or the source region; defaults to us-east-1"
+        }
+      }
+    }
+  }
+}
