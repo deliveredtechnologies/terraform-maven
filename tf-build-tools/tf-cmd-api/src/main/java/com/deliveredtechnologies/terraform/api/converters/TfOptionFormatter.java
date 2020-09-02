@@ -46,7 +46,7 @@ public interface TfOptionFormatter {
     for (Map.Entry<String,Object> entry: map.entrySet()) {
       Object val = entry.getValue();
       try {
-        sb.append(String.format("%s '%s=%s' ", format , entry.getKey(), val instanceof String ? val : mapper.writeValueAsString(val)));
+        sb.append(String.format("%s \"%s=%s\" ", format , entry.getKey(), val instanceof String ? val : mapper.writeValueAsString(val)));
       } catch (JsonProcessingException e) {
         throw new TerraformException(e);
       }
