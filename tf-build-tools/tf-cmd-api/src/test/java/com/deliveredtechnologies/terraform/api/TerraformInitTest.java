@@ -80,7 +80,7 @@ public class TerraformInitTest {
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-upgrade "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-from-module=module_dir"));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-force-copy"));
-    Assert.assertThat(tfCommand, CoreMatchers.containsString("-backend-config='bucket=foo' -backend-config='key=bar' "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-backend-config=\"bucket=foo\" -backend-config=\"key=bar\" "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-plugin-dir=/plugins "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-get-plugins=false "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-verify-plugins=false "));
