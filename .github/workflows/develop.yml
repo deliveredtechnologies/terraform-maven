@@ -41,8 +41,9 @@ jobs:
         run: |
           cd tf-build-tools
           VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "***** $VERSION is $VERSION ******"
           if echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
-            echo "***** Version is $VERSION; Deploy is Only for SNAPSHOT Releases *****"
+            echo "***** Deploy is Only for SNAPSHOT Releases *****"
           fi
