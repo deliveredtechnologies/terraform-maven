@@ -43,5 +43,5 @@ jobs:
           if echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
-            echo "***** Version is ${VERSION}; Deploy is Only for SNAPSHOT Releases *****"
+            echo "***** Version is $VERSION; Deploy is Only for SNAPSHOT Releases *****"
           fi
