@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Setup Terraform
+        run: |
+          curl -g https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o /tmp/terraform.zip
+          sudo unzip /tmp/terraform.zip -d /usr/bin
       - name: Build with Maven
         run: cd tf-build-tools && ./mvnw clean test coveralls:report
 
