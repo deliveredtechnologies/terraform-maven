@@ -33,7 +33,7 @@ jobs:
           cd ..
       - name: Deploy on Merge
         id: deploy
-        if: ! echo $PR
+        if: success() && ! steps.deploy.outputs.number
         env:
           PR: ${{ steps.deploy.outputs.number }}
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
