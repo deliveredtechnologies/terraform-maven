@@ -4,6 +4,8 @@
 name: Java CI with Maven
 
 on:
+  pull_request:
+    branches: [ develop ]
   push:
     branches: [ develop ]
 
@@ -13,18 +15,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-    - name: Build with Maven
-      run: |
-        cd tf-build-tools
-        VERSION=${./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout}
-        if echo $VERSION | grep -q SNAPSHOT; then
-          echo "*** Validating the build and deploying to Sonatype's SNAPSHOT repo ***"
-          cp ../.mvn.settings.xml $HOME/.m2/settings.xml && ./mvnw clean test coveralls:report deploy
-        else
-          ./mvnw clean test coveralls:report
-        fi
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Setup Terraform
+        run: |
+          curl -g https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o /tmp/terraform.zip
+          sudo unzip /tmp/terraform.zip -d /usr/bin
+      - name: Build with Maven
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
+          cp ../.mvn.settings.xml $HOME/.m2/settings.xml
+          cd tf-build-tools && ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN"
+          cd ..
+      - name: Deploy on Merge
+        id: deploy
+        if: success() && ! steps.deploy.outputs.pr
+        env:
+          OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
+        run:
+          cd tf-build-tools
+          VERSION = $(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          if VERSION echo $VERSION | grep -q SNAPSHOT; then
+            ./mvnw deploy -DskipTests=true
+          else
+            echo "***** Version is ${VERSION}; Deploy is Only for SNAPSHOT Releases *****"
+          fi
