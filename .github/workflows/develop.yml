@@ -33,8 +33,9 @@ jobs:
           cd ..
       - name: Deploy on Merge
         id: deploy
-        if: ! steps.deploy.outputs.number
+        if: ! echo $PR
         env:
+          PR: ${{ steps.deploy.outputs.number }}
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
         run: |
