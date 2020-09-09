@@ -33,13 +33,14 @@ jobs:
           cd ..
       - name: Deploy on Merge
         id: deploy
-        if: success() && ! steps.deploy.outputs.pr
+        if: ! steps.deploy.outputs.number
         env:
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
         run: |
           cd tf-build-tools
-          if ./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout | grep -q SNAPSHOT ; then
+          VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          if echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
             echo "***** Version is $VERSION; Deploy is Only for SNAPSHOT Releases *****"
