@@ -37,10 +37,10 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
-        run:
+        run: |
           cd tf-build-tools
           VERSION = $(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
-          if echo $VERSION | grep -q SNAPSHOT; then
+          if echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
             echo "***** Version is ${VERSION}; Deploy is Only for SNAPSHOT Releases *****"
