@@ -68,6 +68,7 @@ jobs:
           fi
 
           # Stage for Maven Central Deployment
+          export GPG_TTY=$(tty)
           ./mvnw deploy -DskipTests=true -Dgpg.passphrase="$GPG_KEY_PW" -Dgpg.passphrase="$GPG_KEY_ID" -P ${PROFILE}
 
 
