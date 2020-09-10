@@ -35,7 +35,7 @@ jobs:
         id: deploy
         if: success() && ! steps.deploy.outputs.number
         env:
-          PR: ${{ steps.deploy.outputs.number }}
+          PR: ${{ steps.deploy.outputs.pr }}
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
         run: |
