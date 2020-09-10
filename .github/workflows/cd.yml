@@ -67,7 +67,6 @@ jobs:
             PROFILE="release"
           fi
 
-          echo "***** ${OSSRH_USERNAME} *****"
           # Stage for Maven Central Deployment
           export GPG_TTY=$(tty)
           ./mvnw deploy -DskipTests=true -P ${PROFILE}
