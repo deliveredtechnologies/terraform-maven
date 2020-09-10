@@ -2,19 +2,12 @@ language: java
 sudo: false
 branches:
   only:
-  - develop
-  - /^release\/v.*$/
-  - /^hotfix\/v.*$/
+  - none
 cache:
   directories:
     - $HOME/.m2
 jdk:
 - openjdk8
-before_install:
-  - curl -g https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o /tmp/terraform.zip
-  - sudo unzip /tmp/terraform.zip -d /usr/bin
 script:
 - |
-  cd tf-build-tools
-  echo "*** Validating the build ***"
-  ./mvnw clean test
+  "***** Travis No More! *****"
