@@ -1,0 +1,75 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Setup Maven
+        env:
+          GPG_KEY: ${{ secrets.MAVEN_KEY }}
+        run: |
+          cp .mvn.settings.xml $HOME/.m2/settings.xml
+          echo "$GPG_KEY" >> codesigning.asc
+          gpg --import codesigning.asc
+          shred --remove codesigning.asc
+      - name: Setup Terraform
+        run: |
+          curl -g https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o /tmp/terraform.zip
+          sudo unzip /tmp/terraform.zip -d /usr/bin
+      - name: Build with Maven
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
+          cd tf-build-tools
+          ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN"
+          cd ..
+      - name: Deploy on Merge
+        id: deploy
+        env:
+          OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
+          GPG_KEY_PW: ${{ secrets.MAVEN_KEY_PW }}
+          GPG_KEY_ID: ${{ secrets.MAVEN_KEY_ID }}
+        run: |
+          cd tf-build-tools
+
+          VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          PROFILE=""
+
+          if [ "$BRANCH_NAME" == "develop" ] && ![ echo $VERSION | grep -q SNAPSHOT ]; then
+            DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
+
+            # Ensure that the build number is in the 4th [semver] position
+            if [ "$DOTS" < "3" ]; then
+              VERSION="${VERSION}.0"
+            fi
+            VERSION="${VERSION}-${GITHUB_RUN_NUMBER}"
+            echo "***** VERSION is $VERSION ******"
+            ./mvnw versions:set -DnewVersion="${VERSION}"
+          else
+            PROFILE="release"
+          fi
+
+          # Stage for Maven Central Deployment
+          export GPG_TTY=$(tty)
+          ./mvnw deploy -DskipTests=true -Dgpg.passphrase="$GPG_KEY_PW" -Dgpg.passphrase="$GPG_KEY_ID" -p ${PROFILE}
+
+
+
+

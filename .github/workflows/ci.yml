@@ -5,9 +5,7 @@ name: Java CI with Maven
 
 on:
   pull_request:
-    branches: [ develop ]
-  push:
-    branches: [ develop ]
+    branches: [ develop, master ]
 
 jobs:
   build:
@@ -30,22 +28,3 @@ jobs:
         run: |
           cp .mvn.settings.xml $HOME/.m2/settings.xml
           cd tf-build-tools && ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN"
-          cd ..
-      - name: Deploy on Merge
-        id: deploy
-        env:
-          OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
-          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
-        run: |
-          cd tf-build-tools
-
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
-
-          echo "***** VERSION is $VERSION ******"
-
-          if [ -z "$PR_NUMBER" ] && echo $VERSION | grep -q SNAPSHOT ; then
-            ./mvnw deploy -DskipTests=true
-          else
-            echo "***** Skipping Deploy *****"
-          fi
