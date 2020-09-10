@@ -70,7 +70,7 @@ jobs:
 
           # Stage for Maven Central Deployment
           export GPG_TTY=$(tty)
-          ./mvnw deploy -DskipTests=true -P ${PROFILE}
+          ./mvnw deploy -DskipTests=true -P ${PROFILE} -pl !"tf-test"
 
 
 
