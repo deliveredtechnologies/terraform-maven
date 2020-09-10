@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: Java CD with Maven
 
 on:
   push:
@@ -24,6 +24,7 @@ jobs:
         env:
           GPG_KEY: ${{ secrets.MAVEN_KEY }}
         run: |
+          export GPG_TTY=$(tty)
           cp .mvn.settings.xml $HOME/.m2/settings.xml
           echo "$GPG_KEY" >> codesigning.asc
           gpg --import codesigning.asc
@@ -67,7 +68,6 @@ jobs:
           fi
 
           # Stage for Maven Central Deployment
-          export GPG_TTY=$(tty)
           ./mvnw deploy -DskipTests=true -Dgpg.passphrase="$GPG_KEY_PW" -Dgpg.passphrase="$GPG_KEY_ID" -p ${PROFILE}
 
 
