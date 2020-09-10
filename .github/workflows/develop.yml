@@ -35,16 +35,16 @@ jobs:
         id: deploy
         if: success() && ! echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }'
         env:
-          PR: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
         run: |
+          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           cd tf-build-tools
           VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "***** PR is $PR *****"
+          echo "***** PR is $PR_NUMBER *****"
           echo "***** VERSION is $VERSION ******"
-          if echo $VERSION | grep -q SNAPSHOT ; then
+          if ! $PR_NUMBER && echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
-            echo "***** Deploy is Only for SNAPSHOT Releases *****"
+            echo "***** Skipping Deploy *****"
           fi
