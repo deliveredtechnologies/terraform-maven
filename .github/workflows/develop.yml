@@ -44,7 +44,7 @@ jobs:
 
           echo "***** VERSION is $VERSION ******"
 
-          if ! echo $PR_NUMBER && echo $VERSION | grep -q SNAPSHOT ; then
+          if [ -z "$PR_NUMBER" ] && echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
             echo "***** Skipping Deploy *****"
