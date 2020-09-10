@@ -68,7 +68,7 @@ jobs:
           fi
 
           # Stage for Maven Central Deployment
-          ./mvnw deploy -DskipTests=true -Dgpg.passphrase="$GPG_KEY_PW" -Dgpg.passphrase="$GPG_KEY_ID" -p ${PROFILE}
+          ./mvnw deploy -DskipTests=true -Dgpg.passphrase="$GPG_KEY_PW" -Dgpg.passphrase="$GPG_KEY_ID" -P ${PROFILE}
 
 
 
