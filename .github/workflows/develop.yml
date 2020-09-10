@@ -33,7 +33,7 @@ jobs:
           cd ..
       - name: Deploy on Merge
         id: deploy
-        if: success() && ! $PR
+        if: success() && ! $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
         env:
           PR: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
