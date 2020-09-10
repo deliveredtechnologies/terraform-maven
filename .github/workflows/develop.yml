@@ -37,12 +37,14 @@ jobs:
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
         run: |
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           cd tf-build-tools
+
+          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "***** PR is $PR_NUMBER *****"
+
           echo "***** VERSION is $VERSION ******"
-          if ! $PR_NUMBER && echo $VERSION | grep -q SNAPSHOT ; then
+
+          if [-z "$PR_NUMBER"] && echo $VERSION | grep -q SNAPSHOT ; then
             ./mvnw deploy -DskipTests=true
           else
             echo "***** Skipping Deploy *****"
