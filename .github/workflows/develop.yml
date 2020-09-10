@@ -33,9 +33,9 @@ jobs:
           cd ..
       - name: Deploy on Merge
         id: deploy
-        if: success() && ! steps.deploy.outputs.number
+        if: success() && ! $PR
         env:
-          PR: ${{ steps.deploy.outputs.pr }}
+          PR: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
         run: |
