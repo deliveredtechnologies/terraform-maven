@@ -1,6 +1,5 @@
 package com.deliveredtechnologies.terraform.fluent.api
 
-
 import spock.lang.Shared
 import spock.lang.Specification
 
