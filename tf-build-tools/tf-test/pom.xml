@@ -8,15 +8,50 @@
     <version>0.12-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>tf-cmd-api</artifactId>
-  <name>tf-cmd-api</name>
-  <description>Terraform Commands API :: The bridge between Java and Terraform</description>
+
+  <artifactId>tf-test</artifactId>
+  <name>tf-test</name>
   <properties>
     <maven.deploy.skip>false</maven.deploy.skip>
     <maven.install.skip>false</maven.install.skip>
     <gpg.skip>false</gpg.skip>
     <skipNexusStagingDeployMojo>false</skipNexusStagingDeployMojo>
   </properties>
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy -->
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.deliveredtechnologies</groupId>
+      <artifactId>tf-cmd-api</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.30</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.spockframework/spock-core -->
+    <dependency>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
+      <version>2.0-M2-groovy-3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json -->
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-json</artifactId>
+      <version>3.0.5</version>
+    </dependency>
+
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -86,52 +121,36 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+        <version>1.9.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>addTestSources</goal>
+              <goal>compileTests</goal>
+              <goal>addSources</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M4</version>
+        <configuration>
+          <includes>
+            <include>**/*Spec.java</include>
+          </includes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.zeroturnaround</groupId>
-      <artifactId>zt-exec</artifactId>
-      <version>1.11</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.9</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.26</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>2.27.0</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.11.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
-    <dependency>
-      <groupId>org.reflections</groupId>
-      <artifactId>reflections</artifactId>
-      <version>0.9.12</version>
-    </dependency>
-  </dependencies>
+
 </project>

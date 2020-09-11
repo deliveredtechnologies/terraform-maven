@@ -1,123 +1,51 @@
-#Set-PSDebug -Trace 1
+#Set-PSDebug -Trace 2
 
-##############################################################
-# try to figure out where the root directory of the project is
-##############################################################
 $arg_list       = $args
 if ($arg_list -eq "") {
     $arg_list   = " "
 }
-$cur_dir        = Get-Location
-$target_curdir  = "$cur_dir" + "\.tf"
-$projectBaseDir = ""
 
-While ( $projectBaseDir -eq ""){
-    if (Test-Path -Path "$target_curdir") {
-        $projectBaseDir = "$cur_dir"
-    } Else {
-        cd ..
-        $cur_dir        = Get-Location
-        $target_curdir = "$cur_dir" + "\.tf"
+function downloadTerraformBinary($terraformBinarySource, $targetDir)
+{
+    $terraformZip = $targetDir + "terraform.zip"
+    try {
+        $WebClient = New-Object System.Net.WebClient;
+        $webclient.DownloadFile($terraformBinarySource, $terraformZip)
     }
+    catch {
+        "An error occurred that could not be resolved."
+    }
+    try {
+        Expand-Archive -LiteralPath $terraformZip -DestinationPath $targetDir -Force
+    }
+    catch {
+        "An error occurred that could not be resolved."
+    }
+    remove-item $terraformZip
 }
 
-$targetDir = "$projectBaseDir" + "\.tf\"
-$propFile  = "$targetDir"      + "terraform-maven.properties"
+$targetDir = $MyInvocation.InvocationName -replace "tfw.ps1"
+$propFile  = $targetDir + "terraform-maven.properties"
+$tfwProps  = convertfrom-stringdata (get-content $propFile -raw)
 
-################################################################
-# read all lines from the properties file and store in variables
-################################################################
-Get-Content $propFile | ForEach-Object {
-    if($_ -match "distributionSite"){
-        $pos              = $_.IndexOf("=")
-        $distributionSite = $_.Substring($pos+1)
-    }
-    if($_ -match "releaseDir"      ){
-        $pos              = $_.IndexOf("=")
-        $releaseDir       = $_.Substring($pos+1)
-    }
-    if($_ -match "releaseName"     ){
-        $pos              = $_.IndexOf("=")
-        $releaseName      = $_.Substring($pos+1)
-    }
-    if($_ -match "releaseVer"      ){
-        $pos              = $_.IndexOf("=")
-        $releaseVer       = $_.Substring($pos+1)
-    }
-    if($_ -match "releaseOS"       ){
-        $pos              = $_.IndexOf("=")
-        $releaseOS        = $_.Substring($pos+1)
-    }
-    if($_ -match "releaseSuffix"   ){
-        $pos              = $_.IndexOf("=")
-        $releaseSuffix    = $_.Substring($pos+1)
-    }
-}
+##################################
+# Construct the URL of the package
+##################################
+$releaseSource = $tfwProps.distributionSite  +
+                "/" + $tfwProps.releaseDir  +
+                "/" + $tfwProps.releaseVer  +
+                "/" + $tfwProps.releaseName +
+                "_" + $tfwProps.releaseVer  +
+                "_" + "windows"             +
+                "_" + $tfwProps.releaseSuffix
 
-#################################################################################
-# Construct the full zip file name, full binary file name, and URL of the package
-#################################################################################
-$releaseLinux   = "linux"
-$releaseWindows = "windows"
-
-$terraformZipLinux = "$targetDir" +
-        "$releaseName"    +
-        "_"               +
-        "$releaseVer"     +
-        "_"               +
-        "$releaseLinux"   +
-        "_"               +
-        "$releaseSuffix"
-
-$terraformZipWindows = "$targetDir" +
-        "$releaseName"    +
-        "_"               +
-        "$releaseVer"     +
-        "_"               +
-        "$releaseWindows" +
-        "_"               +
-        "$releaseSuffix"
-
-$terraformBinary =        "$targetDir" +
-                          "terraform.exe"
-$terraformBinaryLinux =   "$targetDir" +
-                          "terraform"
-$terraformBinaryWindows = "$targetDir" +
-                          "terraform.exe"
-
-$releaseSourceLinux = "$distributionSite" +
-        "/"                               +
-        "$releaseDir"                     +
-        "/"                               +
-        "$releaseVer"                     +
-        "/"                               +
-        "$releaseName"                    +
-        "_"                               +
-        "$releaseVer"                     +
-        "_"                               +
-        "$releaseLinux"                   +
-        "_"                               +
-        "$releaseSuffix"
-
-$releaseSourceWindows = "$distributionSite" +
-        "/"                                 +
-        "$releaseDir"                       +
-        "/"                                 +
-        "$releaseVer"                       +
-        "/"                                 +
-        "$releaseName"                      +
-        "_"                                 +
-        "$releaseVer"                       +
-        "_"                                 +
-        "$releaseWindows"                   +
-        "_"                                 +
-        "$releaseSuffix"
+$terraformBinary = $targetDir + "terraform.exe"
 
 ##########################################################################
 # if the terraform binary is already there, figure out what version it is
 ##########################################################################
-if ( [System.IO.File]::Exists($terraformBinaryWindows) ) {
-    $versionString       = & $terraformBinaryWindows -version
+if ( [System.IO.File]::Exists($terraformBinary) ) {
+    $versionString       = & $terraformBinary -version
     $arr                 = $versionString.split(" ")
     $installedVerionFull = $arr[1]
     $len                 = $installedVerionFull.Length
@@ -128,29 +56,11 @@ if ( [System.IO.File]::Exists($terraformBinaryWindows) ) {
     # same version as the properties file indicates
     # if not, download and install the desired version
     ###############################################################
-    if ($installedVerion -eq $releaseVer) {
+    if ($installedVerion -eq $tfwProps.releaseVer) {
         Write-Host ""
     } else {
         Write-Host "Different version, downloading"
-        try {
-            $WebClient = New-Object System.Net.WebClient;
-            $webclient.DownloadFile($releaseSourceLinux, $terraformZipLinux)
-            $webclient.DownloadFile($releaseSourceWindows, $terraformZipWindows)
-        }
-        catch {
-            "An error occurred that could not be resolved."
-        }
-        remove-item $terraformBinaryLinux
-        remove-item $terraformBinaryWindows
-        try {
-            Expand-Archive -LiteralPath $terraformZipWindows -DestinationPath $targetDir
-            Expand-Archive -LiteralPath $terraformZipLinux -DestinationPath $targetDir
-        }
-        catch {
-            "An error occurred that could not be resolved."
-        }
-        remove-item $terraformZipLinux
-        remove-item $terraformZipWindows
+        downloadTerraformBinary $releaseSource $targetDir
     }
 } else {
     ############################################
@@ -158,35 +68,13 @@ if ( [System.IO.File]::Exists($terraformBinaryWindows) ) {
     # download and install the desired version
     ############################################
     Write-Host "Terraform not found, installing"
-    try {
-        $WebClient = New-Object System.Net.WebClient;
-        $webclient.DownloadFile($releaseSourceLinux, $terraformZipLinux)
-        $webclient.DownloadFile($releaseSourceWindows, $terraformZipWindows)
-    }
-    catch {
-        "An error occurred that could not be resolved."
-    }
-    if ( [System.IO.File]::Exists($terraformBinaryLinux) ) {
-        remove-item $terraformBinaryLinux
-    }
-    if ( [System.IO.File]::Exists($terraformBinaryWindows) ) {
-        remove-item $terraformBinaryWindows
-    }
-    try {
-        Expand-Archive -LiteralPath $terraformZipWindows -DestinationPath $targetDir
-        Expand-Archive -LiteralPath $terraformZipLinux -DestinationPath $targetDir
-    }
-    catch {
-        "An error occurred that could not be resolved."
-    }
-    remove-item $terraformZipLinux
-    remove-item $terraformZipWindows
+    downloadTerraformBinary $releaseSource $targetDir
 }
 ###################################################
 # Run terraform with the supplied arguments if any
 ###################################################
 try {
-        Invoke-Expression "$terraformBinaryWindows $arg_list"
+        Invoke-Expression "$terraformBinary $arg_list"
 }
 catch {
     "An error occurred invoking terraform.exe."
