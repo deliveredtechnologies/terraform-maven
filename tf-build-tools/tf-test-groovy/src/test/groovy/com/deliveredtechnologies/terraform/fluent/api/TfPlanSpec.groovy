@@ -13,7 +13,7 @@ class TfPlanSpec extends Specification {
         tfPlan = new TfPlan(new File("./src/test/resources/terraform.tfplan.json").text)
     }
 
-    def "GetResourcesByType"() {
+    def "getResourcesByType"() {
         given:
         List<Map> resources = tfPlan.getResourcesByType("aws_s3_bucket")
 
@@ -25,7 +25,7 @@ class TfPlanSpec extends Specification {
 
     }
 
-    def "GetResourcesBy"() {
+    def "getResourcesBy"() {
         given:
         List<Map> resources = tfPlan.getResourcesBy({it.type == "aws_s3_bucket"})
 
@@ -36,7 +36,7 @@ class TfPlanSpec extends Specification {
         resources[2].type == "aws_s3_bucket"
     }
 
-    def "GetOutputs"() {
+    def "getOutputs"() {
         given:
         Map outputs = tfPlan.getOutputs()
 

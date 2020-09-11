@@ -14,7 +14,7 @@ class TfStateSpec extends Specification {
         tfState = new TfState(new File("./src/test/resources/terraform.tfstate.json").text)
     }
 
-    def "GetResourcesByType"() {
+    def "getResourcesByType"() {
         given:
         List<Map> resources = tfState.getResourcesByType("aws_s3_bucket")
 
@@ -26,7 +26,7 @@ class TfStateSpec extends Specification {
 
     }
 
-    def "GetResourcesBy"() {
+    def "getResourcesBy"() {
         given:
         List<Map> resources = tfState.getResourcesBy({it.type == "aws_s3_bucket"})
 
@@ -37,7 +37,7 @@ class TfStateSpec extends Specification {
         resources[2].type == "aws_s3_bucket"
     }
 
-    def "GetOutputs"() {
+    def "getOutputs"() {
         given:
         Map outputs = tfState.getOutputs()
 
