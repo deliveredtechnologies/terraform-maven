@@ -27,4 +27,4 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
           cp .mvn.settings.xml $HOME/.m2/settings.xml
-          cd tf-build-tools && ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN"
+          cd tf-build-tools && ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN" -Dbranch="$BRANCH_NAME"
