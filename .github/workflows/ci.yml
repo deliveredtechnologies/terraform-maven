@@ -26,5 +26,6 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
+          pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           cp .mvn.settings.xml $HOME/.m2/settings.xml
-          cd tf-build-tools && ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN" -Dbranch="$BRANCH_NAME"
+          cd tf-build-tools && ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN" -Dbranch="$BRANCH_NAME" -DpullRequest="$pull_number"
