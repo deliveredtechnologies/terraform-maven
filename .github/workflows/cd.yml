@@ -51,18 +51,20 @@ jobs:
           cd tf-build-tools
 
           VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
-          PROFILE=""
+          PROFILE="SNAPSHOT"
 
           # if [ "$BRANCH_NAME" == "develop" ] && ! echo $VERSION | grep -q SNAPSHOT ; then
           if ! echo $VERSION | grep -q SNAPSHOT ; then
-            DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
+            PROFILE="release"
 
             # Ensure that the build number is in the 4th [semver] position
+            DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
             if [ "$DOTS" < "3" ]; then
               VERSION="${VERSION}.0"
             fi
+
             VERSION="${VERSION}-${GITHUB_RUN_NUMBER}"
-            echo "***** VERSION is $VERSION ******"
+            echo "***** VERSION has been updated to $VERSION ******"
             ./mvnw versions:set -DnewVersion="${VERSION}"
           else
             PROFILE="release"
