@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.deliveredtechnologies</groupId>
     <artifactId>tf-build-tools</artifactId>
-    <version>0.12</version>
+    <version>0.12-SNAPSHOT</version>
   </parent>
   <artifactId>tf-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>

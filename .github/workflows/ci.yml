@@ -5,7 +5,7 @@ name: Java CI with Maven
 
 on:
   pull_request:
-    branches: [ foo ]
+    branches: [ develop, master ]
 
 jobs:
   build:

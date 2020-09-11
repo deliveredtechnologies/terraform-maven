@@ -6,8 +6,6 @@ name: Java CD with Maven
 on:
   push:
     branches: [ develop, master ]
-  pull_request:
-    branches: [ develop, master ]
 
 jobs:
   build:
@@ -56,10 +54,10 @@ jobs:
           if ! echo $VERSION | grep -q SNAPSHOT ; then
             PROFILE="release"
 
-            if [ "$BRANCH_NAME" == "develop" ] ; then
+            if [ "${BRANCH_NAME}" == "develop" ] ; then
               # Ensure that the build number is in the 4th [semver] position
               DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
-              if [ "$DOTS" < "3" ]; then
+              if [ $DOTS -lt 3 ]; then
                 VERSION="${VERSION}.0"
               fi
 
@@ -72,7 +70,3 @@ jobs:
           # Stage for Maven Central Deployment
           export GPG_TTY=$(tty)
           ./mvnw deploy -DskipTests=true -P ${PROFILE} -pl !"tf-test"
-
-
-
-
