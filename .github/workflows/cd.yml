@@ -53,21 +53,20 @@ jobs:
           VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
           PROFILE="SNAPSHOT"
 
-          # if [ "$BRANCH_NAME" == "develop" ] && ! echo $VERSION | grep -q SNAPSHOT ; then
           if ! echo $VERSION | grep -q SNAPSHOT ; then
             PROFILE="release"
 
-            # Ensure that the build number is in the 4th [semver] position
-            DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
-            if [ "$DOTS" < "3" ]; then
-              VERSION="${VERSION}.0"
-            fi
+            if [ "$BRANCH_NAME" == "develop" ] ; then
+              # Ensure that the build number is in the 4th [semver] position
+              DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
+              if [ "$DOTS" < "3" ]; then
+                VERSION="${VERSION}.0"
+              fi
 
-            VERSION="${VERSION}-${GITHUB_RUN_NUMBER}"
-            echo "***** VERSION has been updated to $VERSION ******"
-            ./mvnw versions:set -DnewVersion="${VERSION}"
-          else
-            PROFILE="release"
+              VERSION="${VERSION}-${GITHUB_RUN_NUMBER}"
+              echo "***** VERSION has been updated to $VERSION ******"
+              ./mvnw versions:set -DnewVersion="${VERSION}"
+            fi
           fi
 
           # Stage for Maven Central Deployment
