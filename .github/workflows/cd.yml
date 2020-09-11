@@ -53,8 +53,8 @@ jobs:
           VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
           PROFILE=""
 
-          # if [ "$BRANCH_NAME" == "develop" ] && ![ echo $VERSION | grep -q SNAPSHOT ]; then
-          if ![ echo $VERSION | grep -q SNAPSHOT ]; then
+          # if [ "$BRANCH_NAME" == "develop" ] && ! echo $VERSION | grep -q SNAPSHOT ; then
+          if ! echo $VERSION | grep -q SNAPSHOT ; then
             DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
 
             # Ensure that the build number is in the 4th [semver] position
