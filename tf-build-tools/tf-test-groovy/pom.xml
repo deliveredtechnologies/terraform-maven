@@ -5,7 +5,7 @@
   <parent>
     <artifactId>tf-build-tools</artifactId>
     <groupId>com.deliveredtechnologies</groupId>
-    <version>0.12-SNAPSHOT</version>
+    <version>0.12</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -16,13 +16,24 @@
     <maven.install.skip>false</maven.install.skip>
     <gpg.skip>false</gpg.skip>
     <skipNexusStagingDeployMojo>false</skipNexusStagingDeployMojo>
+    <groovy.version>3.0.4</groovy.version>
   </properties>
   <dependencies>
     <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy -->
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy</artifactId>
-      <version>3.0.4</version>
+      <version>${groovy.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-groovydoc</artifactId>
+      <version>${groovy.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-templates</artifactId>
+      <version>${groovy.version}</version>
     </dependency>
     <dependency>
       <groupId>com.deliveredtechnologies</groupId>
@@ -49,7 +60,6 @@
       <artifactId>groovy-json</artifactId>
       <version>3.0.5</version>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -131,11 +141,20 @@
         <version>1.9.0</version>
         <executions>
           <execution>
+            <id>groovy-compile</id>
             <goals>
               <goal>addTestSources</goal>
               <goal>compileTests</goal>
               <goal>addSources</goal>
               <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>stubs-for-javadocs</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>addStubSources</goal>
+              <goal>generateStubs</goal>
             </goals>
           </execution>
         </executions>
@@ -152,5 +171,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
