@@ -4,6 +4,7 @@ import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -88,6 +89,7 @@ public class TerraformCommandLineDecoratorTest {
     Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
   }
 
+  @Ignore("not yet ready , Please ignore.")
   @Test
   public void terraformCommandLineDecoratorDoesntBlowUpWithoutLogging() throws IOException, InterruptedException {
 
