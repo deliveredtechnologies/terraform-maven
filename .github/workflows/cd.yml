@@ -55,7 +55,11 @@ jobs:
             PROFILE="release"
 
             if [ "${BRANCH_NAME}" == "develop" ] ; then
-              # Ensure that the build number is in the 4th [semver] position
+              # Always push a SNAPSHOT release on a merge into the 'develop' branch
+              ./mvnw versions:set -DnewVersion="${VERSION}-SNAPSHOT"
+              ./mvnw deploy -DskipTests=true -P snapshot
+
+              # Ensure that the build number is in the 4th [semver] position for release to Maven Central
               DOTS=$VERSION | sed -e 's/\(.\)/\n/g' | grep l | wc -l
               if [ $DOTS -lt 3 ]; then
                 VERSION="${VERSION}.0"
@@ -67,6 +71,6 @@ jobs:
             fi
           fi
 
-          # Stage for Maven Central Deployment
+          # Stage for Maven Central Deployment if a release or SonaType SNAPSHOT repo if a SNAPSHOT
           export GPG_TTY=$(tty)
-          ./mvnw deploy -DskipTests=true -P ${PROFILE} -pl !"tf-test"
+          ./mvnw deploy -DskipTests=true -P ${PROFILE}
