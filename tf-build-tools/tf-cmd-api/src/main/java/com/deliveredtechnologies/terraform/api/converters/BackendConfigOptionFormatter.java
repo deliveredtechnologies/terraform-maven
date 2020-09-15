@@ -12,7 +12,7 @@ public class BackendConfigOptionFormatter implements TfOptionFormatter {
   public String convert(String format, Object value) {
     String str = "";
     if (value instanceof String) {
-      str = csvConverter("-backend-config='%s' ", (String) value);
+      str = csvConverter("-backend-config=\"%s\" ", (String) value);
     }
     return str;
   }

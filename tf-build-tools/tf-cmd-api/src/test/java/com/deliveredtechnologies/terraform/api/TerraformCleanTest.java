@@ -71,7 +71,7 @@ public class TerraformCleanTest {
   public void terraformCleanThrowsTerraformExceptionOnInvalidPath() throws IOException, TerraformException {
     TerraformClean terraformClean = new TerraformClean(
         this.tfModulesWorkingDir.resolveSibling("invalid").toString(),
-        this.tfInitWorkingDir.toString());
+        "invalid");
 
     terraformClean.execute(new Properties());
   }

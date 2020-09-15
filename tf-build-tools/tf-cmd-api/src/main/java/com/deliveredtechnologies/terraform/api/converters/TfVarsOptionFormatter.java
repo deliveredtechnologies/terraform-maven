@@ -21,7 +21,7 @@ public class TfVarsOptionFormatter implements TfOptionFormatter {
     }
 
     if (value instanceof String) {
-      str = csvConverter("-var '%s' ", (String) value);
+      str = csvConverter("-var \"%s\" ", (String) value);
     }
     return str;
   }

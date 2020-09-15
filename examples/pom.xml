@@ -8,5 +8,6 @@
   <modules>
     <module>tf-s3</module>
     <module>tf-s3-consumer</module>
+    <module>tf-pre-post-infra-test</module>
   </modules>
 </project>

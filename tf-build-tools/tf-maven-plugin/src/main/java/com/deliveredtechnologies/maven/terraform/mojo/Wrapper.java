@@ -89,8 +89,10 @@ public class Wrapper extends TerraformMojo<String> {
         } catch (IOException e) {
           throw new MojoExecutionException(String.format("Unable to create %s!", tfwFileName), e);
         }
+        tfwFile.setExecutable(true);
       }
     }
+
 
     /*
      * Here we check for command line arguments (if any) and update the properties file

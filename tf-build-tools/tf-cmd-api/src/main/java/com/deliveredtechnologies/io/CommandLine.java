@@ -68,7 +68,7 @@ public class CommandLine implements Executable {
     Optional<String> output;
 
     String [] baseCommand = command.split(" ");
-    String loggerName = baseCommand.length == 2 ? baseCommand[0] + "-" + baseCommand[1] : baseCommand[0];
+    String loggerName = baseCommand.length >= 2 ? baseCommand[0] + "-" + baseCommand[1] : baseCommand[0];
     try {
       output = Optional.ofNullable(processExecutor.command(cmd)
         .directory(directory.toAbsolutePath().toFile())

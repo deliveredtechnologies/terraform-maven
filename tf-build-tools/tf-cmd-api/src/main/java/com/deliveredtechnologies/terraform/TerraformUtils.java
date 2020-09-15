@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * Static utilities for Terraform related default Paths and stuff.
@@ -55,8 +54,8 @@ public class TerraformUtils {
     } else {
       path = Paths.get("src", "main", "tf", tfmodule);
     }
-    if (!path.toFile().exists() || !Arrays.stream(path.toFile().listFiles()).anyMatch(p -> p.isFile() && p.getName().endsWith(".tf"))) {
-      throw new TerraformException(String.format("%1$s does not contain any Terraform (*.terraform) files!", tfmodule));
+    if (!path.toFile().exists()) {
+      throw new TerraformException(String.format("%1$s does not exist", tfmodule));
     }
 
     return path;
