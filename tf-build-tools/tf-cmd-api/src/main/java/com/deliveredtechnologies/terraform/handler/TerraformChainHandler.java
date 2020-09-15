@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
 import java.util.Properties;
+import java.util.Set;
 
 public class TerraformChainHandler {
 
