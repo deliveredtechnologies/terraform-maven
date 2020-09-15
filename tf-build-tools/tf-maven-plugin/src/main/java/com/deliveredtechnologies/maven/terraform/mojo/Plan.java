@@ -5,6 +5,7 @@ import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
 import com.deliveredtechnologies.terraform.handler.TerraformChainHandler;
+import com.deliveredtechnologies.terraform.handler.TerraformHandlerException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -72,7 +73,7 @@ public class Plan extends TerraformMojo<String> {
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
       TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir, new MavenSlf4jAdapter(getLog()));
       terraformChainHandler.chainInitiator(getFieldsAsProperties());
-    } catch (IOException | TerraformException | ClassNotFoundException e) {
+    } catch (IOException | TerraformException | TerraformHandlerException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
   }

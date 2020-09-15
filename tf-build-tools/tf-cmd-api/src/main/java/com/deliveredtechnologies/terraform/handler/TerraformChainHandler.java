@@ -42,14 +42,15 @@ public class TerraformChainHandler {
    * Executes given planAction for a given backendType - GET/PUTs terraform plan files from/to specified backend.
    * @param properties property options
    */
-  public void chainInitiator(Properties properties) throws ClassNotFoundException {
+  public void chainInitiator(Properties properties) throws TerraformHandlerException {
     for (Class<? extends TerraformHandler> terraformHandler : this.handlerClasses) {
       try {
         Class cls = Class.forName(terraformHandler.getName());
         Object obj = cls.getConstructor(new Class[]{String.class, Logger.class}).newInstance(new Object[]{tfRootDir, logger});
         ((TerraformHandler) obj).doAction(properties);
-      } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-        e.printStackTrace();
+      } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | ClassNotFoundException e) {
+        //throw the exception because we can't really handle this in a meaninful way
+        throw new TerraformHandlerException("Failed to invoke " + terraformHandler.getName(), e);
       }
     }
   }
