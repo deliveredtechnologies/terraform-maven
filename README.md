@@ -1,11 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.9.1/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.9.1/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.9.1/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.10.1/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.10.1/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.10.1/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.9.1-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.10-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.10.1-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.11-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -37,6 +37,7 @@ The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Ter
   * [tf:package](#tfpackage)
   * [tf:deploy](#tfdeploy)
   * [tf:clean](#tfclean)
+  * [tf:wrapper](#tfwrapper)
 * [How Commands Are Delegated to Terraform](#how-commands-are-delegated-to-terraform)
   * [*nix-based Operating Systems](#nix-based-operating-systems)
   * [Windows Operating Systems](#windows-operating-systems)
@@ -222,6 +223,7 @@ extracted, initialized and applied as-is or submitted to Terraform Enterprise._
 | ------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------|
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} or src/main/tf if there are multiple source modules |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules                                                     |
+| tfVarFiles   | String  | A comma delimited string of tfvars files in relation to tfRootDir (e.g., variables/dev1.tfvars,variables/dev2.tfvars)                             | 
 | fatTar       | Boolean | Set to true if a fat compressed tar.gz package should be created, otherwise false; defaults to false                                              |
 
 ---
@@ -251,10 +253,30 @@ Description:
 
 Deletes all 'terraform' files from terraform configurations along with the Terraform modules directory.
 
-| Name         | Type   | Description                                                                                    |
-| ------------ | ------ | ---------------------------------------------------------------------------------------------- |
+| Name         | Type    | Description                                                                                   |
+| ------------ | ------- | --------------------------------------------------------------------------------------------- |
 | tfRootDir    | String  | The terraform root module directory location; defaults to src/main/tf/{first directory found} |
 | tfModulesDir | String  | The directory that contains the Terraform module depenencies; defaults to src/main/.tfmodules |
+
+#### tf:wrapper
+
+Description:
+
+Binds the Maven project to a specific Terraform binary version.
+
+The format of the URL from which to fetch the Terraform binary is modeled after HashiCorp's distribution URL.
+
+```{distributionSite}/{releaseDir}/{releaseVer}/{releaseName}_{releaseVer}_{releaseOS}_{releaseSuffix}```
+
+The default location is 
+
+| Name             | Type   | Description                                                                                        |
+| ---------------- | ------ | -------------------------------------------------------------------------------------------------- |
+| distributionSite | String | The baseUrl from which to fetch the Terraform binary; defaults to _https://releases.hashicorp.com_ |
+| releaseDir       | String | The name of the release project; defaults to _terraform_                                           |
+| releaseVer       | String | The version of the Terraform binary to bind to the project                                         |
+| releaseName      | String | The name of the release artifact; defaults to _terraform_                                          |
+| releaseSuffix    | String | The suffix of the artifact, including extension; defaults to _amd64.zip_                           |
 
 ### How Commands Are Delegated to Terraform
 
@@ -281,7 +303,7 @@ Instead of doing all the above steps you can simply build the module/project by 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.8.2 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.10 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -289,7 +311,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.8.2
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.10
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
