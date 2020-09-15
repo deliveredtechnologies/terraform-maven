@@ -5,7 +5,6 @@ import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.handler.TerraformApplyS3Handler;
 import com.deliveredtechnologies.terraform.handler.TerraformChainHandler;
 import com.deliveredtechnologies.terraform.handler.TerraformHandler;
-import com.deliveredtechnologies.terraform.handler.TerraformPlanS3Handler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -32,7 +31,7 @@ public class TerraformApplyS3HandlerTest {
   }
 
   @Test
-  public void initiatingTheChainFromApply() throws IOException, TerraformException, InterruptedException {
+  public void initiatingTheChainFromApply() throws IOException, TerraformException, InterruptedException, ClassNotFoundException {
     TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir,logger);
     terraformChainHandler.chainInitiator(properties);
     TerraformHandler terraformHandler = new TerraformApplyS3Handler(executable,logger);
@@ -45,7 +44,7 @@ public class TerraformApplyS3HandlerTest {
   }
 
   @Test
-  public void planOperationWithAllPropertiesSpecified() throws IOException, InterruptedException, TerraformException {
+  public void planOperationWithAllPropertiesSpecified() throws IOException, InterruptedException{
     TerraformHandler terraformHandler = new TerraformApplyS3Handler(executable,logger);
 
     String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
@@ -64,18 +63,4 @@ public class TerraformApplyS3HandlerTest {
 
     terraformHandler.doAction(properties);
   }
-
-  @Test
-  public void planOperationWithPlanPropertyNotSpecified() throws IOException, InterruptedException {
-    TerraformHandler terraformHandler = new TerraformApplyS3Handler(executable, logger);
-    terraformHandler.nextHandler(new TerraformPlanS3Handler(executable, logger));
-
-    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
-    properties.put("plan", "create.json");
-    properties.put("planOutputFile", s3BucketKey);
-
-    terraformHandler.handleRequest(properties);
-    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json");
-  }
-
 }

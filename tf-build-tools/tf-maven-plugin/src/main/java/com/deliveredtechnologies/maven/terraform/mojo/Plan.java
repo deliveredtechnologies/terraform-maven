@@ -72,7 +72,7 @@ public class Plan extends TerraformMojo<String> {
       execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
       TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir, new MavenSlf4jAdapter(getLog()));
       terraformChainHandler.chainInitiator(getFieldsAsProperties());
-    } catch (IOException | TerraformException e) {
+    } catch (IOException | TerraformException | ClassNotFoundException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
   }

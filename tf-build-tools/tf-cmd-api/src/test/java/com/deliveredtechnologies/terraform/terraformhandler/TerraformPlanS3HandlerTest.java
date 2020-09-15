@@ -2,7 +2,6 @@ package com.deliveredtechnologies.terraform.terraformhandler;
 
 import com.deliveredtechnologies.io.Executable;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.handler.TerraformApplyS3Handler;
 import com.deliveredtechnologies.terraform.handler.TerraformChainHandler;
 import com.deliveredtechnologies.terraform.handler.TerraformHandler;
 import com.deliveredtechnologies.terraform.handler.TerraformPlanS3Handler;
@@ -32,7 +31,7 @@ public class TerraformPlanS3HandlerTest {
   }
 
   @Test
-  public void initiatingTheChainFromPlan() throws IOException, TerraformException, InterruptedException {
+  public void initiatingTheChainFromPlan() throws IOException, TerraformException, InterruptedException, ClassNotFoundException {
     TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir,logger);
     terraformChainHandler.chainInitiator(properties);
     TerraformHandler terraformHandler = new TerraformPlanS3Handler(executable, logger);
@@ -80,18 +79,4 @@ public class TerraformPlanS3HandlerTest {
 
     terraformHandler.doAction(properties);
   }
-
-  @Test
-  public void expectNextHandlerOperation() throws IOException, InterruptedException {
-    TerraformHandler terraformHandler = new TerraformPlanS3Handler(executable, logger);
-    terraformHandler.nextHandler(new TerraformApplyS3Handler(executable, logger));
-
-    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
-    properties.put("planOutputFile", "create.json");
-    properties.put("plan", s3BucketKey);
-
-    terraformHandler.handleRequest(properties);
-    Mockito.verify(executable, Mockito.times(1)).execute("aws s3api get-object --bucket terraform-maven-state --key planfiles/test.json test.json");
-  }
-
 }
