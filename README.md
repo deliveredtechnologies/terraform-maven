@@ -1,10 +1,10 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.11/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.11/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.11/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.11.1/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.11.1/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.11.1/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.11-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.11.1-green.svg
 [maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.12-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
@@ -13,7 +13,7 @@
 
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
-[![Build Status](https://travis-ci.org/deliveredtechnologies/terraform-maven.svg?branch=develop&maxAge=600&service=github)](https://travis-ci.org/deliveredtechnologies/terraform-maven)
+[![Build Status](https://github.com/deliveredtechnologies/terraform-maven/workflows/build/badge.svg)](https://github.com/deliveredtechnologies/terraform-maven/actions?query=workflow%3A%22build%22)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
 [![Maven Central][maven-badge]][tf-maven-plugin]
 
@@ -303,7 +303,7 @@ Instead of doing all the above steps you can simply build the module/project by 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.10 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.11 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -311,7 +311,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.10
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.11
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.

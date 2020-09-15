@@ -9,4 +9,17 @@
   <pluginGroups>
     <pluginGroup>org.eluder.coveralls</pluginGroup>
   </pluginGroups>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <gpg.executable>gpg</gpg.executable>
+        <gpg.keyname>${env.GPG_KEY_ID}</gpg.keyname>
+        <gpg.passphrase>${env.GPG_KEY_PW}</gpg.passphrase>
+      </properties>
+    </profile>
+  </profiles>
 </settings>

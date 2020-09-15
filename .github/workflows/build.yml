@@ -1,0 +1,72 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: build
+
+on:
+  push:
+    branches: [ develop, master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Set up Maven
+        env:
+          GPG_KEY: ${{ secrets.MAVEN_KEY }}
+        run: |
+          export GPG_TTY=$(tty)
+          cp .mvn.settings.xml $HOME/.m2/settings.xml
+          echo "$GPG_KEY" >> codesigning.asc
+          gpg --batch --import codesigning.asc
+          shred --remove codesigning.asc
+      - name: Set up Terraform
+        run: |
+          curl -g https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip -o /tmp/terraform.zip
+          sudo unzip /tmp/terraform.zip -d /usr/bin
+      - name: Build with Maven
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
+          cd tf-build-tools
+          ./mvnw clean test coveralls:report -DrepoToken="$COVERALLS_REPO_TOKEN" -Dbranch="$BRANCH_NAME" -B
+          cd ..
+      - name: Deploy
+        id: deploy
+        env:
+          OSSRH_USERNAME: ${{ secrets.SONATYPE_USER }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PW }}
+          GPG_KEY_PW: ${{ secrets.MAVEN_KEY_PW }}
+          GPG_KEY_ID: ${{ secrets.MAVEN_KEY_ID }}
+        run: |
+          cd tf-build-tools
+
+          VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          PROFILE="SNAPSHOT"
+
+          if ! echo $VERSION | grep -q SNAPSHOT ; then
+            PROFILE="release"
+
+            echo "***** BRANCH_NAME is ${GITHUB_REF} *****"
+
+            if [ "${GITHUB_REF}" == "refs/heads/develop" ] ; then
+              # Always push a SNAPSHOT release on a merge into the 'develop' branch
+              ./mvnw versions:set -DnewVersion="${VERSION}-SNAPSHOT" -B
+              ./mvnw deploy -DskipTests=true -B -P snapshot
+
+              VERSION="${VERSION}-${GITHUB_RUN_NUMBER}"
+              echo "***** VERSION has been updated to $VERSION ******"
+              ./mvnw versions:set -DnewVersion="${VERSION}" -B
+            fi
+          fi
+
+          # Stage for Maven Central Deployment if a release or SonaType SNAPSHOT repo if a SNAPSHOT
+          export GPG_TTY=$(tty)
+          ./mvnw deploy -DskipTests=true -B -P ${PROFILE}
