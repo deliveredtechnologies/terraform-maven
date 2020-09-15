@@ -44,7 +44,7 @@ public class TerraformApplyS3HandlerTest {
   }
 
   @Test
-  public void planOperationWithAllPropertiesSpecified() throws IOException, InterruptedException{
+  public void planOperationWithAllPropertiesSpecified() throws IOException, InterruptedException {
     TerraformHandler terraformHandler = new TerraformApplyS3Handler(executable,logger);
 
     String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";

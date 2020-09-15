@@ -28,7 +28,7 @@ public class TfCliOptionBuilderTest {
     TfCliOptionBuilder tfCliOptionBuilder = new TfCliOptionBuilder(TfCliOptionBuilder.initializeFormatterRegistry());
     String options = tfCliOptionBuilder.convert(TerraformApply.Option.values(), properties);
 
-    Assert.assertThat(options, CoreMatchers.containsString("-var 'key1=value1' -var 'key2=value2' "));
+    Assert.assertThat(options, CoreMatchers.containsString("-var \"key1=value1\" -var \"key2=value2\" "));
     Assert.assertThat(options, CoreMatchers.containsString("-var-file=test1.txt -var-file=test2.txt "));
     Assert.assertThat(options, CoreMatchers.containsString("-lock-timeout=1000 "));
     Assert.assertThat(options, CoreMatchers.containsString("-target=module1.module2 "));
