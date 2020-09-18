@@ -31,7 +31,6 @@ public class TerraformPlanS3Handler extends TerraformHandler {
 
   @Override
   public void doAction(Properties properties) {
-
     if (properties.containsKey("planOutputFile") && properties.getProperty("planOutputFile").startsWith("s3")) {
       try {
         String planFile = properties.getProperty("planOutputFile");
