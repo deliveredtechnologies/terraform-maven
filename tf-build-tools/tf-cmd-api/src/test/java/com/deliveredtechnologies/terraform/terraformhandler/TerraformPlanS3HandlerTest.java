@@ -29,21 +29,6 @@ public class TerraformPlanS3HandlerTest {
     logger = Mockito.mock(Logger.class);
   }
 
-  //  @Test
-  //  public void initiatingTheChainFromPlan() throws IOException, TerraformException, InterruptedException, ClassNotFoundException, TerraformHandlerException {
-  //    TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir,logger);
-  //    terraformChainHandler.chainInitiator(properties);
-  //    TerraformHandler terraformHandler = new TerraformPlanS3Handler(executable, logger);
-  //
-  //    String kmsKeyId = "4d6f7e4-b816-42f5-87b2-c5952285e53c";
-  //    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
-  //    properties.put("kmsKeyId", kmsKeyId);
-  //    properties.put("planOutputFile", s3BucketKey);
-  //
-  //    terraformHandler.doAction(properties);
-  //    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json --sse aws:kms --sse-kms-key-id 4d6f7e4-b816-42f5-87b2-c5952285e53c");
-  //  }
-
   @Test
   public void planOperationWithAllPropertiesSpecified() throws IOException, InterruptedException {
     TerraformHandler terraformHandler = new TerraformPlanS3Handler(executable, logger);

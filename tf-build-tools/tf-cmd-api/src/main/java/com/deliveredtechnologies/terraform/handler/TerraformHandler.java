@@ -23,4 +23,3 @@ public abstract class TerraformHandler {
 
   public void doAction(Properties properties) {}
 }
-

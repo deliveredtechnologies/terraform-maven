@@ -13,10 +13,7 @@ import java.util.Properties;
 public class TerraformPlanS3Handler extends TerraformHandler {
 
   private Logger logger;
-
-
   private static final Logger LOGGER = LoggerFactory.getLogger(TerraformUtils.class);
-
   private Executable executable;
 
   public TerraformPlanS3Handler(String tfRootDir, Logger logger) throws IOException, TerraformException {
@@ -27,7 +24,6 @@ public class TerraformPlanS3Handler extends TerraformHandler {
     this.executable = executable;
     this.logger = logger;
   }
-
 
   @Override
   public void doAction(Properties properties) {

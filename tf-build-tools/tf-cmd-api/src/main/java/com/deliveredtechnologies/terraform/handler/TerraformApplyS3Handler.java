@@ -10,9 +10,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class TerraformApplyS3Handler extends TerraformHandler {
+
   private Logger logger;
-
-
   private Executable executable;
 
   public TerraformApplyS3Handler(String tfRootDir, Logger logger) throws IOException, TerraformException {
@@ -38,4 +37,3 @@ public class TerraformApplyS3Handler extends TerraformHandler {
     }
   }
 }
-
