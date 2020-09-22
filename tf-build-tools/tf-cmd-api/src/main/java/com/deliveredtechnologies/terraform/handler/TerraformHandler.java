@@ -11,11 +11,6 @@ public abstract class TerraformHandler {
 
   private TerraformHandler nextHandler ;
 
-  public TerraformHandler nextHandler(TerraformHandler nextHandler) {
-    this.nextHandler = nextHandler;
-    return nextHandler;
-  }
-
   public final void handleRequest(Properties properties) {
     doAction(properties);
     Optional.ofNullable(nextHandler).ifPresent(handler -> handler.handleRequest(properties));
