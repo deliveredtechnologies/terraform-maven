@@ -7,7 +7,7 @@ import java.util.Properties;
 /**
  * Chain of responsibility handler.
  */
-public abstract class TerraformHandler {
+public class TerraformHandler {
 
   private TerraformHandler nextHandler ;
 
