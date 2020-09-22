@@ -11,10 +11,10 @@ public abstract class TerraformHandler {
 
   private TerraformHandler nextHandler ;
 
-  public TerraformHandler nextHandler(TerraformHandler nextHandler) {
-    this.nextHandler = nextHandler;
-    return nextHandler;
-  }
+  //  public TerraformHandler nextHandler(TerraformHandler nextHandler) {
+  //    this.nextHandler = nextHandler;
+  //    return nextHandler;
+  //  }
 
   protected final void handleRequest(Properties properties) {
     doAction(properties);
