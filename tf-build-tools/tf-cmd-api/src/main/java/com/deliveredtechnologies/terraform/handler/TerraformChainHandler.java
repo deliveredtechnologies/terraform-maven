@@ -49,7 +49,6 @@ public class TerraformChainHandler {
         Object obj = cls.getConstructor(new Class[]{String.class, Logger.class}).newInstance(new Object[]{tfRootDir, logger});
         ((TerraformHandler) obj).doAction(properties);
       } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | ClassNotFoundException e) {
-        //throw the exception because we can't really handle this in a meaninful way
         throw new TerraformHandlerException("Failed to invoke " + terraformHandler.getName(), e);
       }
     }
