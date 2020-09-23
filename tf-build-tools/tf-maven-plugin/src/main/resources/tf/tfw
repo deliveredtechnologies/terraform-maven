@@ -1,28 +1,24 @@
 #!/usr/bin/env bash
 args="$@"
-##############################################################
-# try to figure out where the root directory of the project is
-##############################################################
-cur_loc=`pwd`
-target_cd="$cur_loc/.tf"
-projectBaseDir=""
 
-while [[ $projectBaseDir == "" ]]
-do
-    if [ -d "$target_cd" ]
-    then
-        projectBaseDir="$cur_loc"
-    else
-        cd ..
-        cur_loc=`pwd`
-        target_cd="$cur_loc/.tf"
-    fi
-done
-targetDir="$projectBaseDir/.tf/"
+###############################
+# Download the terraform binary
+###############################
+function downloadTerraformBinary()
+{
+  targetDir=$1
+  releaseSource=$2
+  terraformZip="${targetDir}terraform.zip"
+  curl --max-time 300 -o $terraformZip $releaseSource
+  unzip -o -d $targetDir $terraformZip
+  rm -f $terraformZip
+}
+
+thisScript=$0
+targetDir=${thisScript%"tfw"}
+
 propFile="${targetDir}terraform-maven.properties"
 search="="
-cd $targetDir
-
 ################################################################
 # read all lines from the properties file and store in variables
 ################################################################
@@ -53,78 +49,42 @@ done < "$propFile"
 #################################################################################
 # Construct the full zip file name, full binary file name, and URL of the package
 #################################################################################
-releaseLinux="linux"
-releaseWindows="windows"
-terraformZipLinux="${targetDir}${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
-terraformZipWindows="${targetDir}${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
-terraformBinary="${targetDir}terraform.exe"
-terraformBinaryLinux="terraform"
-terraformBinaryWindows="${targetDir}terraform.exe"
-releaseSourceLinux="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
-releaseSourceWindows="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
-
-releaseOS=Linux
-if [[ $releaseOS == "windows" ]]
-then
-  terraformBinary=$terraformBinaryWindows
-else
-  terraformBinary=$terraformBinaryLinux
-fi
+terraformBinary="${targetDir}terraform"
+releaseSource="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_linux_${releaseSuffix}"
 
 ##########################################################################
 # if the terraform binary is already there, figure out what version it is
 ##########################################################################
 if [[ -f $terraformBinary ]]
 then
-    versionString=`$terraformBinary -version`
-    search="Terraform v"
-    rest=${versionString#*$search}
-    installedVerion=`echo $rest|cut -d ' ' -f 1`
+  versionString=`$terraformBinary -version`
+  search="Terraform v"
+  rest=${versionString#*$search}
+  installedVerion=`echo $rest|cut -d ' ' -f 1`
 
 ###############################################################
 # if the terraform binary is already there, check if it is the
 # same version as the properties file indicates
 # if not, download and install the desired version
 ###############################################################
-    if [[ $installedVerion == "$releaseVer" ]]
-    then
-        echo ""
-    else
-        echo "Different version, downloading"
-        curl --max-time 300 -o $terraformZipLinux $releaseSourceLinux
-        curl --max-time 300 -o $terraformZipWindows $releaseSourceWindows
-        rm $terraformBinaryLinux
-        rm $terraformBinaryWindows
-        unzip -d $targetDir $terraformZipLinux
-        unzip -d $targetDir $terraformZipWindows
-        rm $terraformZipLinux
-        rm $terraformZipWindows
-    fi
+  if [[ $installedVerion == "$releaseVer" ]]
+  then
+    echo ""
+  else
+    echo "Different version, downloading"
+      downloadTerraformBinary $targetDir $releaseSource
+  fi
 else
 ############################################
 # if the terraform binary is not there,
 # download and install the desired version
 ############################################
-    echo "Terraform not found, installing"
-    curl --max-time 300 -o $terraformZipLinux $releaseSourceLinux
-    curl --max-time 300 -o $terraformZipWindows $releaseSourceWindows
-    if [ -f $terraformBinaryLinux ]
-    then
-        rm $terraformBinaryLinux
-    fi
-    if [ -f $terraformBinaryWindows ]
-    then
-        rm $terraformBinaryWindows
-    fi
-    unzip -d $targetDir $terraformZipLinux
-    unzip -d $targetDir $terraformZipWindows
-    rm $terraformZipLinux
-    rm $terraformZipWindows
+  echo "Terraform not found, installing"
+  downloadTerraformBinary $targetDir $releaseSource
 fi
 
 ###################################################
 # Run terraform with the supplied arguments if any
 ###################################################
-cd $targetDir
 $terraformBinary $args
 exit

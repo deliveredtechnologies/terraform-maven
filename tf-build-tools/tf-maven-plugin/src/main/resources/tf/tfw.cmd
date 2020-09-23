@@ -1,8 +1,5 @@
 echo off
-set ORIG=%cd%
-set INPUT=%0%
-set TARGET=%INPUT:tfw.cmd=%
-cd %TARGET%
-powershell -ep bypass -file tfw.ps1 %*
-cd %ORIG%
+set THIS_CMD=%0%
+set TF_BIN=%THIS_CMD:tfw=%
+powershell -ep bypass -file %TF_BIN%tfw.ps1 %*
 exit /b

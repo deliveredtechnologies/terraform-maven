@@ -82,7 +82,7 @@ public class TerraformPlanTest {
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-refresh=false "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-state=my.tfstate "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-target=module1.module2 "));
-    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var 'key1=value1' -var 'key2=value2' "));
+    Assert.assertThat(tfCommand, CoreMatchers.containsString("-var \"key1=value1\" -var \"key2=value2\" "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-var-file=test1.txt -var-file=test2.txt "));
   }
 
