@@ -58,5 +58,4 @@ class S3PreProvisionSpec extends Specification {
                 ])
         tfplan = terraform.initAndPlan()
     }
-
 }
