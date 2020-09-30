@@ -14,13 +14,13 @@ class AwsSpec extends Specification {
 
 
     @Shared
-    Aws aws = new Aws()
+    Aws aws
 
-    AmazonAutoScaling asc = Stub()
+    AmazonAutoScaling asc = Stub(AmazonAutoScaling)
     AutoScalingGroup asg = Mock()
 
     def setup() {
-        aws.client = asc
+        aws = new Aws(asc)
     }
 
     def "waitForCapacityMetWithinRetryLimit"() {

@@ -15,9 +15,18 @@ import java.time.Duration
 
 class Aws {
 
-    AmazonAutoScaling client = AmazonAutoScalingClientBuilder.defaultClient()
+    AmazonAutoScaling autoScalingClient
 
     Logger log = LoggerFactory.getLogger(getClass())
+
+
+    Aws() {
+        this.autoScalingClient = AmazonAutoScalingClientBuilder.defaultClient()
+    }
+
+    Aws(AmazonAutoScaling autoScalingClient) {
+        this.autoScalingClient = autoScalingClient
+    }
 
     Map waitForCapacity(String asgName, Duration delay, maxRetries) {
 
@@ -38,7 +47,7 @@ class Aws {
     }
 
     Map getCapacityInfoAsg(String asgName) {
-        DescribeAutoScalingGroupsResult result = client.describeAutoScalingGroups(new DescribeAutoScalingGroupsRequest().withAutoScalingGroupNames(asgName))
+        DescribeAutoScalingGroupsResult result = autoScalingClient.describeAutoScalingGroups(new DescribeAutoScalingGroupsRequest().withAutoScalingGroupNames(asgName))
 
         def groups = result.getAutoScalingGroups()
         if(groups.size() == 0) {
