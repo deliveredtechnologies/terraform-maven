@@ -54,12 +54,35 @@
       <version>2.0-M2-groovy-3.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>1.10.16</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json -->
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-json</artifactId>
       <version>3.0.5</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/net.jodah/failsafe -->
+    <dependency>
+      <groupId>net.jodah</groupId>
+      <artifactId>failsafe</artifactId>
+      <version>2.4.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-autoscaling -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-autoscaling</artifactId>
+      <version>1.11.865</version>
+    </dependency>
+
+
+
   </dependencies>
 
   <build>
@@ -92,6 +115,7 @@
         <configuration>
           <excludes>
             <exclude>**/*Exception*</exclude>
+            <exclude>**/*HttpsTrustManager*</exclude>
           </excludes>
         </configuration>
         <executions>

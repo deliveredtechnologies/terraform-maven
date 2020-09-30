@@ -45,7 +45,7 @@ public class TerraformApplyTest {
   public void setup() {
 
     properties = new HashMap<>();
-    terraformApply = new TerraformApply(new TerraformCommandLineDecorator(TerraformCommand.APPLY, executable));
+    terraformApply = new TerraformApply(executable);
   }
   //TODO maybe a timeout test
 
@@ -67,7 +67,6 @@ public class TerraformApplyTest {
     Mockito.verify(this.executable, Mockito.times(1)).execute(captor.capture());
     String tfCommand = captor.getValue();
 
-    Assert.assertThat(tfCommand, CoreMatchers.startsWith("terraform apply"));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-var \"key1=value1\" -var \"key2=value2\" "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-var-file=test1.txt -var-file=test2.txt "));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-lock-timeout=1000s "));
@@ -92,7 +91,6 @@ public class TerraformApplyTest {
     Mockito.verify(this.executable, Mockito.times(1)).execute(captor.capture());
     String tfCommand = captor.getValue();
 
-    Assert.assertThat(tfCommand, CoreMatchers.startsWith("terraform apply"));
     Assert.assertThat(tfCommand, CoreMatchers.containsString("-var \"key1=value1\" "));
 
   }
