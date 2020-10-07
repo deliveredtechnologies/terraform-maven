@@ -9,9 +9,14 @@ function downloadTerraformBinary()
   targetDir=$1
   releaseSource=$2
   terraformZip="${targetDir}terraform.zip"
-  curl --max-time 300 -o $terraformZip $releaseSource
-  unzip -o -d $targetDir $terraformZip
-  rm -f $terraformZip
+  curl -k --max-time 300 -o $terraformZipLinux $releaseSourceLinux
+  curl -k --max-time 300 -o $terraformZipWindows $releaseSourceWindows
+  rm $terraformBinaryLinux
+  rm $terraformBinaryWindows
+  unzip -o -d $targetDir $terraformZipLinux
+  unzip -o -d $targetDir $terraformZipWindows
+  rm $terraformZipLinux
+  rm $terraformZipWindows
 }
 
 thisScript=$0
@@ -49,6 +54,17 @@ done < "$propFile"
 #################################################################################
 # Construct the full zip file name, full binary file name, and URL of the package
 #################################################################################
+
+releaseLinux="linux"
+releaseWindows="windows"
+terraformZipLinux="${targetDir}${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
+terraformZipWindows="${targetDir}${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
+terraformBinary="${targetDir}terraform.exe"
+terraformBinaryLinux="${targetDir}terraform"
+terraformBinaryWindows="${targetDir}terraform.exe"
+releaseSourceLinux="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseLinux}_${releaseSuffix}"
+releaseSourceWindows="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_${releaseWindows}_${releaseSuffix}"
+
 terraformBinary="${targetDir}terraform"
 releaseSource="${distributionSite}/${releaseDir}/${releaseVer}/${releaseName}_${releaseVer}_linux_${releaseSuffix}"
 

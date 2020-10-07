@@ -7,21 +7,27 @@ if ($arg_list -eq "") {
 
 function downloadTerraformBinary($terraformBinarySource, $targetDir)
 {
-    $terraformZip = $targetDir + "terraform.zip"
+    #$terraformZip = $targetDir + "terraform.zip"
     try {
         $WebClient = New-Object System.Net.WebClient;
-        $webclient.DownloadFile($terraformBinarySource, $terraformZip)
+        #$webclient.DownloadFile($terraformBinarySource, $terraformZip)
+        $webclient.DownloadFile($releaseSourceLinux, $terraformZipLinux)
+        $webclient.DownloadFile($releaseSourceWindows, $terraformZipWindows)
     }
     catch {
         "An error occurred that could not be resolved."
     }
     try {
-        Expand-Archive -LiteralPath $terraformZip -DestinationPath $targetDir -Force
+        #Expand-Archive -LiteralPath $terraformZip -DestinationPath $targetDir -Force
+        Expand-Archive -LiteralPath $terraformZipWindows -DestinationPath $targetDir -Force
+        Expand-Archive -LiteralPath $terraformZipLinux -DestinationPath $targetDir -Force
     }
     catch {
         "An error occurred that could not be resolved."
     }
-    remove-item $terraformZip
+    #remove-item $terraformZip
+    remove-item $terraformZipLinux
+    remove-item $terraformZipWindows
 }
 
 $targetDir = $MyInvocation.InvocationName -replace "tfw.ps1"
@@ -31,6 +37,28 @@ $tfwProps  = convertfrom-stringdata (get-content $propFile -raw)
 ##################################
 # Construct the URL of the package
 ##################################
+
+$releaseLinux   = "linux"
+$releaseWindows = "windows"
+
+$terraformZipLinux = "$targetDir" +
+        "$releaseName"    +
+        "_"               +
+        "$releaseVer"     +
+        "_"               +
+        "$releaseLinux"   +
+        "_"               +
+        "$releaseSuffix"
+
+$terraformZipWindows = "$targetDir" +
+        "$releaseName"    +
+        "_"               +
+        "$releaseVer"     +
+        "_"               +
+        "$releaseWindows" +
+        "_"               +
+        "$releaseSuffix"
+
 $releaseSource = $tfwProps.distributionSite  +
                 "/" + $tfwProps.releaseDir  +
                 "/" + $tfwProps.releaseVer  +
@@ -39,6 +67,39 @@ $releaseSource = $tfwProps.distributionSite  +
                 "_" + "windows"             +
                 "_" + $tfwProps.releaseSuffix
 
+$releaseSourceLinux = "$distributionSite" +
+        "/"                               +
+        "$releaseDir"                     +
+        "/"                               +
+        "$releaseVer"                     +
+        "/"                               +
+        "$releaseName"                    +
+        "_"                               +
+        "$releaseVer"                     +
+        "_"                               +
+        "$releaseLinux"                   +
+        "_"                               +
+        "$releaseSuffix"
+
+$releaseSourceWindows = "$distributionSite" +
+        "/"                                 +
+        "$releaseDir"                       +
+        "/"                                 +
+        "$releaseVer"                       +
+        "/"                                 +
+        "$releaseName"                      +
+        "_"                                 +
+        "$releaseVer"                       +
+        "_"                                 +
+        "$releaseWindows"                   +
+        "_"                                 +
+        "$releaseSuffix"
+
+
+$terraformBinaryLinux =   "$targetDir" +
+        "terraform"
+$terraformBinaryWindows = "$targetDir" +
+        "terraform.exe"
 $terraformBinary = $targetDir + "terraform.exe"
 
 ##########################################################################
