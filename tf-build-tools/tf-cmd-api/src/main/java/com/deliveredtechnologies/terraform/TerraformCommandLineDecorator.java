@@ -5,6 +5,7 @@ import com.deliveredtechnologies.io.Executable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class TerraformCommandLineDecorator implements Executable {
   public TerraformCommandLineDecorator(TerraformCommand cmd, Executable commandLine, Logger logger) {
     this.commandLine = commandLine;
     this.cmd = cmd;
+
     this.logger = Optional.ofNullable(logger);
     this.logger.ifPresent(log -> this.commandLine.setLogger(log));
   }
@@ -91,6 +93,15 @@ public class TerraformCommandLineDecorator implements Executable {
   }
 
   private String getTerraformCommand(String command) {
-    return String.format("terraform %1$s %2$s", cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+
+    return String.format("%s %s %s", getTFExecutable(), cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
+  }
+
+  private String getTFExecutable() {
+    File tfwrapper = new File(".tf/tfw");
+    if (tfwrapper.exists()) {
+      tfwrapper.setExecutable(true);
+    }
+    return tfwrapper.exists() ? tfwrapper.getAbsolutePath().replaceAll("[\\\\]","/") : "terraform";
   }
 }

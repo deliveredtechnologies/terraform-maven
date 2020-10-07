@@ -10,22 +10,50 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Properties;
 
-public class TerraformOutput implements TerraformOperation<String> {
-  private Executable terraform;
+public class TerraformOutput extends TerraformCliOperation {
+
+  public enum Option implements TerraformOption {
+
+    json("-json", "true"),
+    noColor("-no-color"),
+    state("-state=");
+
+    public String format;
+    public String defaultValue;
+
+    Option(String format) {
+      this.format = format;
+    }
+
+    Option(String format, String defaultValue) {
+      this.format = format;
+      this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public String getDefault() {
+      return this.defaultValue;
+    }
+
+    @Override
+    public String getFormat() {
+      return this.format;
+    }
+
+
+  }
 
   TerraformOutput(Executable terraform) {
-    this.terraform = terraform;
+    super(terraform);
   }
 
   TerraformOutput(Executable terraform, Logger logger) {
-    this.terraform = terraform;
-    this.terraform.setLogger(logger);
+    super(terraform, logger);
   }
 
   public TerraformOutput() throws IOException, TerraformException {
-    this(new String());
+    this((String)null);
   }
 
   public TerraformOutput(String tfRootDir) throws IOException, TerraformException {
@@ -36,26 +64,8 @@ public class TerraformOutput implements TerraformOperation<String> {
     this(new TerraformCommandLineDecorator(TerraformCommand.OUTPUT, new CommandLine(tfRootDir == null || tfRootDir.isEmpty() ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir), false, logger)));
   }
 
-  /**
-   * Executes `terraform output -json -module={tfRootDir}`.
-   *
-   * @param properties  parameter options for terraform output (currently, only tfRootDir)
-   * @return            the output from terraform output -json
-   * @throws TerraformException
-   */
   @Override
-  public String execute(Properties properties) throws TerraformException {
-    try {
-
-      String options = "-json";
-
-      if (properties.containsKey("timeout")) {
-        return terraform.execute(options, Integer.parseInt(properties.get("timeout").toString()));
-      } else {
-        return terraform.execute(options);
-      }
-    } catch (InterruptedException | IOException e) {
-      throw new TerraformException(e.getMessage(), e);
-    }
+  protected TerraformOption[] getTerraformParams() {
+    return TerraformOutput.Option.values();
   }
 }

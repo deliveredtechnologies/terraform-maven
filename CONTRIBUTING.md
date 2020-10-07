@@ -22,6 +22,8 @@
    
    Start working on an issue by forking the repository and making your updates from the 'develop' branch in your fork or a 
    branch off of your fork's 'develop' branch. 
+   
+   _NOTE: Code submissions must be complete, which means code + tests + updates to the README.md._
     
    Don't forget to add your name/details as a contributor in the POM.
 
@@ -34,6 +36,8 @@
 
    Once your PR is free from merge conflicts and all of the automated checks pass (i.e. build validation + code coverage validation), one of the developers under the deliveredtechnologies project
    will review the PR and leave comments and/or merge the PR.
+   
+   _NOTE: Small and low complexity PRs are reviewed faster than large and high complexity PRs._
 
 5. Remediation
     
