@@ -24,6 +24,9 @@ public class Clean extends TerraformMojo<String> {
   @Parameter(property = "tfModulesDir")
   String tfModulesDir;
 
+  @Parameter(property = "tfdestroyPlan")
+  String tfdestroyPlan;
+
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
