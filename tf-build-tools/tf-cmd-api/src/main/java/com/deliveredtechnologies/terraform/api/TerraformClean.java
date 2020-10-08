@@ -76,11 +76,6 @@ public class TerraformClean implements TerraformOperation<String> {
         }
       }
 
-      //delete provisioned resources
-      if () {
-        //terraform apply call
-      }
-
       //delete .terraform directories
       Files.walk(this.tfRootModulePath.getParent()).filter(path -> path.toString().endsWith(".terraform"))
           .map(Path::toFile)

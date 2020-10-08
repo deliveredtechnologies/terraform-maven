@@ -1,6 +1,7 @@
 package com.deliveredtechnologies.maven.terraform.mojo;
 
 import com.deliveredtechnologies.terraform.TerraformException;
+import com.deliveredtechnologies.terraform.api.TerraformApply;
 import com.deliveredtechnologies.terraform.api.TerraformClean;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -24,12 +25,17 @@ public class Clean extends TerraformMojo<String> {
   @Parameter(property = "tfModulesDir")
   String tfModulesDir;
 
-  @Parameter(property = "tfdestroyPlan")
-  String tfdestroyPlan;
+  @Parameter(property = "tfDestroyPlan")
+  String tfDestroyPlan;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     try {
+      System.out.println("checking the plan file");
+      if (getFieldsAsProperties().containsKey(tfDestroyPlan)) {
+        System.out.println("checking the plan file");
+        execute(new TerraformApply(tfRootDir), getFieldsAsProperties());
+      }
       execute(new TerraformClean(tfModulesDir, tfRootDir), getFieldsAsProperties());
     } catch (IOException | TerraformException e) {
       throw new MojoExecutionException(e.getMessage(), e);
