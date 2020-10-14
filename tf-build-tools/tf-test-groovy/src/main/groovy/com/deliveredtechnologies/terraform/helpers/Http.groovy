@@ -13,6 +13,10 @@ class Http {
 
     private final Logger log = LoggerFactory.getLogger(getClass())
 
+    private Http(){
+        throw new IllegalStateException("Static utility class")
+    }
+
     static Map httpGetWithCustomValidation(String url, Consumer<Integer> statusCode, Consumer<String> response, Proxy proxy = Proxy.NO_PROXY) {
         def connection = new URL(url).openConnection(proxy)
         def body = connection.content.text
