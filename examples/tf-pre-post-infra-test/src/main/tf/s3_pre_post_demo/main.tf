@@ -4,7 +4,7 @@ resource "random_id" "id" {
 provider "aws" {
   region = "us-east-1"
 }
-resource "aws_s3_bucket" "bucket3" {
+resource "aws_s3_bucket" "bucket" {
   bucket = "tftest-bucket-${random_id.id.dec}"
 
   versioning {
@@ -19,5 +19,5 @@ resource "aws_s3_bucket" "bucket3" {
 }
 
 output "bucket_name" {
-  value = aws_s3_bucket.bucket3.bucket
+  value = aws_s3_bucket.bucket.bucket
 }
