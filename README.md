@@ -22,7 +22,7 @@
 The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Terraform’s project lifecycle and dependency management capability. 
 Maven, in some form has been the standard for Java project management for over a decade. Now, all of that Maven goodness can be used with Terraform!
 
-Integrate automtated tests (Spock, JUnit, TestNG) into your Terraform projects, use Maven's dependency management functionality with Terraform, combine Java and Terraform into the same project, and more!
+Integrate automtated tests (Spock, JUnit, TestNG) into your Terraform projects, use Maven's dependency management functionality with Terraform, combine Java and Terraform into the same project, and more! 
 
 <hr>
 
