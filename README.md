@@ -336,5 +336,6 @@ Use the plugin or update the plugin configuration in the POM to call terraform s
 
 ### Articles
 
-* [Unit Testing Terraform](https://medium.com/@claytonlong_34858/unit-testing-terraform-e592a5c3777f)
+* [Making Terraform Testing Groovy: Part 1 - Pre-provision Testing](https://medium.com/deliveredtechnologies/making-terraform-testing-groovy-6a9278bdce1)
+* [Unit Testing Terraform](https://medium.com/deliveredtechnologies/unit-testing-terraform-e592a5c3777f)
 * [Maven Gives Terraform a Big Boost](https://dzone.com/articles/maven-gives-terraform-a-big-boost)
