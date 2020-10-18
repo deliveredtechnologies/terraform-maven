@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
-    <tf-maven-version>0.11.1</tf-maven-version>
+    <tf-maven-version>0.12-SNAPSHOT</tf-maven-version>
   </properties>
   <artifactId>tf-s3</artifactId>
   <groupId>com.deliveredtechnologies.example.maven.tf</groupId>
@@ -45,7 +45,6 @@
       <version>2.0-M2-groovy-3.0</version>
       <scope>test</scope>
     </dependency>
-
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -53,12 +52,10 @@
       <version>1.7.30</version>
       <scope>test</scope>
     </dependency>
-
-
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk</artifactId>
-      <version>1.11.584</version>
+      <version>1.11.838</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -8,6 +8,7 @@ import org.zeroturnaround.exec.stream.slf4j.Slf4jStream;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +69,8 @@ public class CommandLine implements Executable {
     Optional<String> output;
 
     String [] baseCommand = command.split(" ");
-    String loggerName = baseCommand.length == 2 ? baseCommand[0] + "-" + baseCommand[1] : baseCommand[0];
+    String baseCommandName = Paths.get(baseCommand[0]).getFileName().toString();
+    String loggerName = baseCommand.length >= 2 ? baseCommandName + "-" + baseCommand[1] : baseCommandName;
     try {
       output = Optional.ofNullable(processExecutor.command(cmd)
         .directory(directory.toAbsolutePath().toFile())

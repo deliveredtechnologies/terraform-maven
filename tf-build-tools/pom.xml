@@ -6,12 +6,13 @@
   <groupId>com.deliveredtechnologies</groupId>
   <artifactId>tf-build-tools</artifactId>
   <packaging>pom</packaging>
-  <version>0.11.1</version>
+  <version>0.12</version>
   <description>Terraform Build Tools: The parent POM project for Java and Terraform Tools</description>
   <modules>
     <module>tf-cmd-api</module>
     <module>tf-maven-plugin</module>
     <module>tf-s3-archetype</module>
+    <module>tf-test-groovy</module>
   </modules>
   <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -135,6 +136,12 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
+                <configuration>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -189,6 +196,7 @@
               <serverId>${nexus.server.id}</serverId>
               <nexusUrl>${nexus.server.url}</nexusUrl>
               <autoReleaseAfterClose>false</autoReleaseAfterClose>
+              <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
             </configuration>
           </plugin>
         </plugins>
@@ -227,7 +235,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M4</version>
+        <version>3.0.0-M5</version>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
