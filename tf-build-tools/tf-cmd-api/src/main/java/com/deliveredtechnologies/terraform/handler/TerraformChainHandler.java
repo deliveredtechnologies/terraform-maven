@@ -42,7 +42,7 @@ public class TerraformChainHandler {
    * Executes given planAction for a given backendType - GET/PUTs terraform plan files from/to specified backend.
    * @param properties property options
    */
-  public void chainInitiator(Properties properties) throws TerraformHandlerException {
+  public void initiateChain(Properties properties) throws TerraformHandlerException {
     for (Class<? extends TerraformHandler> terraformHandler : this.handlerClasses) {
       try {
         Class cls = Class.forName(terraformHandler.getName());

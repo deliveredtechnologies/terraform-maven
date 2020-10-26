@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Execute TerraformApplyS3Handler - Get the planFiles from S3.
+ */
 public class TerraformApplyS3Handler extends TerraformHandler {
 
   private Logger logger;

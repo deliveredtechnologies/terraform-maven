@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Execute TerraformPlanS3Handler - Upload the planFiles from Local to S3.
+ */
 public class TerraformPlanS3Handler extends TerraformHandler {
 
   private Logger logger;

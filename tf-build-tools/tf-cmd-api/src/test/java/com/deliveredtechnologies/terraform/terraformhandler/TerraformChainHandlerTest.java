@@ -36,13 +36,13 @@ public class TerraformChainHandlerTest {
     String s3BucketKey = "test.json";
     properties.put("kmsKeyId", kmsKeyId);
     properties.put("planOutputFile", s3BucketKey);
-    terraformChainHandler.chainInitiator(properties);
+    terraformChainHandler.initiateChain(properties);
   }
 
   @Test(expected = TerraformHandlerException.class)
   public void terraformChainHandlerThrowsTerraformHandlerExceptionOnError() throws IOException, InterruptedException, TerraformException, TerraformHandlerException {
     Mockito.when(this.executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
     TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir, logger);
-    terraformChainHandler.chainInitiator(properties);
+    terraformChainHandler.initiateChain(properties);
   }
 }
