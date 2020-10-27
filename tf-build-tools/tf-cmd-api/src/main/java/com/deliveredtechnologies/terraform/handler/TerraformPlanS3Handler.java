@@ -42,7 +42,7 @@ public class TerraformPlanS3Handler extends TerraformHandler {
           executable.execute(String.format("aws s3 cp %1$s %2$s", fileName, planFile));
         }
       } catch (InterruptedException | IOException e) {
-        e.printStackTrace();
+        logger.error("Unable to get " + properties.getProperty("planOutputFile") + "; " + e.getMessage());
       }
     }
   }

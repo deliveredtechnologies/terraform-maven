@@ -38,13 +38,4 @@ public class TerraformChainHandlerTest {
     properties.put("planOutputFile", s3BucketKey);
     terraformChainHandler.initiateChain(properties);
   }
-
-  /*
-  @Test(expected = TerraformHandlerException.class)
-  public void terraformChainHandlerThrowsTerraformHandlerExceptionOnError() throws IOException, InterruptedException, TerraformException, TerraformHandlerException {
-    Mockito.when(this.executable.execute(Mockito.anyString())).thenThrow(new IOException("boom!"));
-    TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir, logger);
-    terraformChainHandler.initiateChain(properties);
-  }
-   */
 }
