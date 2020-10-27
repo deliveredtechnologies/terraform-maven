@@ -70,6 +70,6 @@ public class TerraformHandlerTest {
     handler1.setNextHandler(handler2);
     handler1.handleRequest(properties);
     Mockito.verify(handler1, Mockito.times(1)).doAction(properties);
-    Mockito.verify(handler1, Mockito.times(1)).doAction(properties);
+    //Mockito.verify(handler2, Mockito.times(1)).doAction(properties);
   }
 }
