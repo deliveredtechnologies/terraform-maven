@@ -1,11 +1,11 @@
-[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.11.1/maven-plugin
-[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.11.1/jar
-[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.11.1/jar
+[tf-maven-plugin]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-maven-plugin/0.12/maven-plugin
+[tf-cmd-api]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-cmd-api/0.12/jar
+[tf-s3-archetype]:https://search.maven.org/artifact/com.deliveredtechnologies/tf-s3-archetype/0.12/jar
 [tf-maven-plugin-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-maven-plugin/
 [tf-cmd-api-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-cmd-api/
 [tf-s3-archetype-snapshot]:https://oss.sonatype.org/content/repositories/snapshots/com/deliveredtechnologies/tf-s3-archetype/
-[maven-badge]:https://img.shields.io/badge/maven%20central-0.11.1-green.svg
-[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.12-green.svg
+[maven-badge]:https://img.shields.io/badge/maven%20central-0.12-green.svg
+[maven-snapshot-badge]:https://img.shields.io/badge/SNAPSHOT-0.13-green.svg
 
 ![terraform-maven](.docs/MavenTerraform.png)
 
@@ -19,7 +19,10 @@
 
 # Terraform Maven Plugin
 
-The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Terraform’s project lifecycle and dependency management capability. Maven in some form has been the standard for Java project management for over a decade. Now, all of that Maven goodness can be used with Terraform!
+The Terraform Maven Plugin brings Maven to Terraform, which greatly enhances Terraform’s project lifecycle and dependency management capability. 
+Maven, in some form has been the standard for Java project management for over a decade. Now, all of that Maven goodness can be used with Terraform!
+
+Integrate automtated tests (Spock, JUnit, TestNG) into your Terraform projects, use Maven's dependency management functionality with Terraform, combine Java and Terraform into the same project, and more! 
 
 <hr>
 
@@ -66,28 +69,29 @@ Not finding what you are looking for? [Try the Wiki!](https://github.com/deliver
 * tf-build-tools - The parent project of the tf-maven-plugin and tf-cmd-api projects
   * tf-maven-plugin - The Terraform Maven Plugin project
   * tf-cmd-api - A Java API for Terraform project
+  * tf-test-groovy - A Java library that assists with Testing Terraform using Groovy (e.g. Spock)
   * tf-s3-archetype - An Archetype for a S3 Terraform Project
 
 ### Benefits of the Terraform Maven Plugin
 * Dependency Management
-  * Terraform really has no dependency management to speak of. Even when you use Terraform Enterprise or some other private
+  * Terraform really has no dependency management to speak of. Even when you use Terraform Cloud, Terraform Enterprise or some other private
     Terraform module registry, a version update to a module means editing the Terraform code in each and every place
     that module is sourced. The Terraform Maven Plugin allows you to specify your dependencies for Terraform the same way
     you specify your dependencies with Java: in an external [Maven POM file](https://maven.apache.org/pom.html). And
     because it's Maven, Terraform modules sourced from Maven repos can also take advantage of version ranges and 
-    Maven's SNAPSHOT functionality. It also resoolves transitive dependencies. No more modifying code for version updates! No more sourcing obscure URLs!
+    Maven's SNAPSHOT functionality. It also resolves transitive dependencies. No more modifying code for version updates! No more sourcing obscure URLs!
     Hooray, Maven! 
 * Packaging as Part of the Build Lifecycle
   * The [package goal](#tfpackage) can package a Terraform root module for deployment into a Maven repo
     or it can package that same Terraform root module with its dependencies for deployment into an isolated environment
     or Terraform Enterprise. It's all part of a single Maven goal/command.
 * Deploying Terraform Artifacts to a Maven Repo with an Attached POM is a Snap
-  * By default the [deploy goal](#tfdeploy) deploys a zip artifact packaged by the [package goal](#tfpackage) to a Maven repo
+  * By default, the [deploy goal](#tfdeploy) deploys a zip artifact packaged by the [package goal](#tfpackage) to a Maven repo
     along with the POM of the current Maven Terraform project. But if you want to point to a differnt POM or a different
     artifact for deployment, it can do that too. Easy peasy.
 * Terraform support for Java testing frameworks
   * The tf-cmd-api artifact provides Java support for Terraform, which can be used to easily integrate
-    mature Java testing frameworks, like Spock or JUnit. One example of this is the [[tf-s3 example in this repo]](examples/tf-s3).
+    mature Java testing frameworks, like Spock, JUnit or TestNG. One example of this is the [[tf-s3 example in this repo]](examples/tf-s3).
 * Simple Integration with CI Tools
   * Get rid of hundreds of lines of untested code in your CI tool and replace it with tested build lifecycle management
     using Maven! Most CI tools either have Maven included or have a Maven plugin available. Less Terraform build logic 
@@ -262,7 +266,7 @@ Deletes all 'terraform' files from terraform configurations along with the Terra
 
 Description:
 
-Binds the Maven project to a specific Terraform binary version.
+Binds the Maven project to a specific Terraform binary version (think [Maven Wrapper](https://github.com/takari/maven-wrapper), but for Terraform).
 
 The format of the URL from which to fetch the Terraform binary is modeled after HashiCorp's distribution URL.
 
@@ -303,7 +307,7 @@ Instead of doing all the above steps you can simply build the module/project by 
 An example on how to generate the project using an archetype is shown below.
 
 ```bash
-mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.11 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
+mvn archetype:generate -B -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.12 -DgroupId=<custom_group_name> -DartifactId=<custom-artifact_name>
 ```
 
 Maven Non-Interactive mode creates a project with the name that you passed in <custom_articatId_name> under <custom_groupId_name>.
@@ -311,7 +315,7 @@ Maven Non-Interactive mode creates a project with the name that you passed in <c
 or
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.11
+mvn archetype:generate -DarchetypeGroupId=com.deliveredtechnologies -DarchetypeArtifactId="tf-s3-archetype" -DarchetypeVersion=0.12
 ``` 
 
 After running the above command mvn interactive console prompts for the required arguments (ex: groupId and artifactId) and creates the project accordingly.
@@ -332,5 +336,6 @@ Use the plugin or update the plugin configuration in the POM to call terraform s
 
 ### Articles
 
-* [Unit Testing Terraform](https://medium.com/@claytonlong_34858/unit-testing-terraform-e592a5c3777f)
+* [Making Terraform Testing Groovy: Part 1 - Pre-provision Testing](https://medium.com/deliveredtechnologies/making-terraform-testing-groovy-6a9278bdce1)
+* [Unit Testing Terraform](https://medium.com/deliveredtechnologies/unit-testing-terraform-e592a5c3777f)
 * [Maven Gives Terraform a Big Boost](https://dzone.com/articles/maven-gives-terraform-a-big-boost)

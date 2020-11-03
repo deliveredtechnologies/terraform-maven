@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tf-pre-post-infra-test</artifactId>
   <properties>
-    <tf-maven-version>0.12-SNAPSHOT</tf-maven-version>
+    <tf-maven-version>0.13-SNAPSHOT</tf-maven-version>
   </properties>
   <dependencies>
     <dependency>
