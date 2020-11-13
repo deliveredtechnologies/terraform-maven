@@ -62,7 +62,11 @@ public class Init extends TerraformMojo<String> {
         //TODO new backend factory to support multiple backend types
         //File name convention should be <backendType>.backend.generated.tf.json
         Path dir = tfRootDir == null ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir);
-        Files.write(Paths.get(dir.toString(), "s3.backend.generated.tf.json"), "{ \"terraform\": { \"backend\": { \"s3\": {} } } }".getBytes());
+        StringBuilder backend = new StringBuilder();
+        backend.append("{ \"terraform\": { \"backend\": { \"");
+        backend.append(backendType);
+        backend.append("\": {} } } }");
+        Files.write(Paths.get(dir.toString(), "backend.generated.tf.json"), backend.toString().getBytes());
       }
 
       execute(new TerraformInit(tfRootDir), getFieldsAsProperties());
