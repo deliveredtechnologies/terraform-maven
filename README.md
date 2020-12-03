@@ -138,7 +138,7 @@ Optional Parameters:
 | verifyPlugins | Boolean | Skips release signature validation when installing downloaded plugins (not recommended)                                    |
 | skipTfGet     | Boolean | If set to true, tf:init is done without running tf:get                                                                     |
 | artifact      | String  | Supplied in form {groupId}:{artifactId}:{versionId}; if present, the maven artifact is treated like a root module          |
-| backendType   | String  | It creates default backend (backend.generated.tf.json) with the string value we passed. (e.g. -DbackendType=s3 it creates "backend.generated.tf.json" file with s3 as the backend Type) |
+| backendType   | String  | The terraform backend types (e.g. s3). When supplied, maven creates partial backend file (backend.generated.tf.json) with the given backend type. |
 
 ---
  
