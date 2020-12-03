@@ -5,7 +5,6 @@ import com.deliveredtechnologies.io.Executable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -17,6 +16,7 @@ public class TerraformCommandLineDecorator implements Executable {
   private Executable commandLine;
   private TerraformCommand cmd;
   private Optional<Logger> logger = Optional.empty();
+  private TerraformPathResolver terraformPathResolver = new TerraformPathResolver();
 
   /**
    * Instantiates TerraformCommandLineDecorator with a TerraformCommand (e.g. INIT, PLAN, etc.), an Executable (i.e. CommandLine), and an SLF4J Logger.
@@ -88,20 +88,16 @@ public class TerraformCommandLineDecorator implements Executable {
     this.commandLine.setLogger(logger);
   }
 
+  public void setTerraformPathResolver(TerraformPathResolver terraformPathResolver) {
+    this.terraformPathResolver = terraformPathResolver;
+  }
+
   public Executable getCommandLine() {
     return this.commandLine;
   }
 
   private String getTerraformCommand(String command) {
 
-    return String.format("%s %s %s", getTFExecutable(), cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
-  }
-
-  private String getTFExecutable() {
-    File tfwrapper = new File(".tf/tfw");
-    if (tfwrapper.exists()) {
-      tfwrapper.setExecutable(true);
-    }
-    return tfwrapper.exists() ? tfwrapper.getAbsolutePath().replaceAll("[\\\\]","/") : "terraform";
+    return String.format("%s %s %s", terraformPathResolver.getPath(), cmd.toString(), StringUtils.isEmpty(command) ? "" : command);
   }
 }
