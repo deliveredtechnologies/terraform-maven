@@ -195,7 +195,7 @@
             <configuration>
               <serverId>${nexus.server.id}</serverId>
               <nexusUrl>${nexus.server.url}</nexusUrl>
-              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
               <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
             </configuration>
           </plugin>
