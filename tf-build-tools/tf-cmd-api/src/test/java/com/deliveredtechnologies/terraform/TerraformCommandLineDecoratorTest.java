@@ -4,7 +4,6 @@ import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -27,6 +26,9 @@ public class TerraformCommandLineDecoratorTest {
     Executable executable = Mockito.mock(Executable.class);
     Mockito.when(executable.execute(terraformCommand)).thenReturn(response);
     TerraformCommandLineDecorator terraform = new TerraformCommandLineDecorator(TerraformCommand.INIT, executable);
+    TerraformPathResolver terraformPathResolver = Mockito.mock(TerraformPathResolver.class);
+    Mockito.when(terraformPathResolver.getPath()).thenReturn("terraform");
+    terraform.setTerraformPathResolver(terraformPathResolver);
 
     String output = terraform.execute("");
     Assert.assertEquals(response, output);
@@ -41,6 +43,9 @@ public class TerraformCommandLineDecoratorTest {
     Executable executable = Mockito.mock(Executable.class);
     Mockito.when(executable.execute(terraformCommand, timeout)).thenReturn(response);
     TerraformCommandLineDecorator terraform = new TerraformCommandLineDecorator(TerraformCommand.INIT, executable);
+    TerraformPathResolver terraformPathResolver = Mockito.mock(TerraformPathResolver.class);
+    Mockito.when(terraformPathResolver.getPath()).thenReturn("terraform");
+    terraform.setTerraformPathResolver(terraformPathResolver);
 
     String output = terraform.execute("", timeout);
     Assert.assertEquals(response, output);
@@ -70,6 +75,9 @@ public class TerraformCommandLineDecoratorTest {
   public void loggerPassedToTerraformCommandLineDecoratorIsUsedInCommandLineObject() throws IOException, InterruptedException {
     Logger logger = Mockito.mock(Logger.class);
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, logger);
+    TerraformPathResolver terraformPathResolver = Mockito.mock(TerraformPathResolver.class);
+    Mockito.when(terraformPathResolver.getPath()).thenReturn("terraform");
+    terraformCommandLineDecorator.setTerraformPathResolver(terraformPathResolver);
     terraformCommandLineDecorator.execute("");
 
     Mockito.verify(logger, Mockito.times(1)).info(Mockito.anyString(), Mockito.any(Path.class));
@@ -77,6 +85,7 @@ public class TerraformCommandLineDecoratorTest {
 
     logger = Mockito.mock(Logger.class);
     terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, new CommandLine(TerraformUtils.getDefaultTerraformRootModuleDir()), logger);
+    terraformCommandLineDecorator.setTerraformPathResolver(terraformPathResolver);
     terraformCommandLineDecorator.execute("");
 
     Mockito.verify(logger, Mockito.times(1)).info(Mockito.anyString(), Mockito.any(Path.class));
@@ -84,12 +93,12 @@ public class TerraformCommandLineDecoratorTest {
 
     Executable executable = Mockito.mock(Executable.class);
     terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION, executable);
+    terraformCommandLineDecorator.setTerraformPathResolver(terraformPathResolver);
     terraformCommandLineDecorator.setLogger(logger);
 
     Mockito.verify(executable, Mockito.times(1)).setLogger(logger);
   }
 
-  @Ignore("not yet ready , Please ignore.")
   @Test
   public void terraformCommandLineDecoratorDoesntBlowUpWithoutLogging() throws IOException, InterruptedException {
 
@@ -116,6 +125,9 @@ public class TerraformCommandLineDecoratorTest {
     }
 
     TerraformCommandLineDecorator terraformCommandLineDecorator = new TerraformCommandLineDecorator(TerraformCommand.VERSION);
+    TerraformPathResolver terraformPathResolver = Mockito.mock(TerraformPathResolver.class);
+    Mockito.when(terraformPathResolver.getPath()).thenReturn("terraform");
+    terraformCommandLineDecorator.setTerraformPathResolver(terraformPathResolver);
     terraformCommandLineDecorator.execute("init");
     String[]entries = tfDir.list();
     for (String s: entries) {
