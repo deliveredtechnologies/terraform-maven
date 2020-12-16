@@ -1,6 +1,7 @@
 package com.deliveredtechnologies.terraform.terraformhandler;
 
 import com.deliveredtechnologies.io.Executable;
+import com.deliveredtechnologies.terraform.TerraformException;
 import com.deliveredtechnologies.terraform.handler.TerraformApplyS3Handler;
 import com.deliveredtechnologies.terraform.handler.TerraformHandler;
 import com.deliveredtechnologies.terraform.handler.TerraformPlanS3Handler;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class TerraformHandlerTest {
@@ -56,6 +58,19 @@ public class TerraformHandlerTest {
     TerraformPlanS3Handler handler = Mockito.mock(TerraformPlanS3Handler.class);
     handler.doAction(properties);
     Mockito.verify(handler, Mockito.times(1)).doAction(properties);
+  }
+
+  @Test
+  public void validateNextHandler() throws IOException, TerraformException, InterruptedException {
+    String kmsKeyId = "4d6f7e4-b816-42f5-87b2-c5952285e53c";
+    String s3BucketKey = "s3://terraform-maven-state/planfiles/test.json";
+    String tfRootDir = "src/test/resources/tf_initialized/root";
+    properties.put("kmsKeyId", kmsKeyId);
+    properties.put("planOutputFile", s3BucketKey);
+    TerraformPlanS3Handler handler = new TerraformPlanS3Handler(executable, logger);
+    handler.setNextHandler(new TerraformApplyS3Handler(executable, logger));
+    handler.doAction(properties);
+    Mockito.verify(executable, Mockito.times(1)).execute("aws s3 cp test.json s3://terraform-maven-state/planfiles/test.json --sse aws:kms --sse-kms-key-id 4d6f7e4-b816-42f5-87b2-c5952285e53c");
   }
 
   @Test
