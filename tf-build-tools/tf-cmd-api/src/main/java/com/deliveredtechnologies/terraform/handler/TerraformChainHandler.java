@@ -11,6 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import java.util.Set;
 
+/**
+ * Chain of responsibility chainHandler.
+ */
 public class TerraformChainHandler {
 
   private Logger logger;
