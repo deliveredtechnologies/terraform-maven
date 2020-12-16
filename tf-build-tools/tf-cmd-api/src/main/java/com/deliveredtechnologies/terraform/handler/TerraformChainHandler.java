@@ -14,9 +14,7 @@ import java.util.Set;
 public class TerraformChainHandler {
 
   private Logger logger;
-
   String tfRootDir;
-
   Set<Class<? extends TerraformHandler>> handlerClasses;
 
   /**
@@ -27,10 +25,6 @@ public class TerraformChainHandler {
     this.logger = logger;
     this.tfRootDir = (StringUtils.isEmpty(tfRootDir) ? TerraformUtils.getDefaultTerraformRootModuleDir() : TerraformUtils.getTerraformRootModuleDir(tfRootDir)).toString();
     this.handlerClasses = getHandlerClasses();
-  }
-
-  public TerraformChainHandler(Logger logger) throws TerraformException, IOException {
-    this(null, logger);
   }
 
   private Set<Class<? extends TerraformHandler>> getHandlerClasses() {
