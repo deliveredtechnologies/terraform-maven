@@ -184,7 +184,7 @@ Optional Parameters:
 | lockTimeout | Number | Duration to retry a state lock                                                                                     |
 | target      | String | A resource address to target                                                                                       |
 | noColor     | Any    | If this property exists, the -no-color flag is set                                                                 |
-| plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used                             |
+| plan        | String | A terraform plan to apply; if both plan and tfRootDir are specified, only plan is used. To get plan file from s3 (e.g. -Dplan=s3://<bucket-name>/<key-prefix>/<plan-file-name>)                             |
 | tfRootDir   | String | A terraform config directory to apply; defaults to `src/main/tf/{first dir found}`, then current directory         |
 | refreshState | Boolean | If set to "true" then Terraform will refresh the state before apply                                              |
 | timeout     | Number | The maximum time in milliseconds that the terraform apply command can run; defaults to 10min                       |
