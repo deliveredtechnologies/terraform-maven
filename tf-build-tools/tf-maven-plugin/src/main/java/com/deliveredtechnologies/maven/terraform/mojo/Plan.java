@@ -3,8 +3,9 @@ package com.deliveredtechnologies.maven.terraform.mojo;
 import com.deliveredtechnologies.maven.logs.MavenSlf4jAdapter;
 import com.deliveredtechnologies.maven.terraform.TerraformGetMavenRootArtifact;
 import com.deliveredtechnologies.terraform.TerraformException;
-import com.deliveredtechnologies.terraform.TerraformPlanFileUtils;
 import com.deliveredtechnologies.terraform.api.TerraformPlan;
+import com.deliveredtechnologies.terraform.handler.TerraformChainHandler;
+import com.deliveredtechnologies.terraform.handler.TerraformHandlerException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -69,10 +70,10 @@ public class Plan extends TerraformMojo<String> {
         TerraformGetMavenRootArtifact mavenRepoExecutableOp = new TerraformGetMavenRootArtifact(artifact, tfRootDir, getLog());
         tfRootDir = mavenRepoExecutableOp.execute(getFieldsAsProperties());
       }
-      execute(new TerraformPlan(tfRootDir));
-      TerraformPlanFileUtils planUtils = new TerraformPlanFileUtils(tfRootDir, new MavenSlf4jAdapter(getLog()));
-      planUtils.executePlanFileOperation(getFieldsAsProperties());
-    } catch (IOException | TerraformException e) {
+      execute(new TerraformPlan(tfRootDir, new MavenSlf4jAdapter(getLog())));
+      TerraformChainHandler terraformChainHandler = new TerraformChainHandler(tfRootDir, new MavenSlf4jAdapter(getLog()));
+      terraformChainHandler.initiateChain(getFieldsAsProperties());
+    } catch (IOException | TerraformException | TerraformHandlerException e) {
       throw new MojoExecutionException(e.getMessage(), e);
     }
   }
