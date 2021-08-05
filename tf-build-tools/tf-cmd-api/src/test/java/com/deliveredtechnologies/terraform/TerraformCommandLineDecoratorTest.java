@@ -3,6 +3,7 @@ package com.deliveredtechnologies.terraform;
 import com.deliveredtechnologies.io.CommandLine;
 import com.deliveredtechnologies.io.Executable;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -62,7 +63,13 @@ public class TerraformCommandLineDecoratorTest {
   public void terraformCommandLineDecoratorSucceedsOnCreationWhenTfSourceDirIsFound() throws IOException {
     Path tfMainPath = Paths.get("src", "main");
     Path tfSrcPath = tfMainPath.resolve("tf");
-    if (tfSrcPath.toFile().exists()) Files.delete(tfSrcPath);
+    if (tfSrcPath.toFile().exists()) {
+      if (tfSrcPath.toFile().isDirectory()) {
+        FileUtils.deleteDirectory(tfSrcPath.toFile());
+      } else {
+        Files.delete(tfSrcPath);
+      }
+    }
     Path rootModulePath = tfSrcPath.resolve("root");
     Files.createDirectory(tfSrcPath);
     Files.createDirectory(rootModulePath);
