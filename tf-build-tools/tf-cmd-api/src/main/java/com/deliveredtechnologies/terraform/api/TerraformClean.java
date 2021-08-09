@@ -33,9 +33,9 @@ public class TerraformClean implements TerraformOperation<String> {
     this.tfModulesPath = StringUtils.isEmpty(tfModules)
       ? TerraformUtils.getDefaultTfModulesDir()
       : Paths.get(tfModules);
-    this.tfRootModulePath = (StringUtils.isEmpty(tfRootModule)
+    this.tfRootModulePath = StringUtils.isEmpty(tfRootModule)
       ? TerraformUtils.getDefaultTerraformRootModuleDir()
-      : TerraformUtils.getTerraformRootModuleDir(tfRootModule)).getParent();
+      : TerraformUtils.getTerraformRootModuleDir(tfRootModule);
   }
 
   @Override
@@ -55,7 +55,7 @@ public class TerraformClean implements TerraformOperation<String> {
       }
 
       //delete terraform files in terraform root module
-      List<Path> terraformModuleFiles = recursivelyWalk(this.tfRootModulePath.getParent(), path -> path.getParent().toAbsolutePath().toString().endsWith(String.format(".terraform%1$smodules", File.separator)) || path.getFileName().toString().contains(".tfstate"));
+      List<Path> terraformModuleFiles = recursivelyWalk(this.tfRootModulePath, path -> path.getParent().toAbsolutePath().toString().endsWith(String.format(".terraform%1$smodules", File.separator)) || path.getFileName().toString().contains(".tfstate"));
 
       for (Path file : terraformModuleFiles) {
 
@@ -77,7 +77,7 @@ public class TerraformClean implements TerraformOperation<String> {
       }
 
       //delete .terraform directories
-      Files.walk(this.tfRootModulePath.getParent()).filter(path -> path.toString().endsWith(".terraform"))
+      Files.walk(this.tfRootModulePath).filter(path -> path.toString().endsWith(".terraform"))
           .map(Path::toFile)
           .forEach(file -> {
             response.append(file.toString()).append('\n');

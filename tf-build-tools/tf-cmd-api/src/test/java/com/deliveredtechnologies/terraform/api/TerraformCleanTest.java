@@ -62,7 +62,7 @@ public class TerraformCleanTest {
 
     Assert.assertFalse(this.tfModulesWorkingDir.toFile().exists());
 
-    Assert.assertFalse(Files.walk(this.tfInitWorkingDir)
+    Assert.assertFalse(Files.walk(this.tfInitWorkingDir.resolve("root"))
         .filter(path -> path.getFileName().toString().endsWith(".terraform") || path.getFileName().toString().endsWith(".tfstate"))
         .findAny().isPresent());
   }
