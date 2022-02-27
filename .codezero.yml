@@ -1,0 +1,68 @@
+lang:
+  java: 8
+  terraform: 0.12.31
+secrets:
+  - ~COVERALLS_REPO_TOKEN=lO7/P7etVaHwLNMnttcBtsTDDC64RrTbNGRbnvfA/3bG7vX4oKDE/TIi5TqSAR+S7jYRvr9VhXBE9JS83pExPvKqXNBR/qL4G2hXuMxhGtyj5rR6+3jdfxUjLUeiOY2YlBxv1BFVTQcjLWIvFWwv50K75Gc9Zel7jMjumyg7v3kuQwrijImFEDmrkKFAROei8MomZQYWkkzKR3y0byJqMvR6IXdMEpC7QgxfcrrtzE3IPNkNB5BNSMkpWRKmWxICg9B5E/KUVmN+wcGkO0aJS7j5657VXZo23hX8EUP63pEVN6YPZc3o6q/FLOptzifrStnh68ZHGaidRB7AoL+CPw==
+  - PASSPHRASE=iT4v78YgDU46UPkTvN7LBR6UVfIUdzliuffIWpCRVbomQzuYth84g55ZIFVIXxUoKoqVBMZB1Ejs3Vrx7Cnisd0Wu3oqtjl+pdV3YVyAwNeMnElBI7Wpb0tXb3G+IFEGr6vKISXZCdZ8EIkX1+Ycr67hU/q36zM7ewo0//KTW+PMbLoPVX0QaxsRgBkt1DQkfPASR7Iit1pSsgtBgWdTGGH4Ml0cyh19qFfOEngFdy19pCSdihVT5YAZZbNNdrdCiqXJbMH4XJ1K2Zy/ajET31+566ZIjRv8bv491tOZDiOzm+EFK/7Dgc1e2psWj3GHlmeAULNaEqgq0q9iZbY/Pg==
+  - SONATYPE_USER=K9rX2ukpx5raA5rzTWrAdHgNZeSEUA+K9dy8Pvx7e8gPbpytpIMiD1e3DkAxqb5hIcRZq0trT6F4q0EKuoM3pw92QpiQ6/H+oKMtdVWQsb5WERtGTS2CqmJ0diaDH8CDHlp2SQQgGeDh9B2w2acucYyFIT3V9hRzlDMsthTe9r+eeEXv0s06NgvR6Ddj2dPa0WCXcF92HZFkEwAmCCx46xp/X/vyRVZqfT9SyojQWFDlEBsv0kn1cgEKREVF8jxPxtzU7vIpN/AbwtdyBPvWavqP4STtLVI1vLrtpiN+t2yJDqOU7dL2EiV5qDUpEqqcTtg/1f9GO760n8+uBnVzWg==
+  - SONATYPE_PW=DQ/26gG/xzayZQWwh6lG7rTD/fubBtnCfIwvEmPb94sB6/7K7s6UfjyoflwJfmd2MCtX52ifItQYYb73yVKbJrwlvtc8GHWBcIjlg1g7fC5s9MdTUrNzeYzKFd+tC7rJBCy/totIJfAD5KY0A2CnLCDRAk324hloXTuZWaAlpbsiCEYUBeaaw0991lH4gwxfehpj4u8zTfwiAazQyzKq6QW8mEYihxLkG8U8bLoz3k9qSWiR5nrneu+OJEOjDgPBq2lMnaKRhSsFhNWMki7YOXIhmvsnCQ0Nr491r7xLcXX7v7XhTsanZkU67tTy05+pszqqTP9etKFnAibT+fDdCg==
+  - MAVEN_KEY_PW=QBSraoqlaUcckk2UNLIgl7GZVSBzVC8jpNr8kPRdQANmMNxYYnjAMDFOSfv7aK7l1UWqrI0V3p9Qu2/QvK3AvdeLIycDhkW/qvhmeiI1Aduvb8P9djxMl2erFC/osRkw/HIic5tCNgK8TNjGBjmevjApmksWGKr8Y10CkTjXKdoOL0RcrY20f8HGTJoX7c9iM/7QBC5DBhAyvXlWPum6x1K9oDUvDQyh2f6uowB4JDXfcJsutox/nCTFSa3ZGJlYy1Qlm/HNRupJ/p471OVmJElvmkLm13YNXAtPEnSC70XMV9BNylXjJtruZnYHYobcWSqW/lETvMhi+AyM62H6wA==
+  - MAVEN_KEY_ID=ls4Axr5lja/knrKIC5sAlbE3Ash5/W5Egrb3RTL3omrbzuNOlb+9kr93e12OwK8NSYYEjejdrhsXnqFXXbKmv+v3zYKJQxQ4aM0Suq6lHPK7cjeIp/Dp37iON5UzMakep6rsm+Mc9WUtcKrsgE9Anml2IQxCRTKt4GHF4gOz9PHKIlOQfLz0i894+fLUeasV1XZiN6F3bQP/FnWSqTm+7+HAEEvbI1c6ttYXNiMTSJh4YnLoPn5hT0Dvo0MwDR+/LKVaLFbhkr7Bvm8xB86rlFD/qY5XNRzAlDxaLY/0AVtHDQhnIckswi5QOxTaXvT35Sehvtxtp2YI8gTLFWMYew==
+events:
+  git_branch: develop,master
+  git_pr: develop,master
+ops:
+  setup:
+    - maven:
+        path: ''
+        script: |
+          export GPG_TTY=$(tty)
+          gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" --output codesigning.asc .maven.key.enc
+          gpg --batch --import codesigning.asc
+          shred --remove codesigning.asc
+  test:
+    - tf-build-tools:
+        script: |
+          ls ~/.m2 || mkdir ~/.m2
+          cp ../.mvn.settings.xml ~/.m2/settings.xml
+          ./mvnw clean test coveralls:report -DrepoToken="$SECRET_COVERALLS_REPO_TOKEN" -Dbranch="$CODEZERO_BRANCH" -DpullRequest="$CODEZERO_PR" -B -no-transfer-progress
+  deploy:
+    - tf-build-tools:
+        env:
+          - OSSRH_USERNAME={{SECRET_SONATYPE_USER}}
+          - OSSRH_PASSWORD={{SECRET_SONATYPE_PW}}
+          - GPG_KEY_PW={{SECRET_MAVEN_KEY_PW}}
+          - GPG_KEY_ID={{SECRET_MAVEN_KEY_ID}}
+        script: |
+          VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -no-transfer-progress -DforceStdout)
+          PROFILE="SNAPSHOT"
+          if ! echo $VERSION | grep -q SNAPSHOT ; then
+            PROFILE="release"
+            echo "***** BRANCH_NAME is ${CODEZERO_BRANCH} *****"
+            if [ "${CODEZERO_BRANCH}" == "develop" ] ; then
+              # Always push a SNAPSHOT release on a merge into the 'develop' branch
+              ./mvnw versions:set -DnewVersion="${VERSION}-SNAPSHOT" -B -no-transfer-progress
+              ./mvnw deploy -DskipTests=true -B -P snapshot -no-transfer-progress
+
+              #Stage a build release to Maven Central if merged to develop
+              VERSION="${VERSION}-${CODEZERO_JOB_NUM}"
+              echo "***** VERSION has been updated to $VERSION ******"
+              ./mvnw versions:set -DnewVersion="${VERSION}" -B -no-transfer-progress
+            fi
+          fi
+          # Stage for Maven Central Deployment if a release or SonaType SNAPSHOT repo if a SNAPSHOT
+          export GPG_TTY=$(tty)
+          ./mvnw deploy -DskipTests=true -B -P ${PROFILE} -no-transfer-progress
+stages:
+  - Validate:
+      events:
+        git_pr: any
+      ops:
+        - test
+  - Deploy:
+      events:
+        git_branch: any
+      ops:
+        - setup
+        - test
+        - deploy

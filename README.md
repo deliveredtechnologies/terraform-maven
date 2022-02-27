@@ -13,7 +13,7 @@
 
 
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
-[![Build Status](https://github.com/deliveredtechnologies/terraform-maven/workflows/build/badge.svg)](https://github.com/deliveredtechnologies/terraform-maven/actions?query=workflow%3A%22build%22)
+[![Build Status](https://codezero.bluflametech.com/badge/project-63-develop.svg)](https://codezero.bluflametech.com/projects/63)
 [![Coverage Status](https://coveralls.io/repos/github/deliveredtechnologies/terraform-maven/badge.svg?branch=develop)](https://coveralls.io/github/deliveredtechnologies/terraform-maven?branch=develop)
 [![Maven Central][maven-badge]][tf-maven-plugin]
 
